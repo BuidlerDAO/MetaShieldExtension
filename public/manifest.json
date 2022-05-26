@@ -1,0 +1,53 @@
+{
+  "manifest_version": 3,
+  "name": "Chrome Extension Boilerplate",
+  "description": "使用 react + antd 开发 chrome-extension 的脚手架工程",
+  "version": "1.0",
+
+  "icons": {
+    "16": "icons/ic_16.png",
+    "48": "icons/ic_48.png",
+    "128": "icons/ic_128.png"
+  },
+
+  "permissions": [
+    "contextMenus",
+    "tabs",
+    "activeTab",
+    "storage",
+    "background",
+    "tabCapture"
+  ],
+
+  "host_permissions": [
+    "<all_urls>"
+  ],
+
+  "background": {
+    "service_worker": "js/background.js"
+  },
+
+  "action": {
+    "default_icon": "icons/ic_16.png",
+    "default_title": "Extension Popup",
+    "default_popup": "html/popup.html"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["js/contentScripts.js"],
+      "css": ["css/contentScripts.css"],
+      "run_at": "document_start"
+    }
+  ],
+
+  "web_accessible_resources": [
+    {
+      "resources": ["images/*","js/contentScriptsProxyEthereum.js"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+
+  "minimum_chrome_version": "5"
+}
