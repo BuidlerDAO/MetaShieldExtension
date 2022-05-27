@@ -9,7 +9,9 @@ class ChromeMessage {
 // 获取函数的形参个数
 function getFuncParameters(func) {
     if (typeof func === 'function') {
-        const match = /[^(]+\(([^)]*)?\)/gm.exec(Function.prototype.toString.call(func));
+        const match = /[^(]+\(([^)]*)?\)/gm.exec(
+            Function.prototype.toString.call(func)
+        );
         if (match[1]) {
             const args = match[1].replace(/[^,\w]*/g, '').split(',');
             return args.length;
@@ -69,6 +71,21 @@ class ContentClient {
     }
 }
 
+// proxy scripts 发送和监听消息
+class ProxyClient {
+    listen(msg, callBack) {
+        listeners[msg] = callBack;
+    }
+
+    seedMessage(message) {
+        return new Promise((resolve) => {
+            chrome.runtime.sendMessage(message, (res) => {
+                resolve(res);
+            });
+        });
+    }
+}
+
 // background 发送和监听消息
 class BackgroundClient {
     listen(msg, callBack) {
@@ -88,5 +105,8 @@ class BackgroundClient {
 
 const contentClient = new ContentClient();
 const backgroundClient = new BackgroundClient();
+const proxyClient = new ProxyClient();
 
-export { contentClient, backgroundClient, ChromeMessage };
+export {
+    contentClient, backgroundClient, proxyClient, ChromeMessage
+};

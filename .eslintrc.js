@@ -21,7 +21,7 @@ module.exports = {
     "plugins": [
         "react"
     ],
-    "globale": {
+    "globals": {
         WRAPPER_CLASS_NAME: true
     },
     "rules": {

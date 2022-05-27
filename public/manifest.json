@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "Chrome Extension Boilerplate",
-  "description": "使用 react + antd 开发 chrome-extension 的脚手架工程",
+  "name": "Meta Shield",
+  "description": "The first line of defense for the survival in Metaverse",
   "version": "1.0",
 
   "icons": {
