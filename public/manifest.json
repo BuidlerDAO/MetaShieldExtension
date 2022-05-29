@@ -29,7 +29,7 @@
 
   "action": {
     "default_icon": "icons/ic_16.png",
-    "default_title": "Extension Popup",
+    "default_title": "Meta Shield",
     "default_popup": "html/popup.html"
   },
 
@@ -37,7 +37,7 @@
     {
       "matches": ["<all_urls>"],
       "js": ["js/contentScripts.js"],
-      "css": ["css/contentScripts.css"],
+      "css": ["css/contentScripts.css","css/contentScriptsProxyEthereum.css"],
       "run_at": "document_start"
     }
   ],

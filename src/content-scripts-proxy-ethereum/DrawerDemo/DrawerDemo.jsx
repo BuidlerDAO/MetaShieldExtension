@@ -1,24 +1,34 @@
-import React, { Component } from 'react';
-import { Drawer, Button } from 'antd';
+import React, { useState } from 'react';
+import {
+    Modal, Drawer, Button, Alert, notification, Col, Row
+} from 'antd';
+import { ExclamationCircleOutlined, StopOutlined } from '@ant-design/icons';
 import './DrawerDemo.scss';
 // import { contentClient, ChromeMessage } from '../../chrome';
 
-export default class DrawerDemo extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            // messageFromBg: null
-        };
-        this.showContainer();
-    }
+const DrawerDemo = ({
+    message, description, method, params
+}) => {
+    // 'success' | 'info' | 'warning' | 'error';
+    // openNotificationWithIcon(type, message, description) {
+    //     notification[type]({
+    //         message: `${message}`,
+    //         description: `${description}`,
+    //         getContainer: () => document.querySelector('#chrome-extension-content-base-element-ethereum')
+    //     });
+    // }
+    const [loading, setLoading] = useState(false);
+    const [visible, setVisible] = useState(true);
 
-    hideContainer() {
+    const getContainer = () => document.querySelector('#chrome-extension-content-base-element-ethereum');
+
+    const hideContainer = () => {
         document.querySelector('#chrome-extension-content-base-element-ethereum').setAttribute('style', 'display: none');
-    }
+    };
 
-    showContainer() {
-        document.querySelector('#chrome-extension-content-base-element-ethereum').setAttribute('style', 'display: block');
-    }
+    // showContainer() {
+    //     document.querySelector('#chrome-extension-content-base-element-ethereum').setAttribute('style', 'display: block');
+    // }
 
     // Background 通讯
     // async sendMsgToBackground() {
@@ -29,32 +39,142 @@ export default class DrawerDemo extends Component {
     //     });
     // }
 
-    render() {
-        const { message, method, params } = this.props;
+    const handleOk = () => {
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+            setVisible(false);
+        }, 3000);
+    };
+
+    const handleCancel = () => {
+        setVisible(false);
+    };
+
+    const type = 'error';
+
+    if (type === 'success') {
         return (
-            <Drawer
-                title="Risk Warning"
-                getContainer={document.querySelector('#chrome-extension-content-base-element-ethereum')}
-                placement="left"
-                closable={false}
-                onClose={() => { this.hideContainer(); }}
-                visible
+            <div style={{
+                display: 'flex', justifyContent: 'center', height: '60%', marginTop: '20px'
+            }}
             >
-                <p>{message}</p>
-                <p>
-                    Method:
-                    {' '}
-                    {JSON.stringify(method)}
-                </p>
-                <p>
-                    Params:
-                    {' '}
-                    {JSON.stringify(params)}
-                </p>
-                <Button type="primary" onClick={() => this.hideContainer()}>
-                    Close
-                </Button>
-            </Drawer>
+                <Alert
+                    message={`${message}`}
+                    type="success"
+                    showIcon
+                    closable
+                    getContainer={document.querySelector('#chrome-extension-content-base-element-ethereum')}
+                />
+            </div>
         );
     }
-}
+
+    if (type === 'warning') {
+        return (
+            <Modal
+                getContainer={getContainer()}
+                visible={visible}
+                title={(
+                    <>
+                        <ExclamationCircleOutlined style={{ color: '#faad14', marginRight: '8px' }} />
+                        Warning
+                    </>
+                )}
+                onOk={handleOk}
+                onCancel={handleCancel}
+                footer={[
+                    <Button
+                        key="submit"
+                        type="primary"
+                        loading={loading}
+                        onClick={handleOk}
+                    >
+                        Mark as Whitelist
+                    </Button>,
+                    <Button
+                        key="link"
+                        type="primary"
+                        loading={loading}
+                        onClick={handleOk}
+                    >
+                        Mark as Blacklist
+                    </Button>,
+                    <Button key="back" onClick={handleCancel}>
+                        Continue
+                    </Button>
+                ]}
+            >
+                <p>Some contents...</p>
+                <p>Some contents...</p>
+                <p>Some contents...</p>
+                <p>Some contents...</p>
+                <p>Some contents...</p>
+            </Modal>
+        );
+    }
+
+    if (type === 'error') {
+        return (
+            <Modal
+                getContainer={getContainer()}
+                visible={visible}
+                title={(
+                    <>
+                        <StopOutlined style={{ color: '#ff4d4f', marginRight: '8px' }} />
+                        Warning
+                    </>
+                )}
+                onOk={handleOk}
+                onCancel={handleCancel}
+                footer={[
+                    <Button
+                        key="submit"
+                        type="primary"
+                        loading={loading}
+                        onClick={handleOk}
+                    >
+                        Continue anyway
+                    </Button>,
+                    <Button key="back" onClick={handleCancel}>
+                        OK
+                    </Button>
+                ]}
+            >
+                <p>Some contents...</p>
+                <p>Some contents...</p>
+                <p>Some contents...</p>
+                <p>Some contents...</p>
+                <p>Some contents...</p>
+            </Modal>
+        );
+    }
+
+    return (
+        <Drawer
+            title="Risk Warning"
+            getContainer={document.querySelector('#chrome-extension-content-base-element-ethereum')}
+            placement="left"
+            closable={false}
+            onClose={() => { hideContainer(); }}
+            visible
+        >
+            <p>{message}</p>
+            <p>
+                Method:
+                {' '}
+                {JSON.stringify(method)}
+            </p>
+            <p>
+                Params:
+                {' '}
+                {JSON.stringify(params)}
+            </p>
+            <Button type="primary" onClick={() => hideContainer()}>
+                Close
+            </Button>
+        </Drawer>
+    );
+};
+
+export default DrawerDemo;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import {
     Form, Input, Button, Checkbox,
     Typography, Space
@@ -10,97 +10,82 @@ import ModeSwitch from './ModeSwitch';
 
 const { Title, Paragraph, Text } = Typography;
 
-export default class Popup extends Component {
-  state = {
-      name: WRAPPER_CLASS_NAME,
-      safeMode: false
-  };
+const Popup = () => {
+    const [safeMode, setSafeMode] = useState(false);
+    // const name = WRAPPER_CLASS_NAME;
+    const [form] = Form.useForm();
+    const { getFieldsValue } = form;
 
-  setSafeMode(safeMode) {
-      this.setState({
-          safeMode
-      });
-  }
+    const gotoPage = (pageUrl) => {
+        if (!pageUrl) {
+            go('../html/view.html');
+        }
+        go(pageUrl);
+    };
 
-  gotoPage(pageUrl) {
-      if (!pageUrl) {
-          go('../html/view.html');
-      }
-      go(pageUrl);
-  }
+    const handleMask2Click = () => {
+        const value = getFieldsValue();
+        console.log('value :>> ', value);
+        const address = document.getElementById('Address').value;
+        gotoPage(`https://mask2-web.vercel.app/network=ethereum&address=${address}`);
+    };
 
-  render() {
-      return (
-          <div className={`${WRAPPER_CLASS_NAME}`}>
-              <Title className="center-content" level={2}>Meta Shield</Title>
-              <Paragraph className="center-content">
-                  Keep you
-                  {'  '}
-                  <Text strong style={{ color: '#1da57a' }}>
-                      &nbsp;safe&nbsp;
-                  </Text>
-                  {' '}
-                  in
-                  {' '}
-                  <Text code>Web3</Text>
-                  .
-              </Paragraph>
-              <Form
-                  layout="Vertical"
-                  name="basic"
-                  className="basic-table"
-                  initialValues={{ remember: true }}
-              >
-                  <ModeSwitch
-                      safeMode={this.state.safeMode}
-                      setSafeMode={(checked) => {
-                          this.setSafeMode(checked);
-                      }}
-                  ></ModeSwitch>
+    const onFinish = (values) => {
+        // console.log(form);
+    };
 
-                  <Form.Item
-                      label="Address"
-                      name="Address"
-                      rules={[{ required: true, message: 'Please input your Address!' }]}
-                  >
-                      <Input />
-                  </Form.Item>
+    return (
+        <div className={`${WRAPPER_CLASS_NAME}`}>
+            <Title className="center-content" level={2}>Meta Shield</Title>
+            <Paragraph className="center-content">
+                Keep you
+                {'  '}
+                <Text strong style={{ color: '#1da57a' }}>
+            &nbsp;safe&nbsp;
+                </Text>
+                {' '}
+                in
+                {' '}
+                <Text code>Web3</Text>
+                .
+            </Paragraph>
+            <Form
+                form={form}
+                onFinish={onFinish}
+                layout="Vertical"
+                name="basic"
+                className="basic-table"
+                initialValues={{ remember: true }}
+            >
+                <ModeSwitch
+                    safeMode={safeMode}
+                    setSafeMode={(checked) => {
+                        setSafeMode(checked);
+                    }}
+                ></ModeSwitch>
 
-                  {/* <Form.Item
-                        label="Password"
-                        name="password"
-                        rules={[{ required: true, message: 'Please input your password!' }]}
+                <Form.Item
+                    label="Address"
+                    name="Address"
+                    rules={[{ required: true, message: 'Please input your Address!' }]}
+                >
+                    <Input />
+                </Form.Item>
+
+                <Form.Item>
+                    <Button
+                        type="primary"
+                        onClick={() => {
+                            handleMask2Click();
+                        }}
+                        className="form-button"
                     >
-                        <Input.Password />
-                    </Form.Item> */}
+                        Mask^2
+                    </Button>
+                </Form.Item>
+            </Form>
+        </div>
+    );
+};
 
-                  {/* <Form.Item name="remember" valuePropName="checked">
-                        <Checkbox>Remember me</Checkbox>
-                    </Form.Item> */}
-
-                  {/* <Form.Item>
-                        <Button
-                            type="primary"
-                            onClick={() => { this.gotoPage(); }}
-                            className="form-button"
-                        >
-                            演示页面跳转
-                        </Button>
-                    </Form.Item> */}
-
-                  <Form.Item>
-                      <Button
-                          type="primary"
-                          onClick={() => {
-                              this.gotoPage('https://mask2-web.vercel.app/');
-                          }}
-                          className="form-button"
-                      >
-                          Mask^2
-                      </Button>
-                  </Form.Item>
-              </Form>
-          </div>
-      );
-  }
-}
+export default Popup;
