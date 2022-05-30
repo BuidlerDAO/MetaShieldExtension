@@ -22,7 +22,8 @@ const translation_zh = {
         contract_verified: '经检测该合约已完成验证与开源',
         report_button: '报告异常',
         still_continue: '仍要继续',
-        ok: '好的'
+        ok: '好的',
+        i_got_it: '我知道了'
     }
 };
 

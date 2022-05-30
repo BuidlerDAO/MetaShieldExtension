@@ -88,7 +88,7 @@ const DrawerDemo = ({
                         {t('drawer.report_button')}
                     </Button>,
                     <Button key="back" onClick={handleCancel}>
-                        {t('drawer.still_continue')}
+                        {t('drawer.i_got_it')}
                     </Button>
                 ]}
             >

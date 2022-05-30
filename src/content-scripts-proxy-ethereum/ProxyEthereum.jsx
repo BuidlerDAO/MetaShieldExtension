@@ -65,6 +65,7 @@ export default class ProxyEthereum {
         // 初始化代理
         const handler = {
             apply(target, thisArg, argumentsList) {
+                let result = target(...argumentsList);
                 const constList = [...argumentsList][0];
                 console.log('constList :>> ', constList);
                 if (that.isNotableAction(constList)) {
@@ -78,9 +79,13 @@ export default class ProxyEthereum {
                         console.log('data :>> ', data);
                         const type = that.getDrawerType(data);
                         if (data.status === 'success') {
-                            // 检查通过，可以执行
+                            // 获取验证信息，渲染消息框
                             const verification = data.data;
                             that.renderDrawer(type, verification, contractAddress, domain, constList);
+                            // 危险交易进行拦截
+                            if (type === 'error') {
+                                result = null;
+                            }
                         } else {
                             console.log('error data :>> ');
                         }
@@ -88,7 +93,7 @@ export default class ProxyEthereum {
                         console.log('err :>> ', err);
                     });
                 }
-                return target(...argumentsList);
+                return result;
             }
         };
         const proxyETH = () => {

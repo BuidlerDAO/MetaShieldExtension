@@ -22,6 +22,7 @@ const translation_en = {
         report_button: 'Report Anomaly',
         still_continue: 'Still Continue',
         ok: 'OK',
+        i_got_it: 'Got it'
     }
 };
 
