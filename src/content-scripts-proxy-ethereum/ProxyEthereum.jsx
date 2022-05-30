@@ -19,6 +19,7 @@ export default class ProxyEthereum {
     }
 
     isNotableAction(constList) {
+        // 检查是否为关注的交易
         const notableActionList = ['approve'];
         if (typeof constList.method !== 'undefined') {
             if (constList.method === 'eth_sendTransaction') {
@@ -54,7 +55,6 @@ export default class ProxyEthereum {
         // 初始化代理
         const handler = {
             apply(target, thisArg, argumentsList) {
-                console.log(`proxy begin: ${argumentsList}`);
                 const constList = [...argumentsList][0];
                 console.log('constList :>> ', constList);
                 if (that.isNotableAction(constList)) {
@@ -138,7 +138,7 @@ export default class ProxyEthereum {
                 }
             ]
         };
-        // this.renderDrawer('success', 'This action is safe!', 'This is safe', cl);
+        this.renderDrawer('success', 'This action is safe!', 'This is safe', cl);
     }
 
     init() {

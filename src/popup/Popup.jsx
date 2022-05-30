@@ -4,6 +4,9 @@ import {
     Typography, Space
 } from 'antd';
 
+import { useTranslation, Trans } from 'react-i18next';
+import i18n from 'i18next';
+
 import './Popup.scss';
 import { go } from '../chrome';
 import ModeSwitch from './ModeSwitch';
@@ -11,10 +14,15 @@ import ModeSwitch from './ModeSwitch';
 const { Title, Paragraph, Text } = Typography;
 
 const Popup = () => {
+    const { t } = useTranslation();
     const [safeMode, setSafeMode] = useState(false);
     // const name = WRAPPER_CLASS_NAME;
     const [form] = Form.useForm();
     const { getFieldsValue } = form;
+
+    const changeLanguage = () => {
+        i18n.changeLanguage(i18n.language === 'en' ? 'zh' : 'en'); // val入参值为'en'或'zh'
+    };
 
     const gotoPage = (pageUrl) => {
         if (!pageUrl) {
@@ -49,6 +57,7 @@ const Popup = () => {
                 <Text code>Web3</Text>
                 .
             </Paragraph>
+            <Button onClick={changeLanguage}>{t('popup.switch_language')}</Button>
             <Form
                 form={form}
                 onFinish={onFinish}

@@ -3,7 +3,9 @@ import {
     Modal, Drawer, Button, Alert, notification, Col, Row
 } from 'antd';
 import { ExclamationCircleOutlined, StopOutlined } from '@ant-design/icons';
+import { useTranslation, Trans } from 'react-i18next';
 import './DrawerDemo.scss';
+import '../../i18n/config';
 // import { contentClient, ChromeMessage } from '../../chrome';
 
 const DrawerDemo = ({
@@ -17,6 +19,7 @@ const DrawerDemo = ({
     //         getContainer: () => document.querySelector('#chrome-extension-content-base-element-ethereum')
     //     });
     // }
+    const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
     const [visible, setVisible] = useState(true);
 
@@ -51,7 +54,7 @@ const DrawerDemo = ({
         setVisible(false);
     };
 
-    const type = 'error';
+    const type = 'warning';
 
     if (type === 'success') {
         return (
@@ -78,7 +81,7 @@ const DrawerDemo = ({
                 title={(
                     <>
                         <ExclamationCircleOutlined style={{ color: '#faad14', marginRight: '8px' }} />
-                        Warning
+                        {t('drawer.warning')}
                     </>
                 )}
                 onOk={handleOk}
@@ -122,7 +125,7 @@ const DrawerDemo = ({
                 title={(
                     <>
                         <StopOutlined style={{ color: '#ff4d4f', marginRight: '8px' }} />
-                        Warning
+                        {t('drawer.error')}
                     </>
                 )}
                 onOk={handleOk}
