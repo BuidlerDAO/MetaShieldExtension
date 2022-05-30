@@ -9,16 +9,8 @@ import '../../i18n/config';
 // import { contentClient, ChromeMessage } from '../../chrome';
 
 const DrawerDemo = ({
-    message, description, method, params
+    type, message, verification, contractAddress, domain, method, params
 }) => {
-    // 'success' | 'info' | 'warning' | 'error';
-    // openNotificationWithIcon(type, message, description) {
-    //     notification[type]({
-    //         message: `${message}`,
-    //         description: `${description}`,
-    //         getContainer: () => document.querySelector('#chrome-extension-content-base-element-ethereum')
-    //     });
-    // }
     const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
     const [visible, setVisible] = useState(true);
@@ -54,7 +46,7 @@ const DrawerDemo = ({
         setVisible(false);
     };
 
-    const type = 'warning';
+    type = 'error';
 
     if (type === 'success') {
         return (
@@ -63,7 +55,7 @@ const DrawerDemo = ({
             }}
             >
                 <Alert
-                    message={`${message}`}
+                    message={t('drawer.completed_scan')}
                     type="success"
                     showIcon
                     closable
@@ -88,31 +80,21 @@ const DrawerDemo = ({
                 onCancel={handleCancel}
                 footer={[
                     <Button
-                        key="submit"
-                        type="primary"
-                        loading={loading}
-                        onClick={handleOk}
-                    >
-                        Mark as Whitelist
-                    </Button>,
-                    <Button
                         key="link"
                         type="primary"
                         loading={loading}
                         onClick={handleOk}
                     >
-                        Mark as Blacklist
+                        {t('drawer.report_button')}
                     </Button>,
                     <Button key="back" onClick={handleCancel}>
-                        Continue
+                        {t('drawer.still_continue')}
                     </Button>
                 ]}
             >
-                <p>Some contents...</p>
-                <p>Some contents...</p>
-                <p>Some contents...</p>
-                <p>Some contents...</p>
-                <p>Some contents...</p>
+                <p>{t('drawer.you_are_authorizing')}</p>
+                <p>{contractAddress}</p>
+                <p>{verification.contract.Verified ? t('drawer.contract_verified') : t('drawer.contract_not_verified')}</p>
             </Modal>
         );
     }
@@ -132,23 +114,21 @@ const DrawerDemo = ({
                 onCancel={handleCancel}
                 footer={[
                     <Button
-                        key="submit"
+                        key="link"
                         type="primary"
                         loading={loading}
                         onClick={handleOk}
                     >
-                        Continue anyway
+                        {t('drawer.still_continue')}
                     </Button>,
                     <Button key="back" onClick={handleCancel}>
-                        OK
+                        {t('drawer.ok')}
                     </Button>
                 ]}
             >
-                <p>Some contents...</p>
-                <p>Some contents...</p>
-                <p>Some contents...</p>
-                <p>Some contents...</p>
-                <p>Some contents...</p>
+                <p>{t('drawer.you_are_authorizing')}</p>
+                <p>{contractAddress}</p>
+                <p>{verification.contract.Verified ? t('drawer.contract_verified') : t('drawer.contract_not_verified')}</p>
             </Modal>
         );
     }

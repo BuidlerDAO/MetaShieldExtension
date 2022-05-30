@@ -32,13 +32,23 @@ export default class ProxyEthereum {
         return false;
     }
 
-    renderDrawer(type, message, description, constList) {
+    getDrawerType(verificationData) {
+        if (verificationData.domain.status === 'whitelist') {
+            return 'success';
+        } if (verificationData.domain.status === 'blacklist') {
+            return 'error';
+        }
+        return 'warning';
+    }
+
+    renderDrawer(type, verification, contractAddress, domain, constList) {
         render(
             <DrawerDemo
                 style={{ width: '50%' }}
                 type={type}
-                message={message}
-                description={description}
+                contractAddress={contractAddress}
+                domain={domain}
+                verification={verification}
                 method={constList.method}
                 params={constList.params}
                 onClose={() => {
@@ -59,30 +69,24 @@ export default class ProxyEthereum {
                 console.log('constList :>> ', constList);
                 if (that.isNotableAction(constList)) {
                     // 检查合约和域名安全性
+                    const contractAddress = constList.params[0].to;
+                    const domain = window.location.hostname;
                     that.verifyContractAndDomain({
-                        contractAddress: constList.params[0].to,
-                        domain: window.location.hostname
+                        contractAddress,
+                        domain
                     }).then((data) => {
                         console.log('data :>> ', data);
+                        const type = that.getDrawerType(data);
                         if (data.status === 'success') {
                             // 检查通过，可以执行
-                            const type = 'success';
-                            const message = 'This action is new ????';
-                            const description = 'This is safe';
-                            that.renderDrawer(type, message, description, constList);
+                            const verification = data.data;
+                            that.renderDrawer(type, verification, contractAddress, domain, constList);
                         } else {
-                            console.log('object :>> ');
+                            console.log('error data :>> ');
                         }
                     }).catch((err) => {
                         console.log('err :>> ', err);
                     });
-
-                    // that.openNotificationWithIcon('warning', { ...argumentsList });
-                    // alert(
-                    //     '此操作可能存在风险 \n'
-                    //   + `method: ${constList.method}\n`
-                    //   + `params: ${JSON.stringify(constList.params)}`
-                    // );
                 }
                 return target(...argumentsList);
             }
@@ -126,6 +130,18 @@ export default class ProxyEthereum {
     }
 
     test() {
+        const mockData = {
+            status: 'success',
+            data: {
+                contract: {
+                    IsContract: true,
+                    Verified: true
+                },
+                domain: {
+                    status: 'whitelist' // "blacklist" || "whitelist" || "unknown"
+                }
+            }
+        };
         const cl = {
             method: 'eth_sendTransaction',
             params: [
@@ -138,13 +154,13 @@ export default class ProxyEthereum {
                 }
             ]
         };
-        this.renderDrawer('success', 'This action is safe!', 'This is safe', cl);
+        this.renderDrawer('warning', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', 'baidu.com', cl);
     }
 
     init() {
         this.initContainer();
         this.initEthereumProxy();
-        this.test();
+        // this.test();
         // 注意，必须设置了run_at=document_start 此段代码才会生效
         document.addEventListener('DOMContentLoaded', () => {
             // this.initContainer();
