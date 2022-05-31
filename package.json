@@ -45,6 +45,7 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
+    "@douyinfe/semi-ui": "^2.11.1",
     "antd": "^4.16.3",
     "core-js": "^3.14.0",
     "i18next": "^21.8.5",

@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import {
-    Modal, Drawer, Button, Alert, notification, Col, Row
+    Modal, Drawer, Button, Alert, notification, Col, Row,
+    Typography
 } from 'antd';
-import { ExclamationCircleOutlined, StopOutlined } from '@ant-design/icons';
+import { ExclamationOutlined, StopOutlined, LinkOutlined } from '@ant-design/icons';
 import { useTranslation, Trans } from 'react-i18next';
 import './DrawerDemo.scss';
 import '../../i18n/config';
 // import { contentClient, ChromeMessage } from '../../chrome';
+const { Title, Link, Text } = Typography;
 
 const DrawerDemo = ({
     type, message, verification, contractAddress, domain, method, params
@@ -46,7 +48,69 @@ const DrawerDemo = ({
         setVisible(false);
     };
 
-    type = 'error';
+    const getModalContent = (renderType) => {
+        if (renderType === 'warning') {
+            return (
+                <>
+                    <Title style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }} level={3}>
+                        <b>
+                            {t('drawer.please_authorize_carefully')}
+                            &nbsp;
+                            {t('exclamation_mark')}
+                        </b>
+                    </Title>
+                    <p style={{ marginBottom: '4px' }}>{t('drawer.you_are_authorizing')}</p>
+                    <p style={{ marginBottom: '12px' }}>
+                        <a href={`https://etherscan.io/address/${contractAddress}`} target="_blank" rel="noreferrer">
+                            <Text type="secondary">{contractAddress}</Text>
+                            <Text type="secondary"><LinkOutlined /></Text>
+                        </a>
+                    </p>
+                    <p>
+                        {t('drawer.website_unknown')}
+                        {t('comma')}
+                        {verification.contract.Verified ? t('drawer.contract_verified') : t('drawer.contract_not_verified')}
+                        {t('dot')}
+                        {t('drawer.transfer_remind')}
+                    </p>
+                </>
+            );
+        }
+        return (
+            <>
+                <Title style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }} level={3}>
+                    <b>
+                        {t('drawer.please_authorize_carefully')}
+                        &nbsp;
+                        {t('exclamation_mark')}
+                    </b>
+                </Title>
+                <p style={{ marginBottom: '4px' }}>{t('drawer.you_are_authorizing')}</p>
+                <p style={{ marginBottom: '12px' }}>
+                    <a href={`https://etherscan.io/address/${contractAddress}`} target="_blank" rel="noreferrer">
+                        <Text type="secondary">
+                            {contractAddress}
+                        </Text>
+                        <span style={{ transform: 'translate(0,12px)' }}>
+                            <LinkOutlined />
+                        </span>
+                    </a>
+                </p>
+                <p>
+                    <span style={{ color: '#fe5200' }}>
+                        <b>{t('drawer.website_on_blacklist')}</b>
+                    </span>
+                    {t('comma')}
+                    {/* {verification.contract.Verified ? t('drawer.contract_verified') : t('drawer.contract_not_verified')} */}
+                    {t('drawer.auto_block')}
+                    {t('dot')}
+                    {t('drawer.continue_auth_remind')}
+                </p>
+            </>
+        );
+    };
+
+    type = 'danger';
 
     if (type === 'success') {
         return (
@@ -65,70 +129,56 @@ const DrawerDemo = ({
         );
     }
 
-    if (type === 'warning') {
+    if (type === 'warning' || type === 'danger') {
+        const primaryColor = type === 'warning' ? '#ffd600' : '#fe5200';
         return (
             <Modal
+                closable={false}
+                width={460}
                 getContainer={getContainer()}
                 visible={visible}
-                title={(
-                    <>
-                        <ExclamationCircleOutlined style={{ color: '#faad14', marginRight: '8px' }} />
-                        {t('drawer.warning')}
-                    </>
-                )}
                 onOk={handleOk}
-                onCancel={handleCancel}
-                footer={[
-                    <Button
-                        key="link"
-                        type="primary"
-                        loading={loading}
-                        onClick={handleOk}
-                    >
-                        {t('drawer.report_button')}
-                    </Button>,
-                    <Button key="back" onClick={handleCancel}>
-                        {t('drawer.i_got_it')}
-                    </Button>
-                ]}
+                footer={null}
             >
-                <p>{t('drawer.you_are_authorizing')}</p>
-                <p>{contractAddress}</p>
-                <p>{verification.contract.Verified ? t('drawer.contract_verified') : t('drawer.contract_not_verified')}</p>
-            </Modal>
-        );
-    }
-
-    if (type === 'error') {
-        return (
-            <Modal
-                getContainer={getContainer()}
-                visible={visible}
-                title={(
-                    <>
-                        <StopOutlined style={{ color: '#ff4d4f', marginRight: '8px' }} />
-                        {t('drawer.error')}
-                    </>
-                )}
-                onOk={handleOk}
-                onCancel={handleCancel}
-                footer={[
-                    <Button
-                        key="link"
-                        type="primary"
-                        loading={loading}
-                        onClick={handleOk}
+                <Row justify="space-between" style={{ backgroundColor: primaryColor, height: '52px', margin: '-24px -24px 24px -24px' }}>
+                    <Col
+                        span={6}
+                        style={{
+                            display: 'flex', justifyContent: 'left', alignItems: 'center', marginLeft: '47px'
+                        }}
                     >
-                        {t('drawer.still_continue')}
-                    </Button>,
-                    <Button key="back" onClick={handleCancel}>
-                        {t('drawer.ok')}
-                    </Button>
-                ]}
-            >
-                <p>{t('drawer.you_are_authorizing')}</p>
-                <p>{contractAddress}</p>
-                <p>{verification.contract.Verified ? t('drawer.contract_verified') : t('drawer.contract_not_verified')}</p>
+                        <p><b><ExclamationOutlined style={{ color: '#ffffff', fontSize: '20px' }} /></b></p>
+                    </Col>
+                    <Col
+                        span={6}
+                        style={{
+                            display: 'flex', justifyContent: 'right', alignItems: 'center', color: '#ffffff', marginRight: '47px'
+                        }}
+                    >
+                        MetaShield
+                    </Col>
+                </Row>
+                <div style={{ margin: '0px 12px' }}>
+                    {getModalContent(type)}
+                </div>
+                <Row justify="space-between" style={{ height: '80px' }}>
+                    <Col
+                        span={12}
+                        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                    >
+                        <button className={`${type}-button`} onClick={handleCancel} type="button">
+                            {type === 'warning'
+                                ? t('drawer.cancel_authorization')
+                                : t('drawer.i_got_it')}
+                        </button>
+                    </Col>
+                    <Col
+                        span={12}
+                        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                    >
+                        <button className="secondary-button" type="button">{t('drawer.continue_authorization')}</button>
+                    </Col>
+                </Row>
             </Modal>
         );
     }

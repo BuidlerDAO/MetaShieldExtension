@@ -36,7 +36,7 @@ export default class ProxyEthereum {
         if (verificationData.domain.status === 'whitelist') {
             return 'success';
         } if (verificationData.domain.status === 'blacklist') {
-            return 'error';
+            return 'danger';
         }
         return 'warning';
     }
@@ -83,7 +83,7 @@ export default class ProxyEthereum {
                             const verification = data.data;
                             that.renderDrawer(type, verification, contractAddress, domain, constList);
                             // 危险交易进行拦截
-                            if (type === 'error') {
+                            if (type === 'danger') {
                                 result = null;
                             }
                         } else {
@@ -165,7 +165,7 @@ export default class ProxyEthereum {
     init() {
         this.initContainer();
         this.initEthereumProxy();
-        // this.test();
+        this.test();
         // 注意，必须设置了run_at=document_start 此段代码才会生效
         document.addEventListener('DOMContentLoaded', () => {
             // this.initContainer();
