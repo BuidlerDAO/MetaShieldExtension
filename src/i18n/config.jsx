@@ -14,9 +14,18 @@ const resources = {
     }
 };
 
+let lang = 'en';
+const type = navigator.appName;
+if (type === 'Netscape') {
+    lang = navigator.language;// 获取浏览器配置语言，支持非IE浏览器
+} else {
+    lang = navigator.userLanguage;// 获取浏览器配置语言，支持IE5+ == navigator.systemLanguage
+}
+lang = lang.substring(0, 2);
+
 i18n.use(initReactI18next).init({
     resources,
-    lng: 'zh',
+    lng: lang,
     interpolation: {
         escapeValue: false
     }
