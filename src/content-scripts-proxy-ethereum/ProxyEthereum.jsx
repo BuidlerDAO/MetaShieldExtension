@@ -5,6 +5,7 @@ import { render } from 'react-dom';
 import {
     Drawer, Button, Alert, notification, Col, Row
 } from 'antd';
+import { proxyClient } from './message.js';
 import DrawerDemo from './DrawerDemo';
 import './ProxyEthereum.scss';
 
@@ -42,6 +43,7 @@ export default class ProxyEthereum {
     }
 
     renderDrawer(type, verification, contractAddress, domain, constList) {
+        this.showContainer();
         render(
             <DrawerDemo
                 style={{ width: '50%' }}
@@ -57,15 +59,13 @@ export default class ProxyEthereum {
             />,
             this.container
         );
-        this.showContainer();
     }
 
     initEthereumProxy() {
         const that = this;
         // 初始化代理
         const handler = {
-            apply(target, thisArg, argumentsList) {
-                let result = target(...argumentsList);
+            async apply(target, thisArg, argumentsList) {
                 const constList = [...argumentsList][0];
                 console.log('constList :>> ', constList);
                 if (that.isNotableAction(constList)) {
@@ -76,35 +76,43 @@ export default class ProxyEthereum {
                         contractAddress,
                         domain
                     }).then((data) => {
-                        console.log('data :>> ', data);
-                        const type = that.getDrawerType(data);
+                        // const type = that.getDrawerType(data.data);
+                        const type = 'danger';
                         if (data.status === 'success') {
                             // 获取验证信息，渲染消息框
                             const verification = data.data;
+                            // that.renderDrawer(type, verification, contractAddress, domain, constList);
                             that.renderDrawer(type, verification, contractAddress, domain, constList);
-                            // 危险交易进行拦截
-                            if (type === 'danger') {
-                                result = null;
-                            }
+                            // 监听用户选择
+                            proxyClient.listen().then((decisionData) => {
+                                console.log('decisionData :>> ', decisionData);
+                                // 根据用户决定进行拦截
+                                console.log('decisionData.value :>> ', decisionData.value);
+                                if (decisionData.value === 'continue') {
+                                    target(...argumentsList);
+                                }
+                            }).catch((err) => {
+                                console.log('err :>> ', err);
+                            });
                         } else {
                             console.log('error data :>> ');
                         }
                     }).catch((err) => {
                         console.log('err :>> ', err);
                     });
+                    return null;
                 }
-                return result;
+                return target(...argumentsList);
             }
         };
         const proxyETH = () => {
-            console.log('window.ethereum :>> ', window.ethereum);
             if (typeof window.ethereum !== 'undefined') {
                 console.log('find ethereum');
                 const proxy1 = new Proxy(window.ethereum.request, handler);
                 window.ethereum.request = proxy1;
             }
         };
-        setTimeout(proxyETH, 1000);
+        setTimeout(proxyETH, 2000);
     }
 
     // 封装 fetch 请求： 检验合约和域名安全性
@@ -124,7 +132,7 @@ export default class ProxyEthereum {
                     Verified: true
                 },
                 domain: {
-                    status: 'whitelist' // "blacklist" || "whitelist" || "unknown"
+                    status: 'blacklist' // "blacklist" || "whitelist" || "unknown"
                 }
             }
         };
@@ -160,12 +168,17 @@ export default class ProxyEthereum {
             ]
         };
         this.renderDrawer('warning', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', 'baidu.com', cl);
+        proxyClient.listen().then((data) => {
+            console.log('dataddd :>> ', data);
+        }).catch((err) => {
+            console.log('err :>> ', err);
+        });
     }
 
     init() {
         this.initContainer();
         this.initEthereumProxy();
-        this.test();
+        // this.test();
         // 注意，必须设置了run_at=document_start 此段代码才会生效
         document.addEventListener('DOMContentLoaded', () => {
             // this.initContainer();

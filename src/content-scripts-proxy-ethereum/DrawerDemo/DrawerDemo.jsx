@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Modal, Drawer, Button, Alert, notification, Col, Row,
     Typography
 } from 'antd';
 import { ExclamationOutlined, StopOutlined, LinkOutlined } from '@ant-design/icons';
 import { useTranslation, Trans } from 'react-i18next';
+import { proxyClient } from '../message';
 import './DrawerDemo.scss';
 import '../../i18n/config';
 // import { contentClient, ChromeMessage } from '../../chrome';
@@ -21,6 +22,12 @@ const DrawerDemo = ({
 
     const hideContainer = () => {
         document.querySelector('#chrome-extension-content-base-element-ethereum').setAttribute('style', 'display: none');
+    };
+
+    const postMessageToCurrentPage = (decision) => {
+        console.log('start posting message');
+        const msg = { msg_key: 'user_decision', value: decision };
+        proxyClient.postMsg(msg);
     };
 
     // showContainer() {
@@ -46,6 +53,10 @@ const DrawerDemo = ({
 
     const handleCancel = () => {
         setVisible(false);
+        hideContainer();
+        setTimeout(() => {
+            setVisible(true);
+        }, 300);
     };
 
     const getModalContent = (renderType) => {
@@ -166,7 +177,14 @@ const DrawerDemo = ({
                         span={12}
                         style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
                     >
-                        <button className={`${type}-button`} onClick={handleCancel} type="button">
+                        <button
+                            className={`${type}-button`}
+                            onClick={() => {
+                                postMessageToCurrentPage('block');
+                                handleCancel();
+                            }}
+                            type="button"
+                        >
                             {type === 'warning'
                                 ? t('drawer.cancel_authorization')
                                 : t('drawer.i_got_it')}
@@ -176,7 +194,16 @@ const DrawerDemo = ({
                         span={12}
                         style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
                     >
-                        <button className="secondary-button" type="button">{t('drawer.continue_authorization')}</button>
+                        <button
+                            className="secondary-button"
+                            type="button"
+                            onClick={() => {
+                                postMessageToCurrentPage('continue');
+                                handleCancel();
+                            }}
+                        >
+                            {t('drawer.continue_authorization')}
+                        </button>
                     </Col>
                 </Row>
             </Modal>
