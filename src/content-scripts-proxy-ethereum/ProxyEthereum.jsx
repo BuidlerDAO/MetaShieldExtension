@@ -10,7 +10,8 @@ import DrawerDemo from './DrawerDemo';
 import './ProxyEthereum.scss';
 
 const dictionary = {
-    '0x095ea7b': 'approve'
+    '0x095ea7b3': 'approve',
+    '0xa22cb465': 'setApprovalForAll'
 };
 
 export default class ProxyEthereum {
@@ -21,10 +22,10 @@ export default class ProxyEthereum {
 
     isNotableAction(constList) {
         // 检查是否为关注的交易
-        const notableActionList = ['approve'];
+        const notableActionList = ['approve', 'setApprovalForAll'];
         if (typeof constList.method !== 'undefined') {
             if (constList.method === 'eth_sendTransaction') {
-                const functionName = dictionary[constList.params[0].data.substring(0, 9)];
+                const functionName = dictionary[constList.params[0].data.substring(0, 10)];
                 if (notableActionList.includes(functionName)) {
                     return true;
                 }
@@ -105,14 +106,18 @@ export default class ProxyEthereum {
                 return target(...argumentsList);
             }
         };
-        const proxyETH = () => {
+        // eslint-disable-next-line no-use-before-define
+        const proxyInterval = setInterval(proxyETH(), 1000);
+        function proxyETH() {
             if (typeof window.ethereum !== 'undefined') {
-                console.log('find ethereum');
+                console.log('Found ethereum');
                 const proxy1 = new Proxy(window.ethereum.request, handler);
                 window.ethereum.request = proxy1;
+                clearInterval(proxyInterval);
+            } else {
+                console.log('Did not find ethereum');
             }
-        };
-        setTimeout(proxyETH, 2000);
+        }
     }
 
     // 封装 fetch 请求： 检验合约和域名安全性
