@@ -1,7 +1,15 @@
 /* eslint-disable camelcase */
 const translation_en = {
     popup: {
-        switch_language: 'Switch Language'
+        switch_language: 'Switch Language',
+        slogan_part1: 'Identify fishing website',
+        slogan_part2: 'Protect crypto assets',
+        start_protection: 'Start Protection',
+        agree_policy_part1: 'Click the button above to agree with',
+        agree_policy_part2: 'Privacy Policy and Disclaimer',
+        footer_builderDAO: '@BuidlerDao',
+        how_dose_metashield_work: 'How does MetaShield work',
+        report_fishing_website: 'Report fishing website'
     },
     footer: {
         detail: 'All rights reserved @ React'
@@ -15,7 +23,7 @@ const translation_en = {
         warning: 'Warning',
         success: 'Success',
         error: 'Error',
-        completed_scan: 'Security scan completed',
+        completed_scan: 'Transaction is trusted, this website is in MetaShield whitelist',
         you_are_authorizing: 'You are trying to authorize the assets in your wallet to the following address',
         contract_not_verified: 'The contract has not been tested and validated with open source',
         contract_verified: 'The contract has been tested and validated with open source',

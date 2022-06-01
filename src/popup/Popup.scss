@@ -1,5 +1,16 @@
 body {
   height: unset;
+  margin: 0px;
+}
+
+#chrome-extension-popup{
+  min-width: 280px !important; 
+  min-height: 400px !important;
+}
+
+.popup-content{
+  width: 280px !important; 
+  height: 400px !important;
 }
 
 .basic-table {
@@ -14,4 +25,115 @@ body {
 .center-content {
   display: flex !important; 
   justify-content: center !important;
+}
+
+.popup-content{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* start-protection-button */
+.start-protection-button {
+  width: 147px;
+  align-items: center;
+  appearance: none;
+  background-clip: padding-box;
+  background-color: initial;
+  background-image: none;
+  border-style: none;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  flex-direction: row;
+  flex-shrink: 0;
+  font-family: Eina01,sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  justify-content: center;
+  line-height: 24px;
+  margin: 0;
+  min-height: 64px;
+  outline: none;
+  overflow: visible;
+  padding: 19px 26px;
+  pointer-events: auto;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  text-transform: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  // width: auto;
+  word-break: keep-all;
+  z-index: 0;
+}
+
+@media (min-width: 768px) {
+  .start-protection-button {
+    padding: 19px 32px;
+  }
+}
+
+.start-protection-button:before,
+.start-protection-button:after {
+  border-radius: 80px;
+}
+
+.start-protection-button:before {
+  background-color: rgba(255, 103, 73, 0.32);
+  content: "";
+  display: block;
+  height: 100%;
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: -2;
+}
+
+.start-protection-button:after {
+  background-color: initial;
+  background-image: linear-gradient(92.83deg, #F47422 0,#FF7600 100%, #FFAF14
+  100%);
+  bottom: 4px;
+  content: "";
+  display: block;
+  left: 4px;
+  overflow: hidden;
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  transition: all 100ms ease-out;
+  z-index: -1;
+}
+
+.start-protection-button:hover:not(:disabled):after {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  transition-timing-function: ease-in;
+}
+
+.start-protection-button:active:not(:disabled) {
+  color: #ccc;
+}
+
+.start-protection-button:active:not(:disabled):after {
+  background-image: linear-gradient(0deg, rgba(0, 0, 0, .2), rgba(0, 0, 0, .2)), linear-gradient(92.83deg, #F47422 0,#FF7600 100%, #FFAF14
+  100%);;
+  bottom: 4px;
+  left: 4px;
+  right: 4px;
+  top: 4px;
+}
+
+.start-protection-button:disabled {
+  cursor: default;
+  opacity: .24;
 }

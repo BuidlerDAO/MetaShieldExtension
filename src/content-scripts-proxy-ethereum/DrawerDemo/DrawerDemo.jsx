@@ -172,10 +172,10 @@ const DrawerDemo = ({
                 <div style={{ margin: '0px 12px' }}>
                     {getModalContent(type)}
                 </div>
-                <Row justify="space-between" style={{ height: '80px' }}>
+                <Row justify="space-between" style={{ height: '80px', margin: '0px 12px' }}>
                     <Col
                         span={12}
-                        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                        style={{ display: 'flex', justifyContent: 'start', alignItems: 'center' }}
                     >
                         <button
                             className={`${type}-button`}
@@ -192,7 +192,7 @@ const DrawerDemo = ({
                     </Col>
                     <Col
                         span={12}
-                        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                        style={{ display: 'flex', justifyContent: 'end', alignItems: 'center' }}
                     >
                         <button
                             className="secondary-button"

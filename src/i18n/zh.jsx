@@ -1,7 +1,15 @@
 /* eslint-disable camelcase */
 const translation_zh = {
     popup: {
-        switch_language: '切换语言'
+        switch_language: '切换语言',
+        slogan_part1: '识别钓鱼网站',
+        slogan_part2: '保护加密资产',
+        start_protection: '开启保护',
+        agree_policy_part1: '点击上方按钮即表示您同意',
+        agree_policy_part2: '隐私协议与免责条款',
+        footer_builderDAO: '@BuidlerDao',
+        how_dose_metashield_work: 'MetaShield 如何工作',
+        report_fishing_website: '报告钓鱼网站'
     },
 
     footer: {
@@ -16,7 +24,7 @@ const translation_zh = {
         warning: '警告：未收录该页面，请谨慎操作',
         success: '成功',
         error: '危险：当前页面被标记为黑名单，已为您拦截本次交易',
-        completed_scan: '已为您完成安全扫描',
+        completed_scan: '交易可信任，此网址处于MetaShield白名单',
         you_are_authorizing: '您正试图将资产授权给地址',
         contract_not_verified: '经检测该合约未完成验证与开源',
         contract_verified: '经检测该合约已完成验证与开源',
