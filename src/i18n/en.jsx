@@ -9,6 +9,8 @@ const translation_en = {
         agree_policy_part2: 'Privacy Policy and Disclaimer',
         footer_builderDAO: '@BuidlerDao',
         how_dose_metashield_work: 'How does MetaShield work',
+        metashield_explanation_part1: 'Phishing sites usually pretend to be well-known NFT sites and induce you to click certain buttons such as mint, etc. It actually induces you to use the approve method to authorize the asset to an address so that the address can transfer your NFT away.',
+        metashield_explanation_part2: 'MetaShield can effectively identify approve transactions and help you alert and block phishing sites by means of black and white lists and checking the status of authorized addresses.',
         report_fishing_website: 'Report fishing website'
     },
     footer: {

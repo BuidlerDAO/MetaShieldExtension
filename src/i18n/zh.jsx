@@ -9,6 +9,8 @@ const translation_zh = {
         agree_policy_part2: '隐私协议与免责条款',
         footer_builderDAO: '@BuidlerDao',
         how_dose_metashield_work: 'MetaShield 如何工作',
+        metashield_explanation_part1: '钓鱼网站通常会伪装成知名 NFT 网站，诱导您点击某些按钮如 mint 等。实际上会诱导您使用 approve 方法将资产授权给某个地址，从而该地址可以转移走你的 NFT。',
+        metashield_explanation_part2: 'MetaShield 可以有效识别 approve 交易，并通过黑白名单的方式以及检查被授权地址的状态，帮助您进行预警和拦截钓鱼网站。',
         report_fishing_website: '报告钓鱼网站'
     },
 

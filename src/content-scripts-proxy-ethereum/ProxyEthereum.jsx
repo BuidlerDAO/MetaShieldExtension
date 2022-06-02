@@ -7,6 +7,7 @@ import {
 } from 'antd';
 import { proxyClient } from './message.js';
 import DrawerDemo from './DrawerDemo';
+import server from '../server/server';
 import './ProxyEthereum.scss';
 
 const dictionary = {
@@ -121,14 +122,8 @@ export default class ProxyEthereum {
     }
 
     // 封装 fetch 请求： 检验合约和域名安全性
-    verifyContractAndDomain() {
-        // const url = `https://metashield.vercel.app/api/contract?network=ethereum&address`;
-        // return new Promise((resolve, reject) => {
-        //     fetch(url)
-        //         .then((res) => res.json())
-        //         .then((data) => resolve(data))
-        //         .catch((err) => reject(err));
-        // });
+    verifyContractAndDomain({ contractAddress, domain }) {
+        // return server.postVerification(contractAddress, domain);
         const mockData = {
             status: 'success',
             data: {
