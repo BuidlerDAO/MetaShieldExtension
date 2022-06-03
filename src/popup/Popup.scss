@@ -10,9 +10,17 @@ body {
 }
 
 #chrome-extension-popup {
-  // font-family: 'SiyuanFont';
+  font-family: 'Microsoft YaHei' !important;
   min-width: 280px !important;
   min-height: 400px !important;
+}
+
+span {
+  color: #34302e;
+}
+
+p {
+  color: #34302e;
 }
 
 .popup-body {

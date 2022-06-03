@@ -44,7 +44,7 @@
 
   "web_accessible_resources": [
     {
-      "resources": ["images/*","js/contentScriptsProxyEthereum.js"],
+      "resources": ["images/*","js/static/*","js/contentScriptsProxyEthereum.js"],
       "matches": ["<all_urls>"]
     }
   ],

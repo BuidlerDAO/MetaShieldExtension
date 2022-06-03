@@ -52,6 +52,7 @@ const Popup = () => {
     useEffect(() => {
         const body = document.querySelector('body');
         body.style.margin = '0px';
+        body.style.fontFamily = 'Microsoft Yahei';
         get('agreed_to_the_agreement').then((res) => {
             if (res) {
                 setAgreed(res);
@@ -78,7 +79,7 @@ const Popup = () => {
             <div className="popup-body" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <div className="popup-content">
                     <img width="68px" src={NormalLogo} alt="MetaShield Logo"></img>
-                    <img width="198px" src={DarkMetaShield} alt="MetaShield"></img>
+                    <img src={DarkMetaShield} alt="MetaShield"></img>
                     {/* <div className='metashield-logo'>MetaShield</div> */}
                     <div className="popup-slogan">
                         <span>{t('popup.slogan_part1')}</span>

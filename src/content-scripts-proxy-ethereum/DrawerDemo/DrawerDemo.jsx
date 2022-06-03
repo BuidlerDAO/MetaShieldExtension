@@ -6,7 +6,10 @@ import {
 import { ExclamationOutlined, StopOutlined, LinkOutlined } from '@ant-design/icons';
 import { useTranslation, Trans } from 'react-i18next';
 import { proxyClient } from '../message';
+import 'animate.css';
 import './DrawerDemo.scss';
+import MetaShieldWhite from '../../../public/images/MetaShield-White.png';
+import ExclamationBold from '../../../public/images/ExclamationBold.png';
 import '../../i18n/config';
 // import { contentClient, ChromeMessage } from '../../chrome';
 const { Title, Link, Text } = Typography;
@@ -59,25 +62,27 @@ const DrawerDemo = ({
         }, 300);
     };
 
+    type = 'success';
+    useEffect(() => {
+        if (type === 'success') {
+            setTimeout(() => {
+                setVisible(false);
+            }, 3000);
+        }
+    }, []);
+
     const getModalContent = (renderType) => {
         if (renderType === 'warning') {
             return (
                 <>
-                    <Title style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }} level={3}>
-                        <b>
-                            {t('drawer.please_authorize_carefully')}
-                            &nbsp;
-                            {t('exclamation_mark')}
-                        </b>
-                    </Title>
-                    <p style={{ marginBottom: '4px' }}>{t('drawer.you_are_authorizing')}</p>
+                    <p style={{ marginBottom: '4px', color: 'rgba(52, 48, 46, 1)' }}>{t('drawer.you_are_authorizing')}</p>
                     <p style={{ marginBottom: '12px' }}>
                         <a href={`https://etherscan.io/address/${contractAddress}`} target="_blank" rel="noreferrer">
                             <Text type="secondary">{contractAddress}</Text>
                             <Text type="secondary"><LinkOutlined /></Text>
                         </a>
                     </p>
-                    <p>
+                    <p style={{ color: 'rgba(52, 48, 46, 1)' }}>
                         {t('drawer.website_unknown')}
                         {t('comma')}
                         {verification.contract.Verified ? t('drawer.contract_verified') : t('drawer.contract_not_verified')}
@@ -89,15 +94,8 @@ const DrawerDemo = ({
         }
         return (
             <>
-                <Title style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }} level={3}>
-                    <b>
-                        {t('drawer.please_authorize_carefully')}
-                        &nbsp;
-                        {t('exclamation_mark')}
-                    </b>
-                </Title>
-                <p style={{ marginBottom: '4px' }}>{t('drawer.you_are_authorizing')}</p>
-                <p style={{ marginBottom: '12px' }}>
+                <p style={{ marginBottom: '0px', color: 'rgba(52, 48, 46, 1)' }}>{t('drawer.you_are_authorizing')}</p>
+                <p style={{ marginBottom: '12px', color: 'rgba(52, 48, 46, 1)' }}>
                     <a href={`https://etherscan.io/address/${contractAddress}`} target="_blank" rel="noreferrer">
                         <Text type="secondary">
                             {contractAddress}
@@ -107,7 +105,7 @@ const DrawerDemo = ({
                         </span>
                     </a>
                 </p>
-                <p>
+                <p style={{ color: 'rgba(52, 48, 46, 1)' }}>
                     <span style={{ color: '#fe5200' }}>
                         <b>{t('drawer.website_on_blacklist')}</b>
                     </span>
@@ -121,22 +119,29 @@ const DrawerDemo = ({
         );
     };
 
-    type = 'danger';
-
     if (type === 'success') {
         return (
-            <div style={{
-                display: 'flex', justifyContent: 'center', height: '60%', marginTop: '20px'
-            }}
-            >
-                <Alert
-                    message={t('drawer.completed_scan')}
-                    type="success"
-                    showIcon
-                    closable
-                    getContainer={document.querySelector('#chrome-extension-content-base-element-ethereum')}
-                />
-            </div>
+            <>
+                {visible
+                    ? (
+                        <div
+                            style={{
+                                display: 'flex', justifyContent: 'center', height: '60%', marginTop: '20px'
+                            }}
+                        >
+                            <Alert
+                                // className="animate__animated animate__fadeOutDown"
+                                style={{ backgroundColor: '#FFFFFF', border: 'none', boxShadow: '0px 2px 6px 0px rgba(52, 48, 46, 0.3)' }}
+                                message={t('drawer.completed_scan')}
+                                type="success"
+                                showIcon
+                                closable={false}
+                                getContainer={document.querySelector('#chrome-extension-content-base-element-ethereum')}
+                            />
+                        </div>
+                    )
+                    : null}
+            </>
         );
     }
 
@@ -153,23 +158,36 @@ const DrawerDemo = ({
             >
                 <Row justify="space-between" style={{ backgroundColor: primaryColor, height: '52px', margin: '-24px -24px 24px -24px' }}>
                     <Col
-                        span={6}
+                        span={4}
                         style={{
                             display: 'flex', justifyContent: 'left', alignItems: 'center', marginLeft: '47px'
                         }}
                     >
-                        <p><b><ExclamationOutlined style={{ color: '#ffffff', fontSize: '20px' }} /></b></p>
+                        {/* <p><b><ExclamationOutlined style={{ color: '#ffffff', fontSize: '20px' }} /></b></p> */}
+                        <img src={ExclamationBold} style={{ width: '3px' }} alt=""></img>
                     </Col>
                     <Col
-                        span={6}
+                        span={7}
                         style={{
                             display: 'flex', justifyContent: 'right', alignItems: 'center', color: '#ffffff', marginRight: '47px'
                         }}
                     >
-                        MetaShield
+                        <img src={MetaShieldWhite} style={{ width: '100px' }} alt=""></img>
                     </Col>
                 </Row>
-                <div style={{ margin: '0px 12px' }}>
+                <div style={{ margin: '0px 12px 32px 12px' }}>
+                    <Title
+                        style={{
+                            color: type === 'warning' ? '' : primaryColor, display: 'flex', justifyContent: 'center', marginTop: '30px', marginBottom: '36px', fontWeight: '480', fontSize: '32px'
+                        }}
+                        level={3}
+                    >
+                        <b>
+                            {type === 'warning' ? t('drawer.please_authorize_carefully') : t('drawer.high_risk_transaction')}
+                            &nbsp;
+                            {t('exclamation_mark')}
+                        </b>
+                    </Title>
                     {getModalContent(type)}
                 </div>
                 <Row justify="space-between" style={{ height: '80px', margin: '0px 12px' }}>
