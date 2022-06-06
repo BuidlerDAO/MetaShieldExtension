@@ -16,11 +16,6 @@ app.get("/", (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, "index.html"))
 })
 
-// 域名证书
-app.get("/.well-known/pki-validation/fileauth.txt", (req: Request, res: Response) => {
-  res.sendFile(path.join(__dirname, "fileauth.txt"))
-})
-
 app.get("/release", (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, "index.html"))
 })
