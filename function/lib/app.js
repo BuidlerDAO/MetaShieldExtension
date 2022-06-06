@@ -43,12 +43,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
-// 域名证书
-app.get("/.well-known/pki-validation/fileauth.txt", (req, res) => {
-    res.sendFile(path.join(__dirname, "fileauth.txt"));
+app.get("/en", (req, res) => {
+    res.sendFile(path.join(__dirname, "indexen.html"));
 });
-app.get("/release", (req, res) => {
-    res.sendFile(path.join(__dirname, "index.html"));
+app.get("/assets/:asset_id", (req, res) => {
+    res.sendFile(path.join(__dirname, "assets/asset_id"));
 });
 app.get("/logo", (req, res) => {
     const logo = path.join(__dirname, "logo.png");

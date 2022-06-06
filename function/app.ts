@@ -16,8 +16,12 @@ app.get("/", (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, "index.html"))
 })
 
-app.get("/release", (req: Request, res: Response) => {
-  res.sendFile(path.join(__dirname, "index.html"))
+app.get("/en", (req: Request, res: Response) => {
+  res.sendFile(path.join(__dirname, "indexen.html"))
+})
+
+app.get("/assets/:asset_id", (req: Request, res: Response) => {
+  res.sendFile(path.join(__dirname, "assets/asset_id"))
 })
 
 app.get("/logo", (req: Request, res: Response) => {
