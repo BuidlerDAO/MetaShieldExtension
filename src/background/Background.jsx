@@ -8,8 +8,8 @@ export default class Background {
     }
 
     init() {
-        this.initContentMenu();
-        this.initMessageClient();
+        // this.initContentMenu();
+        // this.initMessageClient();
     }
 
     // 初始化右键菜单
