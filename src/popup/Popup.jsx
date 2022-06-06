@@ -76,7 +76,7 @@ const Popup = () => {
     };
 
     const handleReportPhishing = () => {
-
+        window.open('https://docs.google.com/forms/d/e/1FAIpQLSf-hDJPCfkAfSlSFFmKAGeFDGtEQ1tyKhxtkDE8sU5uQ1BrMA/viewform?usp=sf_link', '_blank');
     };
 
     return (
@@ -93,22 +93,26 @@ const Popup = () => {
                     </div>
                     {agreed ? (
                         <>
-                            <div style={{ marginTop: '52px' }}>
-                                {t('popup.how_dose_metashield_work')}
-                                <Tooltip
-                                    getPopupContainer={() => getPopupContainer()}
-                                    title={(
-                                        <div style={{ fontSize: '8px', color: '#767676' }}>
-                                            <p>{t('popup.metashield_explanation_part1')}</p>
-                                            <p>{t('popup.metashield_explanation_part2')}</p>
-                                        </div>
-                                    )}
-                                    color="#ffffff"
-                                >
-                                    <QuestionCircleOutlined style={{ fontSize: '11px', marginLeft: '6px' }} />
-                                </Tooltip>
+                            <div style={{ display: 'flex', marginTop: '52px' }}>
+                                <div>
+                                    {t('popup.how_dose_metashield_work')}
+                                </div>
+                                <div style={{ paddingTop: '1px' }}>
+                                    <Tooltip
+                                        getPopupContainer={() => getPopupContainer()}
+                                        title={(
+                                            <div style={{ fontSize: '8px', color: '#767676' }}>
+                                                <p>{t('popup.metashield_explanation_part1')}</p>
+                                                <p>{t('popup.metashield_explanation_part2')}</p>
+                                            </div>
+                                        )}
+                                        color="#ffffff"
+                                    >
+                                        <QuestionCircleOutlined style={{ fontSize: '11px', marginLeft: '4px' }} />
+                                    </Tooltip>
+                                </div>
                             </div>
-                            <button className={`report-phishing-button is-${i18n.language}-button`} style={{ marginTop: '16px' }} type="button" onClick={handleStopProtection}>{t('popup.report_phishing_website')}</button>
+                            <button className={`report-phishing-button is-${i18n.language}-button`} style={{ marginTop: '16px' }} type="button" onClick={handleReportPhishing}>{t('popup.report_phishing_website')}</button>
                         </>
                     ) : (
                         <>

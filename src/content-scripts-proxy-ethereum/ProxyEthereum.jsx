@@ -12,7 +12,8 @@ import './ProxyEthereum.scss';
 
 const dictionary = {
     '0x095ea7b3': 'approve',
-    '0xa22cb465': 'setApprovalForAll'
+    '0xa22cb465': 'setApprovalForAll',
+    '0x0752881a': 'transfer'
 };
 
 export default class ProxyEthereum {
@@ -23,16 +24,16 @@ export default class ProxyEthereum {
 
     isNotableAction(constList) {
         // 检查是否为关注的交易
-        const notableActionList = ['approve', 'setApprovalForAll'];
+        const notableActionList = ['approve', 'setApprovalForAll', 'transfer'];
         if (typeof constList.method !== 'undefined') {
             if (constList.method === 'eth_sendTransaction') {
                 const functionName = dictionary[constList.params[0].data.substring(0, 10)];
                 if (notableActionList.includes(functionName)) {
-                    return true;
+                    return { result: true, action: functionName };
                 }
             }
         }
-        return false;
+        return { result: false };
     }
 
     getDrawerType(verificationData) {
@@ -44,13 +45,19 @@ export default class ProxyEthereum {
         return 'warning';
     }
 
-    renderDrawer(type, verification, contractAddress, domain, constList) {
+    getAssetValue(constList) {
+        return `${(parseInt(constList.params[0].value, 16) / (10 ** 18)).toFixed(4)} ETH`;
+    }
+
+    renderDrawer(type, verification, contractAddress, domain, constList, actionName, assetValue) {
         this.showContainer();
         render(
             <DrawerDemo
                 style={{ width: '50%' }}
                 type={type}
                 contractAddress={contractAddress}
+                actionName={actionName}
+                assetValue={assetValue}
                 domain={domain}
                 verification={verification}
                 method={constList.method}
@@ -69,8 +76,10 @@ export default class ProxyEthereum {
         const handler = {
             async apply(target, thisArg, argumentsList) {
                 const constList = [...argumentsList][0];
-                // console.log('constList :>> ', constList);
-                if (that.isNotableAction(constList)) {
+                console.log('constList :>> ', constList);
+                const isNotable = that.isNotableAction(constList).result;
+                const actionName = that.isNotableAction(constList).action;
+                if (isNotable) {
                     const contractAddress = constList.params[0].to;
                     // 获取一级域名
                     const domain = document.domain.split('.').slice(-2).join('.');
@@ -81,10 +90,11 @@ export default class ProxyEthereum {
                     });
                     if (verificationData.status && verificationData.status === 'success') {
                         const verification = verificationData.data;
-                        const type = (domain === 'looksrare.org') ? 'danger' : that.getDrawerType(verificationData.data);
-                        // const type = 'warning';
+                        // const type = (domain === 'looksrare.org') ? 'danger' : that.getDrawerType(verificationData.data);
+                        const type = that.getDrawerType(verificationData.data);
+                        const assetValue = actionName === 'transfer' ? that.getAssetValue(constList) : 0;
                         // 获取验证信息，渲染消息框
-                        that.renderDrawer(type, verification, contractAddress, domain, constList);
+                        that.renderDrawer(type, verification, contractAddress, domain, constList, actionName, assetValue);
                         if (type === 'success') {
                             return target(...argumentsList);
                         }
@@ -97,7 +107,7 @@ export default class ProxyEthereum {
                     }
                     // 检查合约和域名安全性时出错
                     const type = 'error';
-                    that.renderDrawer(type, 'verification', 'contractAddress', domain, constList);
+                    that.renderDrawer(type, 'verification', 'contractAddress', domain, constList, actionName);
                 }
                 return target(...argumentsList);
             }
@@ -105,16 +115,19 @@ export default class ProxyEthereum {
         // eslint-disable-next-line no-use-before-define
         const proxyInterval = setInterval(proxyETH(), 1000);
         function proxyETH() {
-            if (typeof window.ethereum !== 'undefined') {
+            console.log('window.web3 :>> ', window.web3);
+            if (typeof window.ethereum !== 'undefined' || typeof window.web3 !== 'undefined') {
                 console.log('Found ethereum');
                 const proxy1 = new Proxy(window.ethereum.request, handler);
+                const proxy2 = new Proxy(window.web3.currentProvider, handler);
                 window.ethereum.request = proxy1;
+                window.web3.currentProvider = proxy2;
                 clearInterval(proxyInterval);
             } else {
                 console.log('Did not find ethereum');
             }
         }
-        // setTimeout(() => { proxyETH(); }, 1500);
+        setTimeout(() => { clearInterval(proxyInterval); }, 10000);
     }
 
     // 封装 fetch 请求： 检验合约和域名安全性
@@ -177,7 +190,7 @@ export default class ProxyEthereum {
     init() {
         this.initContainer();
         this.initEthereumProxy();
-        this.test();
+        // this.test();
         // 注意，必须设置了run_at=document_start 此段代码才会生效
         // document.addEventListener('DOMContentLoaded', () => {
         //     // this.initContainer();

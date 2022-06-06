@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
     Modal, Drawer, Button, Alert, notification, Col, Row,
-    Typography
+    Typography, Tooltip
 } from 'antd';
 import { ExclamationOutlined, StopOutlined, LinkOutlined } from '@ant-design/icons';
 import { useTranslation, Trans } from 'react-i18next';
@@ -16,13 +16,14 @@ import i18n from '../../i18n/config';
 const { Title, Link, Text } = Typography;
 
 const DrawerDemo = ({
-    type, message, verification, contractAddress, domain, method, params
+    type, message, verification, contractAddress, domain, method, params, actionName, assetValue
 }) => {
     const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
     const [visible, setVisible] = useState(true);
 
     const getContainer = () => document.querySelector('#chrome-extension-content-base-element-ethereum');
+    const getModalContainer = () => document.querySelector('#chrome-extension-content-base-element-ethereum-notification-content');
 
     const hideContainer = () => {
         document.querySelector('#chrome-extension-content-base-element-ethereum').setAttribute('style', 'display: none');
@@ -82,7 +83,6 @@ const DrawerDemo = ({
         if (renderType === 'warning') {
             return (
                 <>
-                    <p style={{ marginBottom: '4px', color: 'rgba(52, 48, 46, 1)' }}>{t('drawer.you_are_authorizing')}</p>
                     <p style={{ marginBottom: '12px' }}>
                         <a href={`https://etherscan.io/address/${contractAddress}`} style={{ color: '#8c8c8c' }} target="_blank" rel="noreferrer">
                             <Text type="secondary">{contractAddress}</Text>
@@ -101,7 +101,6 @@ const DrawerDemo = ({
         }
         return (
             <>
-                <p style={{ marginBottom: '0px', color: 'rgba(52, 48, 46, 1)' }}>{t('drawer.you_are_authorizing')}</p>
                 <p style={{ marginBottom: '12px', color: 'rgba(52, 48, 46, 1)' }}>
                     <a href={`https://etherscan.io/address/${contractAddress}`} style={{ color: '#8c8c8c' }} target="_blank" rel="noreferrer">
                         <Text type="secondary">
@@ -155,6 +154,10 @@ const DrawerDemo = ({
 
     if (type === 'warning' || type === 'danger') {
         const primaryColor = type === 'warning' ? '#ffd600' : '#fe5200';
+        // const tryingFontColor = type === 'warning' ? 'rgba(52, 48, 46, 1)' : '#fe5200';
+        const assetVal = actionName === 'transfer' ? <Text code>{assetValue}</Text> : t('drawer.assets');
+        const action = actionName === 'transfer' ? t('drawer.transfer') : t('drawer.authorize');
+        const explanation = actionName === 'transfer' ? t('drawer.transfer_explanation') : t('drawer.authorize_explanation');
         return (
             <Modal
                 closable={false}
@@ -165,72 +168,94 @@ const DrawerDemo = ({
                 footer={null}
                 className={`notification-${i18n.language}`}
             >
-                <Row justify="space-between" style={{ backgroundColor: primaryColor, height: '52px', margin: '-24px -24px 24px -24px' }}>
-                    <Col
-                        span={4}
-                        style={{
-                            display: 'flex', justifyContent: 'left', alignItems: 'center', marginLeft: '47px'
-                        }}
-                    >
-                        {/* <p><b><ExclamationOutlined style={{ color: '#ffffff', fontSize: '20px' }} /></b></p> */}
-                        <img src={ExclamationBold} style={{ width: '3px' }} alt=""></img>
-                    </Col>
-                    <Col
-                        span={7}
-                        style={{
-                            display: 'flex', justifyContent: 'right', alignItems: 'center', color: '#ffffff', marginRight: '47px'
-                        }}
-                    >
-                        <img src={MetaShieldWhite} style={{ width: '100px' }} alt=""></img>
-                    </Col>
-                </Row>
-                <div style={{ margin: '0px 12px 32px 12px' }}>
-                    <div
-                        className={`careful-auth-${i18n.language}`}
-                        style={{
-                            color: type === 'warning' ? '' : primaryColor, display: 'flex', justifyContent: 'center', marginTop: '30px', marginBottom: '36px'
-                        }}
-                    >
-                        {type === 'warning' ? t('drawer.please_authorize_carefully') : t('drawer.high_risk_transaction')}
+                <div id="chrome-extension-content-base-element-ethereum-notification-content">
+                    <Row justify="space-between" style={{ backgroundColor: primaryColor, height: '52px', margin: '-24px -24px 24px -24px' }}>
+                        <Col
+                            span={4}
+                            style={{
+                                display: 'flex', justifyContent: 'left', alignItems: 'center', marginLeft: '47px'
+                            }}
+                        >
+                            {/* <p><b><ExclamationOutlined style={{ color: '#ffffff', fontSize: '20px' }} /></b></p> */}
+                            <img src={ExclamationBold} style={{ width: '3px' }} alt=""></img>
+                        </Col>
+                        <Col
+                            span={7}
+                            style={{
+                                display: 'flex', justifyContent: 'right', alignItems: 'center', color: '#ffffff', marginRight: '47px'
+                            }}
+                        >
+                            <img src={MetaShieldWhite} style={{ width: '100px' }} alt=""></img>
+                        </Col>
+                    </Row>
+                    <div style={{ margin: '0px 12px 32px 12px' }}>
+                        <div
+                            className={`careful-auth-${i18n.language}`}
+                            style={{
+                                color: type === 'warning' ? '' : primaryColor, display: 'flex', justifyContent: 'center', marginTop: '30px', marginBottom: '36px'
+                            }}
+                        >
+                            {type === 'warning' ? t('drawer.please_authorize_carefully') : t('drawer.high_risk_transaction')}
                             &nbsp;
-                        {t('exclamation_mark')}
+                            {t('exclamation_mark')}
+                        </div>
+                        {/* 您正在试图…… */}
+                        <p style={{ marginBottom: '4px', color: 'rgba(52, 48, 46, 1)' }}>
+                            {t('drawer.you_are_trying_to')}
+                            {i18n.language === 'zh' ? assetVal : ''}
+                            {i18n.language === 'zh' ? '' : ' '}
+                            <Tooltip
+                                getPopupContainer={() => getModalContainer()}
+                                title={(
+                                    <div style={{ fontSize: '8px', color: '#767676' }}>
+                                        <p>{explanation}</p>
+                                    </div>
+                                )}
+                                color="#ffffff"
+                            >
+                                <Text underline strong style={{ color: type === 'danger' ? primaryColor : '' }}>{action}</Text>
+                            </Tooltip>
+                            {i18n.language === 'zh' ? '' : ' '}
+                            {i18n.language !== 'zh' ? assetVal : ''}
+                            {t('drawer.to_address')}
+                        </p>
+                        {getModalContent(type)}
                     </div>
-                    {getModalContent(type)}
+                    <Row justify="space-between" style={{ height: '80px', margin: '0px 12px' }}>
+                        <Col
+                            span={12}
+                            style={{ display: 'flex', justifyContent: 'start', alignItems: 'center' }}
+                        >
+                            <button
+                                className={`${type}-button`}
+                                onClick={() => {
+                                    postMessageToCurrentPage('block');
+                                    handleCancel();
+                                }}
+                                type="button"
+                            >
+                                {type === 'warning'
+                                    ? t('drawer.cancel_authorization')
+                                    : t('drawer.i_got_it')}
+                            </button>
+                        </Col>
+                        <Col
+                            span={12}
+                            style={{ display: 'flex', justifyContent: 'end', alignItems: 'center' }}
+                        >
+                            <button
+                                className="secondary-button"
+                                type="button"
+                                onClick={() => {
+                                    postMessageToCurrentPage('continue');
+                                    handleCancel();
+                                }}
+                            >
+                                {t('drawer.continue_authorization')}
+                            </button>
+                        </Col>
+                    </Row>
                 </div>
-                <Row justify="space-between" style={{ height: '80px', margin: '0px 12px' }}>
-                    <Col
-                        span={12}
-                        style={{ display: 'flex', justifyContent: 'start', alignItems: 'center' }}
-                    >
-                        <button
-                            className={`${type}-button`}
-                            onClick={() => {
-                                postMessageToCurrentPage('block');
-                                handleCancel();
-                            }}
-                            type="button"
-                        >
-                            {type === 'warning'
-                                ? t('drawer.cancel_authorization')
-                                : t('drawer.i_got_it')}
-                        </button>
-                    </Col>
-                    <Col
-                        span={12}
-                        style={{ display: 'flex', justifyContent: 'end', alignItems: 'center' }}
-                    >
-                        <button
-                            className="secondary-button"
-                            type="button"
-                            onClick={() => {
-                                postMessageToCurrentPage('continue');
-                                handleCancel();
-                            }}
-                        >
-                            {t('drawer.continue_authorization')}
-                        </button>
-                    </Col>
-                </Row>
             </Modal>
         );
     }
