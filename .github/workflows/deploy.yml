@@ -1,0 +1,40 @@
+name: deploy
+
+on: 
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./function/
+    steps:
+    - uses: actions/checkout@v2
+    - run: mkdir -p /home/runner/.npm
+      continue-on-error: true
+
+    - name: Use Node.js 12
+      uses: actions/setup-node@v2
+      with:
+        node-version: 12
+        cache: 'npm'
+        cache-dependency-path: ./package-lock.json
+  
+    
+    - name: npm install
+      run: npm install
+    - name: npm install serverless
+      run: npm i -g serverless serverless-tencent
+    - name: install typescript
+      run: npm install -g typescript
+    - name: login with key
+      run: serverless credentials set --secretId ${{ secrets.TENCENTCLOUD_SECRET_ID }} --secretKey ${{ secrets.TENCENTCLOUD_SECRET_KEY }}
+    # setting https://github.com/serverless/serverless-tencent/issues/142
+    - name: export env 
+      run: export SERVERLESS_PLATFORM_VENDOR=tencent sls deploy
+    - name: export env2
+      run: export SLS_GEO_LOCATION=cn sls deploy
+    - name: deploy
+      run: sls deploy
