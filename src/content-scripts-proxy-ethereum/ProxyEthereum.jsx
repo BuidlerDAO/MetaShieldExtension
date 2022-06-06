@@ -69,40 +69,35 @@ export default class ProxyEthereum {
         const handler = {
             async apply(target, thisArg, argumentsList) {
                 const constList = [...argumentsList][0];
-                console.log('constList :>> ', constList);
+                // console.log('constList :>> ', constList);
                 if (that.isNotableAction(constList)) {
-                    // 检查合约和域名安全性
                     const contractAddress = constList.params[0].to;
-                    const domain = window.location.hostname;
-                    that.verifyContractAndDomain({
+                    // 获取一级域名
+                    const domain = document.domain.split('.').slice(-2).join('.');
+                    // 检查合约和域名安全性
+                    const verificationData = await that.verifyContractAndDomain({
                         contractAddress,
                         domain
-                    }).then((data) => {
-                        // const type = that.getDrawerType(data.data);
-                        const type = 'danger';
-                        if (data.status === 'success') {
-                            // 获取验证信息，渲染消息框
-                            const verification = data.data;
-                            // that.renderDrawer(type, verification, contractAddress, domain, constList);
-                            that.renderDrawer(type, verification, contractAddress, domain, constList);
-                            // 监听用户选择
-                            proxyClient.listen().then((decisionData) => {
-                                console.log('decisionData :>> ', decisionData);
-                                // 根据用户决定进行拦截
-                                console.log('decisionData.value :>> ', decisionData.value);
-                                if (decisionData.value === 'continue') {
-                                    target(...argumentsList);
-                                }
-                            }).catch((err) => {
-                                console.log('err :>> ', err);
-                            });
-                        } else {
-                            console.log('error data :>> ');
-                        }
-                    }).catch((err) => {
-                        console.log('err :>> ', err);
                     });
-                    return null;
+                    if (verificationData.status && verificationData.status === 'success') {
+                        const verification = verificationData.data;
+                        const type = (domain === 'looksrare.org') ? 'danger' : that.getDrawerType(verificationData.data);
+                        // const type = 'warning';
+                        // 获取验证信息，渲染消息框
+                        that.renderDrawer(type, verification, contractAddress, domain, constList);
+                        if (type === 'success') {
+                            return target(...argumentsList);
+                        }
+                        // 监听用户选择
+                        const decisionData = await proxyClient.listen();
+                        if (decisionData.value === 'continue') {
+                            return target(...argumentsList);
+                        }
+                        return null;
+                    }
+                    // 检查合约和域名安全性时出错
+                    const type = 'error';
+                    that.renderDrawer(type, 'verification', 'contractAddress', domain, constList);
                 }
                 return target(...argumentsList);
             }
@@ -119,27 +114,28 @@ export default class ProxyEthereum {
                 console.log('Did not find ethereum');
             }
         }
+        // setTimeout(() => { proxyETH(); }, 1500);
     }
 
     // 封装 fetch 请求： 检验合约和域名安全性
     verifyContractAndDomain({ contractAddress, domain }) {
-        // return server.postVerification(contractAddress, domain);
-        const mockData = {
-            status: 'success',
-            data: {
-                contract: {
-                    IsContract: true,
-                    Verified: true
-                },
-                domain: {
-                    status: 'blacklist' // "blacklist" || "whitelist" || "unknown"
-                }
-            }
-        };
-        const pms = new Promise((resolve, reject) => {
-            resolve(mockData);
-        });
-        return pms;
+        return server.postVerification(contractAddress, domain);
+        // const mockData = {
+        //     status: 'success',
+        //     data: {
+        //         contract: {
+        //             IsContract: true,
+        //             Verified: true
+        //         },
+        //         domain: {
+        //             status: 'blacklist' // "blacklist" || "whitelist" || "unknown"
+        //         }
+        //     }
+        // };
+        // const pms = new Promise((resolve, reject) => {
+        //     resolve(mockData);
+        // });
+        // return pms;
     }
 
     test() {
@@ -167,23 +163,26 @@ export default class ProxyEthereum {
                 }
             ]
         };
-        this.renderDrawer('warning', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', 'baidu.com', cl);
-        proxyClient.listen().then((data) => {
-            console.log('dataddd :>> ', data);
-        }).catch((err) => {
-            console.log('err :>> ', err);
-        });
+        const contractAddress = '0x4d224452801aced8b2f0aebe155379bb5d594381';
+        const domain = window.location.hostname;
+        if (domain.includes('tencent')) {
+            this.renderDrawer('danger', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
+        } else if (domain.includes('google')) {
+            this.renderDrawer('warning', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
+        } else if (domain.includes('github')) {
+            this.renderDrawer('success', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
+        }
     }
 
     init() {
         this.initContainer();
         this.initEthereumProxy();
-        // this.test();
+        this.test();
         // 注意，必须设置了run_at=document_start 此段代码才会生效
-        document.addEventListener('DOMContentLoaded', () => {
-            // this.initContainer();
-            // this.initMessageClient();
-        });
+        // document.addEventListener('DOMContentLoaded', () => {
+        //     // this.initContainer();
+        //     // this.initMessageClient();
+        // });
     }
 
     // 初始化外层包裹元素

@@ -7,9 +7,44 @@
 //   height: 100%;
 //   z-index: 9999;
 // }
+@import url('https://fonts.font.im/css?family=Noto+Sans+SC:100,300,400,500,700,900');
+@import url('https://fonts.font.im/css?family=Open+Sans:300,400,700,800');
+
+
+.notification-zh {
+  font-family: Noto Sans SC, sans-serif;
+}
+.notification-en {
+  font-family: Open Sans, sans-serif;
+}
+
+.svg-control {
+  svg {
+    color: #8c8c8c;
+    margin-bottom: 0 !important;
+  }
+}
 
 .animate__animated.animate__bounce {
   --animate-duration: 2s;
+}
+
+.careful-auth-en {
+  font-family: Open Sans, sans-serif;
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 54px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+.careful-auth-zh {
+  font-family: Noto Sans SC, sans-serif;
+  font-size: 40px;
+  font-weight: 900;
+  line-height: 51px;
+  letter-spacing: 0em;
+  text-align: left;
 }
 
 .warning-button {

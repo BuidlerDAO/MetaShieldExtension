@@ -1,6 +1,12 @@
-// @font-face {
-//   font-family: "SiyuanFont";
-//   src: url("../../public/SourceHanSansSC-VF.otf.woff2");
+@import url('https://fonts.font.im/css?family=Noto+Sans+SC:100,300,400,500,700,900');
+
+// * {
+//   // font-family: Open Sans, sans-serif;
+//   font-family: Noto Sans SC, sans-serif;
+// }
+
+// *[lang='zh-CN'] {
+//   font-family: Noto Sans SC, sans-serif;
 // }
 
 body {
@@ -10,7 +16,7 @@ body {
 }
 
 #chrome-extension-popup {
-  font-family: 'Microsoft YaHei' !important;
+  font-family: Noto Sans SC !important;
   min-width: 280px !important;
   min-height: 400px !important;
 }
@@ -28,6 +34,14 @@ p {
   width: 280px !important;
   height: 400px !important;
 }
+
+.popup-zh{
+  font-family: Noto Sans SC, sans-serif;
+}
+.popup-en{
+  font-family: Open Sans, sans-serif;
+}
+
 
 .popup-content {
 }
@@ -58,6 +72,24 @@ p {
 
 .popup-slogan {
   font-size: 14px;
+}
+
+.popup-slogan-en {
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 15px;
+  letter-spacing: 0em;
+  text-align: center;
+}
+
+// .popup-policy {
+// }
+.popup-policy-en {
+  font-size: 9px;
+  font-weight: 400;
+  line-height: 12px;
+  letter-spacing: 0em;
+  text-align: center;
 }
 
 .popup-footer {
@@ -227,4 +259,13 @@ p {
 .report-phishing-button:active {
   box-shadow: none;
   transform: translateY(0);
+}
+
+.is-en-button {
+  // font-family: Open Sans;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  letter-spacing: 0em;
+  text-align: center;
 }

@@ -52,7 +52,12 @@ const Popup = () => {
     useEffect(() => {
         const body = document.querySelector('body');
         body.style.margin = '0px';
-        body.style.fontFamily = 'Microsoft Yahei';
+        // body.style.fontFamily = 'Open Sans';
+        // console.log('navigator.userLanguage :>> ', navigator.language);
+        // console.log('i18n.language :>> ', i18n.language);
+        // if (i18n.language === 'zh') {
+        //     body.style.fontFamily = 'Noto Sans SC';
+        // }
         get('agreed_to_the_agreement').then((res) => {
             if (res) {
                 setAgreed(res);
@@ -70,20 +75,20 @@ const Popup = () => {
         set('agreed_to_the_agreement', false);
     };
 
-    const handleReportFishing = () => {
+    const handleReportPhishing = () => {
 
     };
 
     return (
         <div id="popup-root" className={`${WRAPPER_CLASS_NAME}`} style={{ margin: '0' }}>
-            <div className="popup-body" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+            <div className={`popup-body popup-${i18n.language}`} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <div className="popup-content">
                     <img width="68px" src={NormalLogo} alt="MetaShield Logo"></img>
                     <img src={DarkMetaShield} alt="MetaShield"></img>
                     {/* <div className='metashield-logo'>MetaShield</div> */}
-                    <div className="popup-slogan">
+                    <div className={i18n.language === 'zh' ? 'popup-slogan' : 'popup-slogan-en'}>
                         <span>{t('popup.slogan_part1')}</span>
-&nbsp;
+                        {i18n.language === 'zh' ? ' ' : ', '}
                         <span>{t('popup.slogan_part2')}</span>
                     </div>
                     {agreed ? (
@@ -103,83 +108,32 @@ const Popup = () => {
                                     <QuestionCircleOutlined style={{ fontSize: '11px', marginLeft: '6px' }} />
                                 </Tooltip>
                             </div>
-                            <button className="report-phishing-button" style={{ marginTop: '16px' }} type="button" onClick={handleStopProtection}>{t('popup.report_fishing_website')}</button>
+                            <button className={`report-phishing-button is-${i18n.language}-button`} style={{ marginTop: '16px' }} type="button" onClick={handleStopProtection}>{t('popup.report_phishing_website')}</button>
                         </>
                     ) : (
                         <>
                             <button className="start-protection-button" type="button" onClick={handleStartProtection}>{t('popup.start_protection')}</button>
-                            <div style={{ marginTop: '15.79px' }}>{t('popup.agree_policy_part1')}</div>
-                            <div><Text underline>{t('popup.agree_policy_part2')}</Text></div>
+                            <div className={`popup-policy-${i18n.language}`} style={{ marginTop: '15.79px' }}>{t('popup.agree_policy_part1')}</div>
+                            <div className={`popup-policy-${i18n.language}`}><Text underline>{t('popup.agree_policy_part2')}</Text></div>
                         </>
                     )}
                 </div>
                 <div
-                    aria="footer"
                     className="popup-footer"
                     style={{
                         opacity: '0.5', width: '100%', display: 'flex', justifyContent: 'space-between'
                     }}
                 >
                     <div>{t('popup.footer_builderDAO')}</div>
-                    <div style={{ width: 'auto', display: 'flex', justifyContent: 'end' }} aria="social media icons">
-                        <img src={WebsiteLogo} alt="Website Logo" />
-                        <img src={TwitterLogo} style={{ marginLeft: '12.2px' }} alt="Twitter Logo" />
-                        <img src={DiscordLogo} style={{ marginLeft: '12.2px' }} alt="Discord Logo" />
+                    <div style={{ width: 'auto', display: 'flex', justifyContent: 'end' }}>
+                        <a href=""><img src={WebsiteLogo} alt="Website Logo" /></a>
+                        <a href=""><img src={TwitterLogo} style={{ marginLeft: '12.2px' }} alt="Twitter Logo" /></a>
+                        <a href=""><img src={DiscordLogo} style={{ marginLeft: '12.2px', width: '16px' }} alt="Discord Logo" /></a>
                     </div>
                 </div>
             </div>
         </div>
     );
 };
-
-{ /* <Title className="center-content" level={2}>Meta Shield</Title>
-<Paragraph className="center-content">
-    Keep you
-    {'  '}
-    <Text strong style={{ color: '#1da57a' }}>
-&nbsp;safe&nbsp;
-    </Text>
-    {' '}
-    in
-    {' '}
-    <Text code>Web3</Text>
-    .
-</Paragraph>
-<Button onClick={changeLanguage}>{t('popup.switch_language')}</Button>
-<Form
-    form={form}
-    onFinish={onFinish}
-    layout="Vertical"
-    name="basic"
-    className="basic-table"
-    initialValues={{ remember: true }}
->
-    <ModeSwitch
-        safeMode={safeMode}
-        setSafeMode={(checked) => {
-            setSafeMode(checked);
-        }}
-    ></ModeSwitch>
-
-    <Form.Item
-        label="Address"
-        name="Address"
-        rules={[{ required: true, message: 'Please input your Address!' }]}
-    >
-        <Input />
-    </Form.Item>
-
-    <Form.Item>
-        <Button
-            type="primary"
-            onClick={() => {
-                handleMask2Click();
-            }}
-            className="form-button"
-        >
-            Mask^2
-        </Button>
-    </Form.Item>
-</Form> */ }
 
 export default Popup;

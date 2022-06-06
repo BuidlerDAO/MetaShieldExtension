@@ -10,7 +10,8 @@ import 'animate.css';
 import './DrawerDemo.scss';
 import MetaShieldWhite from '../../../public/images/MetaShield-White.png';
 import ExclamationBold from '../../../public/images/ExclamationBold.png';
-import '../../i18n/config';
+import i18n from '../../i18n/config';
+
 // import { contentClient, ChromeMessage } from '../../chrome';
 const { Title, Link, Text } = Typography;
 
@@ -62,8 +63,8 @@ const DrawerDemo = ({
         }, 300);
     };
 
-    type = 'success';
     useEffect(() => {
+        setVisible(true);
         if (type === 'success') {
             setTimeout(() => {
                 setVisible(false);
@@ -72,20 +73,26 @@ const DrawerDemo = ({
     }, []);
 
     const getModalContent = (renderType) => {
+        const contractInfo = {
+            true: t('drawer.contract_verified'),
+            false: t('drawer.contract_not_verified'),
+            unknown: t('drawer.contract_unknown')
+        };
+
         if (renderType === 'warning') {
             return (
                 <>
                     <p style={{ marginBottom: '4px', color: 'rgba(52, 48, 46, 1)' }}>{t('drawer.you_are_authorizing')}</p>
                     <p style={{ marginBottom: '12px' }}>
-                        <a href={`https://etherscan.io/address/${contractAddress}`} target="_blank" rel="noreferrer">
+                        <a href={`https://etherscan.io/address/${contractAddress}`} style={{ color: '#8c8c8c' }} target="_blank" rel="noreferrer">
                             <Text type="secondary">{contractAddress}</Text>
-                            <Text type="secondary"><LinkOutlined /></Text>
+                            <Text type="secondary"><LinkOutlined color="#8c8c8c" className="svg-control" /></Text>
                         </a>
                     </p>
                     <p style={{ color: 'rgba(52, 48, 46, 1)' }}>
                         {t('drawer.website_unknown')}
                         {t('comma')}
-                        {verification.contract.Verified ? t('drawer.contract_verified') : t('drawer.contract_not_verified')}
+                        {contractInfo[verification.contract.Verified]}
                         {t('dot')}
                         {t('drawer.transfer_remind')}
                     </p>
@@ -96,7 +103,7 @@ const DrawerDemo = ({
             <>
                 <p style={{ marginBottom: '0px', color: 'rgba(52, 48, 46, 1)' }}>{t('drawer.you_are_authorizing')}</p>
                 <p style={{ marginBottom: '12px', color: 'rgba(52, 48, 46, 1)' }}>
-                    <a href={`https://etherscan.io/address/${contractAddress}`} target="_blank" rel="noreferrer">
+                    <a href={`https://etherscan.io/address/${contractAddress}`} style={{ color: '#8c8c8c' }} target="_blank" rel="noreferrer">
                         <Text type="secondary">
                             {contractAddress}
                         </Text>
@@ -119,12 +126,13 @@ const DrawerDemo = ({
         );
     };
 
-    if (type === 'success') {
+    if (type === 'success' || type === 'error') {
         return (
             <>
                 {visible
                     ? (
                         <div
+                            className={`notification-${i18n.language}`}
                             style={{
                                 display: 'flex', justifyContent: 'center', height: '60%', marginTop: '20px'
                             }}
@@ -133,7 +141,7 @@ const DrawerDemo = ({
                                 // className="animate__animated animate__fadeOutDown"
                                 style={{ backgroundColor: '#FFFFFF', border: 'none', boxShadow: '0px 2px 6px 0px rgba(52, 48, 46, 0.3)' }}
                                 message={t('drawer.completed_scan')}
-                                type="success"
+                                type={type}
                                 showIcon
                                 closable={false}
                                 getContainer={document.querySelector('#chrome-extension-content-base-element-ethereum')}
@@ -155,6 +163,7 @@ const DrawerDemo = ({
                 visible={visible}
                 onOk={handleOk}
                 footer={null}
+                className={`notification-${i18n.language}`}
             >
                 <Row justify="space-between" style={{ backgroundColor: primaryColor, height: '52px', margin: '-24px -24px 24px -24px' }}>
                     <Col
@@ -176,18 +185,16 @@ const DrawerDemo = ({
                     </Col>
                 </Row>
                 <div style={{ margin: '0px 12px 32px 12px' }}>
-                    <Title
+                    <div
+                        className={`careful-auth-${i18n.language}`}
                         style={{
-                            color: type === 'warning' ? '' : primaryColor, display: 'flex', justifyContent: 'center', marginTop: '30px', marginBottom: '36px', fontWeight: '480', fontSize: '32px'
+                            color: type === 'warning' ? '' : primaryColor, display: 'flex', justifyContent: 'center', marginTop: '30px', marginBottom: '36px'
                         }}
-                        level={3}
                     >
-                        <b>
-                            {type === 'warning' ? t('drawer.please_authorize_carefully') : t('drawer.high_risk_transaction')}
+                        {type === 'warning' ? t('drawer.please_authorize_carefully') : t('drawer.high_risk_transaction')}
                             &nbsp;
-                            {t('exclamation_mark')}
-                        </b>
-                    </Title>
+                        {t('exclamation_mark')}
+                    </div>
                     {getModalContent(type)}
                 </div>
                 <Row justify="space-between" style={{ height: '80px', margin: '0px 12px' }}>

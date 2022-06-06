@@ -11,7 +11,7 @@ const translation_zh = {
         how_dose_metashield_work: 'MetaShield 如何工作',
         metashield_explanation_part1: '钓鱼网站通常会伪装成知名 NFT 网站，诱导您点击某些按钮如 mint 等。实际上会诱导您使用 approve 方法将资产授权给某个地址，从而该地址可以转移走你的 NFT。',
         metashield_explanation_part2: 'MetaShield 可以有效识别 approve 交易，并通过黑白名单的方式以及检查被授权地址的状态，帮助您进行预警和拦截钓鱼网站。',
-        report_fishing_website: '报告钓鱼网站'
+        report_phishing_website: '报告钓鱼网站'
     },
 
     footer: {
@@ -27,9 +27,11 @@ const translation_zh = {
         success: '成功',
         error: '危险：当前页面被标记为黑名单，已为您拦截本次交易',
         completed_scan: '交易可信任，此网址处于 MetaShield 白名单',
+        completed_scan_error: 'MetaShield 扫描失败',
         you_are_authorizing: '您正试图将资产授权给地址',
         contract_not_verified: '经检测该合约未完成验证与开源',
         contract_verified: '经检测该合约已完成验证与开源',
+        contract_unknown: '未检测到该地址的验证与开源状态',
         report_button: '报告异常',
         still_continue: '仍要继续',
         ok: '好的',
