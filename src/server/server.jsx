@@ -1,6 +1,8 @@
 /* eslint-disable camelcase */
 import md5 from 'blueimp-md5';
 
+const baseURL = 'https://www.metashield.cc/';
+
 const postVerificationCatBoss = (contractAddress, domain) => {
     const formData = new FormData();
     const address = contractAddress;
@@ -59,7 +61,7 @@ const postVerification = (contractAddress, domain) => {
         network
     };
 
-    let fetchUrl = 'https://metashield.ahaclub.net/inwhitelist';
+    let fetchUrl = `${baseURL}/inwhitelist`;
     const paramsArray = [];
     // 拼接参数
     Object.keys(formDataObject).forEach((key) => paramsArray.push(`${key}=${formDataObject[key]}`));
