@@ -11,12 +11,7 @@
   },
 
   "permissions": [
-    "contextMenus",
-    "tabs",
-    "activeTab",
-    "storage",
-    "background",
-    "tabCapture"
+    "storage"
   ],
 
   "host_permissions": [

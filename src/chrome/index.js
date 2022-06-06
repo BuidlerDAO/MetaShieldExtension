@@ -1,5 +1,7 @@
 import { get, set } from './storage';
-import { backgroundClient, contentClient, ChromeMessage, proxyClient } from './message';
+import {
+    backgroundClient, contentClient, ChromeMessage, proxyClient
+} from './message';
 import { create } from './contextMenus';
 import { go } from './history';
 import { reload } from './runtime';
@@ -11,7 +13,7 @@ export {
     backgroundClient,
     contentClient,
     ChromeMessage,
-    create,
+    // create,
     go,
     reload
 };

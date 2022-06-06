@@ -38,7 +38,6 @@ export default class ContentScripts {
 
         contentClient.listen('show drawer', () => {
             this.showContainer();
-
             render(
                 <DrawerDemo
                     onClose={() => {
