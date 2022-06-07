@@ -64,11 +64,6 @@ app.use(function (err: any, req: any, res: any, next: any) {
   res.status(500).send("Internal Serverless Error")
 })
 
-// Web 类型云函数，只能监听 9000 端口
-app.listen(9000, () => {
-  console.log("Server start on http://localhost:9000")
-})
-
 
 app.get("/inwhitelist", async (req: Request, res: Response) => {
   console.log(process.env.FTMSCAN_API_KEY)
@@ -76,3 +71,7 @@ app.get("/inwhitelist", async (req: Request, res: Response) => {
   await getDomainData(req, res)
 })
 
+// Web 类型云函数，只能监听 9000 端口
+app.listen(9000, () => {
+  console.log("Server start on http://localhost:9000")
+})

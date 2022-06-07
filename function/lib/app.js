@@ -55,6 +55,12 @@ app.get("/en", (req, res) => {
 app.get("/indexen.html", (req, res) => {
     res.sendFile(path.join(__dirname, "indexen.html"));
 });
+app.get("/disclaimer", (req, res) => {
+    res.sendFile(path.join(__dirname, "disclaimer.html"));
+});
+app.get("/privacy-policy", (req, res) => {
+    res.sendFile(path.join(__dirname, "privacy-policy.html"));
+});
 app.get("/logo", (req, res) => {
     const logo = path.join(__dirname, "logo.png");
     const content = (0, fs_1.readFileSync)(logo, {
@@ -77,12 +83,12 @@ app.use(function (err, req, res, next) {
     console.log(next);
     res.status(500).send("Internal Serverless Error");
 });
-// Web 类型云函数，只能监听 9000 端口
-app.listen(9000, () => {
-    console.log("Server start on http://localhost:9000");
-});
 app.get("/inwhitelist", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(process.env.FTMSCAN_API_KEY);
     console.log(process.env.TENCENT_SECRET_ID);
     yield (0, get_domain_data_1.getDomainData)(req, res);
 }));
+// Web 类型云函数，只能监听 9000 端口
+app.listen(9000, () => {
+    console.log("Server start on http://localhost:9000");
+});
