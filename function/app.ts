@@ -64,7 +64,6 @@ app.use(function (err: any, req: any, res: any, next: any) {
   res.status(500).send("Internal Serverless Error")
 })
 
-
 app.get("/inwhitelist", async (req: Request, res: Response) => {
   console.log(process.env.FTMSCAN_API_KEY)
   console.log(process.env.TENCENT_SECRET_ID)
