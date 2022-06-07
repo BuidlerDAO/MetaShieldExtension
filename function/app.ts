@@ -11,6 +11,12 @@ var app: Application = express()
 
 // https://stackabuse.com/get-http-post-body-in-express-js/
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use("/assets/:asset_id",(req, res)=>{
+  res.sendFile(path.join(__dirname, req.originalUrl.substring(1)))
+})
+app.use("/vendor/:id",(req, res)=>{
+  res.sendFile(path.join(__dirname, req.originalUrl.substring(1)))
+})
 
 app.get("/", (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, "index.html"))
@@ -20,8 +26,8 @@ app.get("/en", (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, "indexen.html"))
 })
 
-app.get("/assets/:asset_id", (req: Request, res: Response) => {
-  res.sendFile(path.join(__dirname, "assets/asset_id"))
+app.get("/indexen.html", (req: Request, res: Response) => {
+  res.sendFile(path.join(__dirname, "indexen.html"))
 })
 
 app.get("/logo", (req: Request, res: Response) => {
@@ -56,9 +62,9 @@ app.listen(9000, () => {
 })
 
 
-
 app.get("/inwhitelist", async (req: Request, res: Response) => {
+  console.log(process.env.FTMSCAN_API_KEY)
+  console.log(process.env.TENCENT_SECRET_ID)
   await getDomainData(req, res)
-  // res.status(200).send({ tip: "You should use the post request, see doc: https://githubbot.ahaclub.net" })
 })
 

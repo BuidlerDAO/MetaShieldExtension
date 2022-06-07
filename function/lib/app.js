@@ -40,14 +40,20 @@ const get_domain_data_1 = require("./src/get-domain-data");
 var app = express();
 // https://stackabuse.com/get-http-post-body-in-express-js/
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use("/assets/:asset_id", (req, res) => {
+    res.sendFile(path.join(__dirname, req.originalUrl.substring(1)));
+});
+app.use("/vendor/:id", (req, res) => {
+    res.sendFile(path.join(__dirname, req.originalUrl.substring(1)));
+});
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
 app.get("/en", (req, res) => {
     res.sendFile(path.join(__dirname, "indexen.html"));
 });
-app.get("/assets/:asset_id", (req, res) => {
-    res.sendFile(path.join(__dirname, "assets/asset_id"));
+app.get("/indexen.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "indexen.html"));
 });
 app.get("/logo", (req, res) => {
     const logo = path.join(__dirname, "logo.png");
@@ -76,6 +82,7 @@ app.listen(9000, () => {
     console.log("Server start on http://localhost:9000");
 });
 app.get("/inwhitelist", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(process.env.FTMSCAN_API_KEY);
+    console.log(process.env.TENCENT_SECRET_ID);
     yield (0, get_domain_data_1.getDomainData)(req, res);
-    // res.status(200).send({ tip: "You should use the post request, see doc: https://githubbot.ahaclub.net" })
 }));
