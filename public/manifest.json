@@ -10,13 +10,9 @@
     "128": "icons/ic_128.png"
   },
 
-  "permissions": [
-    "storage"
-  ],
+  "permissions": ["storage"],
 
-  "host_permissions": [
-    "<all_urls>"
-  ],
+  "host_permissions": [],
 
   "background": {
     "service_worker": "js/background.js"
@@ -32,14 +28,18 @@
     {
       "matches": ["<all_urls>"],
       "js": ["js/contentScripts.js"],
-      "css": ["css/contentScripts.css","css/contentScriptsProxyEthereum.css"],
+      "css": ["css/contentScripts.css", "css/contentScriptsProxyEthereum.css"],
       "run_at": "document_start"
     }
   ],
 
   "web_accessible_resources": [
     {
-      "resources": ["images/*","js/static/*","js/contentScriptsProxyEthereum.js"],
+      "resources": [
+        "images/*",
+        "js/static/*",
+        "js/contentScriptsProxyEthereum.js"
+      ],
       "matches": ["<all_urls>"]
     }
   ],
