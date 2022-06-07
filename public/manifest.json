@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Meta Shield",
-  "description": "The first line of defense for the survival in Metaverse",
+  "description": "Identify phishing websites and protect your crypto assets.",
   "version": "1.0",
 
   "icons": {
@@ -11,9 +11,6 @@
   },
 
   "permissions": ["storage"],
-
-  "host_permissions": [],
-
   "background": {
     "service_worker": "js/background.js"
   },
@@ -44,5 +41,5 @@
     }
   ],
 
-  "minimum_chrome_version": "5"
+  "minimum_chrome_version": "88"
 }
