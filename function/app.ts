@@ -30,6 +30,14 @@ app.get("/indexen.html", (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, "indexen.html"))
 })
 
+app.get("/disclaimer", (req: Request, res: Response) => {
+  res.sendFile(path.join(__dirname, "disclaimer.html"))
+})
+
+app.get("/privacy-policy", (req: Request, res: Response) => {
+  res.sendFile(path.join(__dirname, "privacy-policy.html"))
+})
+
 app.get("/logo", (req: Request, res: Response) => {
   const logo = path.join(__dirname, "logo.png")
   const content = readFileSync(logo, {
