@@ -18,7 +18,7 @@ module.exports = {
         popup: './src/popup',
         background: './src/background',
         contentScripts: './src/content-scripts',
-        contentScriptsProxyEthereum:'./src/content-scripts-proxy-ethereum',
+        contentScriptsProxyEthereum: './src/content-scripts-proxy-ethereum',
         demo: './src/view/demo'
     },
     output: {

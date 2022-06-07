@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 // import md5 from 'blueimp-md5';
 
-const baseURL = 'https://www.metashield.cc/';
+const baseURL = 'https://www.metashield.cc';
 
 const postVerification = (contractAddress, domain) => {
     const address = contractAddress;
@@ -25,10 +25,29 @@ const postVerification = (contractAddress, domain) => {
     }
 
     return new Promise((resolve, reject) => {
+        // 超时处理
+        const timer = setTimeout(() => {
+            resolve({
+                status: 'success',
+                data: {
+                    contract: {
+                        contract: 'unknown',
+                        verified: 'unknown'
+                    },
+                    domain: {
+                        status: '"unknown"' // "blacklist" || "whitelist" || "unknown"
+                    }
+                }
+            });
+        }, 3000);
+
         fetch(fetchUrl, {
             method: 'GET'
         })
-            .then((res) => res.json())
+            .then((res) => {
+                clearTimeout(timer);
+                return res.json();
+            })
             .then((data) => resolve(data))
             .catch((err) => reject(err));
     });

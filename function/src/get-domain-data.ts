@@ -1,7 +1,8 @@
 import { Network } from "./network"
-import { isContract } from "./utils"
+import { isContract, isVerified } from "./utils"
 import { Request, Response } from "express"
 import whitelist from "../data/whitelist.json"
+import useBlacklist from "../data/use_blacklist.json"
 
 export const getDomainData = async function (req: Request, res: Response) {
   console.log(req.query)
@@ -15,36 +16,39 @@ export const getDomainData = async function (req: Request, res: Response) {
     res.status(400).send({ code: "Query not find" })
     return
   }
-  console.log(whitelist)
 
-  var blackList = ["22.com"]
-
-  const isContractResult = await isContract(address, network as Network)
-  console.log(isContractResult)
-  if (isContractResult.error) {
-    // res.status(200).send(responseData)
-    return {
-      error: {
-        message: isContractResult.error.message,
-      },
-    }
-  }
-  const responseData = {
-    code: 200,
-    status: "success",
-    data: {
-      contract: {
-        IsContract: isContractResult.data, // true || false || "unknown"
-        Verified: isContractResult.data // true || false  || "unknown"
-      },
-      domain: {
-        status: blackList.includes(url)?
+  const status = useBlacklist.includes(url)?
           "blacklist": whitelist.includes(url)?
             "whitelist" : "unknown"
-      }
-    }
+  var responseData, isContractResultData, isVerifiedResultData, errorData: string | boolean | undefined
+  if(status!="unknown"){
+    responseData = getResponseData("unknown", "unknown", status)
+  }else{
+    const isContractResult = await isContract(address, network as Network)
+    const isVerifiedResult = await isVerified(address, network as Network)
+    console.log(isContractResult)
+    isContractResultData = isContractResult.error ? "unknown" :isContractResult.data
+    isVerifiedResultData = isVerifiedResult.error ? "unknown" :isVerifiedResult.data
+    errorData = isContractResult.error?"isContractResult function returned an error":isVerifiedResult.error ?"isVerifiedResult function returned an error": undefined
+    responseData = getResponseData(isContractResultData, isVerifiedResultData, "unknown", errorData)
   }
   res.status(200).send(responseData)
   return responseData
 }
 
+function getResponseData(contract: boolean | string, verified: boolean | string, status: string, error?: boolean | string | undefined){
+  return {
+    code: 200,
+    status: "success",
+    data: {
+      contract: {
+        contract: contract, // true || false || "unknown"
+        verified: verified // true || false  || "unknown"
+      },
+      domain: {
+        status: status,
+      }
+    },
+    error: error,
+  }
+}

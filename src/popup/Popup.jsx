@@ -9,7 +9,7 @@ import i18n from 'i18next';
 import './Popup.scss';
 import { go, get, set } from '../chrome';
 // import ModeSwitch from './ModeSwitch';
-import NormalLogo from '../../public/images/LOGO-Normal.svg';
+import NormalLogo from '../../public/images/LOGO-Normal.png';
 import DarkMetaShield from '../../public/images/MetaShield-Dark.svg';
 import DiscordLogo from '../../public/images/socialmedia-discord.png';
 import TwitterLogo from '../../public/images/socialmedia-twitter.png';
@@ -84,7 +84,7 @@ const Popup = () => {
             <div className={`popup-body popup-${i18n.language}`} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <div className="popup-content">
                     <img width="68px" src={NormalLogo} alt="MetaShield Logo"></img>
-                    <img src={DarkMetaShield} alt="MetaShield"></img>
+                    <img width="208px" src={DarkMetaShield} alt="MetaShield"></img>
                     {/* <div className='metashield-logo'>MetaShield</div> */}
                     <div className={i18n.language === 'zh' ? 'popup-slogan' : 'popup-slogan-en'}>
                         <span>{t('popup.slogan_part1')}</span>
@@ -94,21 +94,21 @@ const Popup = () => {
                     {agreed ? (
                         <>
                             <div style={{ display: 'flex', marginTop: '52px' }}>
-                                <div>
+                                <div className="metashield-explanation">
                                     {t('popup.how_dose_metashield_work')}
                                 </div>
-                                <div style={{ paddingTop: '1px' }}>
+                                <div style={{ paddingTop: '5px' }}>
                                     <Tooltip
                                         getPopupContainer={() => getPopupContainer()}
                                         title={(
-                                            <div style={{ fontSize: '8px', color: '#767676' }}>
+                                            <div style={{ fontSize: '14px', color: '#767676', padding: '17px' }}>
                                                 <p>{t('popup.metashield_explanation_part1')}</p>
                                                 <p>{t('popup.metashield_explanation_part2')}</p>
                                             </div>
                                         )}
                                         color="#ffffff"
                                     >
-                                        <QuestionCircleOutlined style={{ fontSize: '11px', marginLeft: '4px' }} />
+                                        <QuestionCircleOutlined style={{ fontSize: '13px', marginLeft: '4px' }} />
                                     </Tooltip>
                                 </div>
                             </div>
@@ -118,21 +118,39 @@ const Popup = () => {
                         <>
                             <button className="start-protection-button" type="button" onClick={handleStartProtection}>{t('popup.start_protection')}</button>
                             <div className={`popup-policy-${i18n.language}`} style={{ marginTop: '15.79px' }}>{t('popup.agree_policy_part1')}</div>
-                            <div className={`popup-policy-${i18n.language}`}><Text underline>{t('popup.agree_policy_part2')}</Text></div>
+                            <div className={`popup-policy-${i18n.language}`}>
+                                <a href="https://www.metashield.cc/privacy-policy" target="_blank" rel="noreferrer">
+                                    <Text underline>{t('popup.agree_policy_part2_private_policy')}</Text>
+                                </a>
+                                {t('popup.agree_policy_part3_and')}
+                                <a href="https://www.metashield.cc/disclaimer" target="_blank" rel="noreferrer">
+                                    <Text underline>{t('popup.agree_policy_part4_disclaimer')}</Text>
+                                </a>
+                            </div>
                         </>
                     )}
                 </div>
                 <div
                     className="popup-footer"
                     style={{
-                        opacity: '0.5', width: '100%', display: 'flex', justifyContent: 'space-between'
+                        width: '100%', display: 'flex', justifyContent: 'space-between'
                     }}
                 >
-                    <div>{t('popup.footer_builderDAO')}</div>
+                    <div
+                        style={{ color: 'rgba(150, 150, 151, 1)' }}
+                    >
+                        {t('popup.footer_builderDAO')}
+                    </div>
                     <div style={{ width: 'auto', display: 'flex', justifyContent: 'end' }}>
-                        <a href=""><img src={WebsiteLogo} alt="Website Logo" /></a>
-                        <a href=""><img src={TwitterLogo} style={{ marginLeft: '12.2px' }} alt="Twitter Logo" /></a>
-                        <a href=""><img src={DiscordLogo} style={{ marginLeft: '12.2px', width: '16px' }} alt="Discord Logo" /></a>
+                        <a href="https://www.metashield.cc" target="_blank" rel="noreferrer">
+                            <img src={WebsiteLogo} style={{ width: '13px' }} alt="Website Logo" />
+                        </a>
+                        <a href="https://twitter.com/metashieldOS" target="_blank" rel="noreferrer">
+                            <img src={TwitterLogo} style={{ marginLeft: '10px', width: '14px' }} alt="Twitter Logo" />
+                        </a>
+                        <a href="https://discord.gg/Fw7sbfbkJ7" target="_blank" rel="noreferrer">
+                            <img src={DiscordLogo} style={{ marginLeft: '10px', width: '16px' }} alt="Discord Logo" />
+                        </a>
                     </div>
                 </div>
             </div>

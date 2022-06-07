@@ -1,10 +1,11 @@
 {
-  "name": "antd-chrome-extension-boilerplate",
+  "name": "meta-shield",
   "version": "1.0.0",
-  "description": "使用 react + antd 开发 chrome-extension 的脚手架工程",
+  "description": "Meta Shield - Identify Phishing, Protect Assets.",
   "scripts": {
     "start": "webpack serve --config ./config/webpack.dev.js",
     "build": "webpack --config ./config/webpack.prod.js",
+    "buidl": "webpack --config ./config/webpack.prod.js",
     "lint": "eslint . --ext .js,.jsx"
   },
   "devDependencies": {

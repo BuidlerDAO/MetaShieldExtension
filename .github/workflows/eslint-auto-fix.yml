@@ -20,12 +20,12 @@ jobs:
         node-version: 12
         cache: 'npm'
         cache-dependency-path: ./package-lock.json
-  
-    
     - name: npm install
       run: npm install
-    - name: npm install serverless
-      run: npm i -g serverless serverless-tencent
+    - name: npm install eslint
+      run: npm install eslint -g
+    - name: eslint-plugin-import@latest
+      run: npm install eslint-plugin-import@latest --save-dev
     - name: run eslint fix
-      run: eslint "./**.js" --fix
+      run: eslint "./src/**.ts" --fix
 
