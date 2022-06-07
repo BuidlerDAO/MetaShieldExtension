@@ -6,12 +6,14 @@ const translation_en = {
         slogan_part2: 'Protect Assets',
         start_protection: 'START',
         agree_policy_part1: 'By clicking the button above, you agree',
-        agree_policy_part2: 'Privacy Policy and Disclaimer',
+        agree_policy_part2_private_policy: 'Privacy Policy',
+        agree_policy_part3_and: 'and',
+        agree_policy_part4_disclaimer: 'disclaimer',
         footer_builderDAO: '@BuidlerDao',
         how_dose_metashield_work: 'How MetaShield works',
-        metashield_explanation_part1: 'Phishing sites usually pretend to be well-known NFT sites and induce you to click certain buttons such as mint, etc. It actually induces you to use the approve method to authorize the asset to an address so that the address can transfer your NFT away.',
-        metashield_explanation_part2: 'MetaShield can effectively identify approve transactions and help you alert and block phishing sites by means of black and white lists and checking the status of authorized addresses.',
-        report_phishing_website: 'Report phishing site'
+        metashield_explanation_part1: "Phishing sites usually disguise themselves as well-known NFT sites. If you click on their inducing button like mint, they'll actually use the ‘approve’ and ‘send’ method to authorize your asset or transfer them away.",
+        metashield_explanation_part2: 'MetaShield can timely identify approve transactions, check the security status of authorized addresses through blacklist and whitelist, and inform you of the consequence of clicks. Warning or even blocking high-risk authorization.',
+        report_phishing_website: 'Report phishing'
     },
     footer: {
         detail: 'All rights reserved @ React'
@@ -44,7 +46,7 @@ const translation_en = {
         i_got_it: 'Got it',
         cancel_authorization: 'Cancel Authorize',
         continue_authorization: 'Continue',
-        website_unknown: 'This website does not exist on the MetaShield blacklist/ whitelist',
+        website_unknown: 'This website does not exist on the MetaShield whitelist',
         website_on_blacklist: 'Website is on the Blacklist of MetaShield',
         please_authorize_carefully: 'Careful Authorize',
         high_risk_transaction: 'Risk Warning',
@@ -52,9 +54,9 @@ const translation_en = {
         continue_auth_remind: ' Please notice a high risk of stolen assets if you click on continue.',
         auto_block: 'we automatically blocked this transaction for you'
     },
-    comma: ',',
+    comma: ', ',
     colon: ':',
-    dot: '.',
+    dot: '. ',
     exclamation_mark: '!'
 };
 

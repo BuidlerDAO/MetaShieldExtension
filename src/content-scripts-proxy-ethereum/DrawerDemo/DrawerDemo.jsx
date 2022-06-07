@@ -3,7 +3,9 @@ import {
     Modal, Drawer, Button, Alert, notification, Col, Row,
     Typography, Tooltip
 } from 'antd';
-import { ExclamationOutlined, StopOutlined, LinkOutlined } from '@ant-design/icons';
+import {
+    ExclamationOutlined, QuestionCircleOutlined, StopOutlined, LinkOutlined
+} from '@ant-design/icons';
 import { useTranslation, Trans } from 'react-i18next';
 import { proxyClient } from '../message';
 import 'animate.css';
@@ -92,7 +94,7 @@ const DrawerDemo = ({
                     <p style={{ color: 'rgba(52, 48, 46, 1)' }}>
                         {t('drawer.website_unknown')}
                         {t('comma')}
-                        {contractInfo[verification.contract.Verified]}
+                        {contractInfo[verification.contract.verified]}
                         {t('dot')}
                         {t('drawer.transfer_remind')}
                     </p>
@@ -116,7 +118,7 @@ const DrawerDemo = ({
                         <b>{t('drawer.website_on_blacklist')}</b>
                     </span>
                     {t('comma')}
-                    {/* {verification.contract.Verified ? t('drawer.contract_verified') : t('drawer.contract_not_verified')} */}
+                    {/* {verification.contract.verified ? t('drawer.contract_verified') : t('drawer.contract_not_verified')} */}
                     {t('drawer.auto_block')}
                     {t('dot')}
                     {t('drawer.continue_auth_remind')}
@@ -171,24 +173,24 @@ const DrawerDemo = ({
                 <div id="chrome-extension-content-base-element-ethereum-notification-content">
                     <Row justify="space-between" style={{ backgroundColor: primaryColor, height: '52px', margin: '-24px -24px 24px -24px' }}>
                         <Col
-                            span={4}
+                            span={6}
                             style={{
-                                display: 'flex', justifyContent: 'left', alignItems: 'center', marginLeft: '47px'
+                                display: 'flex', justifyContent: 'left', alignItems: 'center', marginLeft: '36px'
                             }}
                         >
                             {/* <p><b><ExclamationOutlined style={{ color: '#ffffff', fontSize: '20px' }} /></b></p> */}
                             <img src={ExclamationBold} style={{ width: '3px' }} alt=""></img>
                         </Col>
                         <Col
-                            span={7}
+                            span={12}
                             style={{
-                                display: 'flex', justifyContent: 'right', alignItems: 'center', color: '#ffffff', marginRight: '47px'
+                                display: 'flex', justifyContent: 'right', alignItems: 'center', color: '#ffffff', marginRight: '36px'
                             }}
                         >
                             <img src={MetaShieldWhite} style={{ width: '100px' }} alt=""></img>
                         </Col>
                     </Row>
-                    <div style={{ margin: '0px 12px 32px 12px' }}>
+                    <div style={{ margin: '0px 13px 32px 13px' }}>
                         <div
                             className={`careful-auth-${i18n.language}`}
                             style={{
@@ -196,29 +198,31 @@ const DrawerDemo = ({
                             }}
                         >
                             {type === 'warning' ? t('drawer.please_authorize_carefully') : t('drawer.high_risk_transaction')}
-                            &nbsp;
                             {t('exclamation_mark')}
                         </div>
                         {/* 您正在试图…… */}
-                        <p style={{ marginBottom: '4px', color: 'rgba(52, 48, 46, 1)' }}>
-                            {t('drawer.you_are_trying_to')}
-                            {i18n.language === 'zh' ? assetVal : ''}
-                            {i18n.language === 'zh' ? '' : ' '}
-                            <Tooltip
-                                getPopupContainer={() => getModalContainer()}
-                                title={(
-                                    <div style={{ fontSize: '8px', color: '#767676' }}>
-                                        <p>{explanation}</p>
-                                    </div>
-                                )}
-                                color="#ffffff"
-                            >
-                                <Text underline strong style={{ color: type === 'danger' ? primaryColor : '' }}>{action}</Text>
-                            </Tooltip>
-                            {i18n.language === 'zh' ? '' : ' '}
-                            {i18n.language !== 'zh' ? assetVal : ''}
-                            {t('drawer.to_address')}
-                        </p>
+                        <b>
+                            <p style={{ marginBottom: '4px', color: 'rgba(52, 48, 46, 1)' }}>
+                                {t('drawer.you_are_trying_to')}
+                                {i18n.language === 'zh' ? assetVal : ''}
+                                {i18n.language === 'zh' ? '' : ' '}
+                                <Tooltip
+                                    getPopupContainer={() => getModalContainer()}
+                                    title={(
+                                        <div style={{ margin: '12px', fontSize: '8px', color: '#767676' }}>
+                                            <p>{explanation}</p>
+                                        </div>
+                                    )}
+                                    color="#ffffff"
+                                >
+                                    <Text>{action}</Text>
+                                    <QuestionCircleOutlined style={{ fontSize: '14px', padding: '0 2px 0px 2px' }} />
+                                </Tooltip>
+                                {i18n.language === 'zh' ? '' : ' '}
+                                {i18n.language !== 'zh' ? assetVal : ''}
+                                {t('drawer.to_address')}
+                            </p>
+                        </b>
                         {getModalContent(type)}
                     </div>
                     <Row justify="space-between" style={{ height: '80px', margin: '0px 12px' }}>

@@ -10,7 +10,9 @@
 @import url('https://fonts.font.im/css?family=Noto+Sans+SC:100,300,400,500,700,900');
 @import url('https://fonts.font.im/css?family=Open+Sans:300,400,700,800');
 
-
+img{
+  border-radius: 0 !important;
+}
 .notification-zh {
   font-family: Noto Sans SC, sans-serif;
 }
@@ -151,10 +153,10 @@
   color: rgba(0, 0, 0, 0.85);
   cursor: pointer;
   display: inline-flex;
-  font-family: system-ui, -apple-system, system-ui, 'Helvetica Neue', Helvetica,
-    Arial, sans-serif;
+  // font-family: system-ui, -apple-system, system-ui, 'Helvetica Neue', Helvetica,
+  //   Arial, sans-serif;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 400;
   justify-content: center;
   line-height: 1.25;
   margin: 0;

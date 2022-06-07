@@ -137,8 +137,8 @@ export default class ProxyEthereum {
         //     status: 'success',
         //     data: {
         //         contract: {
-        //             IsContract: true,
-        //             Verified: true
+        //             contract: true,
+        //             verified: true
         //         },
         //         domain: {
         //             status: 'blacklist' // "blacklist" || "whitelist" || "unknown"
@@ -156,8 +156,8 @@ export default class ProxyEthereum {
             status: 'success',
             data: {
                 contract: {
-                    IsContract: true,
-                    Verified: true
+                    contract: true,
+                    verified: true
                 },
                 domain: {
                     status: 'whitelist' // "blacklist" || "whitelist" || "unknown"
