@@ -1,4 +1,4 @@
-name: deploy-cloud-function
+name: cloud-function-deploy
 
 on: 
   push:

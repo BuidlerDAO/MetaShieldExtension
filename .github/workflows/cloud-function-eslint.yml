@@ -5,6 +5,7 @@ on:
     branches: [ main ]
     paths:
       - 'function/**'
+      - '.github/workflows/cloud-function-eslint.yml'
   pull_request:
     paths:
       - 'function/**'
@@ -31,7 +32,7 @@ jobs:
     - name: npm install eslint
       run: npm install eslint -g
     - name: eslint-plugin-import@latest
-      run: npm install eslint-plugin-import@latest --save-dev
+      run: npm install eslint eslint-plugin-import@latest @typescript-eslint/parser --save-dev
     - name: eslint fix
       run: npm run fix
     - name: build
