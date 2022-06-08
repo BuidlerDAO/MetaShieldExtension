@@ -28,17 +28,17 @@ jobs:
     
     - name: npm install
       run: npm install
+        # setting https://github.com/serverless/serverless-tencent/issues/142
+    - name: export env 
+      run: export SERVERLESS_PLATFORM_VENDOR=tencent
+    - name: export env2
+      run: export SLS_GEO_LOCATION=cn sls deploy
     - name: npm install serverless
       run: npm i -g serverless serverless-tencent
     - name: install typescript
       run: npm install -g typescript
     - name: login with key
       run: serverless credentials set --secretId ${{ secrets.TENCENT_SECRET_ID }} --secretKey ${{ secrets.TENCENT_SECRET_KEY }}
-    # setting https://github.com/serverless/serverless-tencent/issues/142
-    - name: export env 
-      run: export SERVERLESS_PLATFORM_VENDOR=tencent
-    - name: export env2
-      run: export SLS_GEO_LOCATION=cn sls deploy
     - name: build
       run: npm run build
     - name: deploy
