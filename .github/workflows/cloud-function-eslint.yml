@@ -4,10 +4,10 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'functions/**'
+      - 'function/**'
   pull_request:
     paths:
-      - 'functions/**'
+      - 'function/**'
 jobs:
   build:
     runs-on: ubuntu-latest
