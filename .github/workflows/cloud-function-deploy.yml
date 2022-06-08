@@ -3,7 +3,9 @@ name: cloud-function-deploy
 on: 
   push:
     branches: [main]
-    paths: 'function/**'
+    paths: 
+      - 'function/**'
+      - '.github/workflows/cloud-function-deploy.yml'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -31,7 +33,7 @@ jobs:
     - name: install typescript
       run: npm install -g typescript
     - name: login with key
-      run: serverless credentials set --secretId ${{ secrets.TENCENTCLOUD_SECRET_ID }} --secretKey ${{ secrets.TENCENTCLOUD_SECRET_KEY }}
+      run: serverless credentials set --secretId ${{ secrets.TENCENT_SECRET_ID }} --secretKey ${{ secrets.TENCENT_SECRET_KEY }}
     # setting https://github.com/serverless/serverless-tencent/issues/142
     - name: export env 
       run: export SERVERLESS_PLATFORM_VENDOR=tencent
