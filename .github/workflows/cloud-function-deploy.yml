@@ -28,11 +28,9 @@ jobs:
     
     - name: npm install
       run: npm install
-        # setting https://github.com/serverless/serverless-tencent/issues/142
-    - name: export env 
-      run: export SLS_GEO_LOCATION=cn serverless deploy && export SERVERLESS_PLATFORM_VENDOR=tencent sls deploy
+      # setting https://github.com/serverless/serverless-tencent/issues/142
     - name: echo >.env
-      run: echo 'SLS_GEO_LOCATION=cn serverless deploy'>./.env && echo 'SERVERLESS_PLATFORM_VENDOR=tencent sls deploy'>./.env && cat ./.env
+      run: echo 'SLS_GEO_LOCATION=cn serverless deploy'>./.env && echo 'SERVERLESS_PLATFORM_VENDOR=tencent sls deploy'>>./.env && cat ./.env
     - name: npm install serverless
       run: npm i -g serverless serverless-tencent
     - name: install typescript
