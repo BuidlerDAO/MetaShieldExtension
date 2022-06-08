@@ -32,6 +32,8 @@ jobs:
       run: npm install eslint -g
     - name: eslint-plugin-import@latest
       run: npm install eslint-plugin-import@latest --save-dev
-    - name: run eslint fix
-      run: eslint "./src/**.ts" --fix
+    - name: eslint fix
+      run: npm run fix
+    - name: build
+      run: npm run build
 
