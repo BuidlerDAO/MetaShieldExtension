@@ -1,7 +1,13 @@
-name: eslint-auto-fix
+name: cloud-function-eslint
 
 on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'functions/**'
   pull_request:
+    paths:
+      - 'functions/**'
 jobs:
   build:
     runs-on: ubuntu-latest
