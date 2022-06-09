@@ -109,6 +109,10 @@
     /* height: 85px; */
 }
 
+.our-portfolio .col-lg-6,.col-sm-6{
+  padding: 0 3.125rem 3.75rem 3.125rem; 
+}
+
 .gongxian {
     background: #F2F8FF;
     margin-top: 120px;
@@ -260,7 +264,7 @@
   }
 
   .weixin::after {
-    content: url(../images/qr.png);
+    content: url(../images/qr.jpg);
     position: absolute;
     right: -105px;
     top: -60px;
