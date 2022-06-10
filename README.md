@@ -1,5 +1,4 @@
-![](https://www.metashield.cc/assets/images/logo.png)
-# Meta Shield
+# MetaShield
 使用 react + antd 开发 
 
 ## 特性
