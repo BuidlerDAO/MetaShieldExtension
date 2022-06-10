@@ -1,0 +1,40 @@
+name: cloud-function-eslint
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'function/**'
+      - '.github/workflows/cloud-function-eslint.yml'
+  pull_request:
+    paths:
+      - 'function/**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./function
+    steps:
+    - uses: actions/checkout@v2
+    - run: mkdir -p /home/runner/.npm
+      continue-on-error: true
+
+    - name: Use Node.js 12
+      uses: actions/setup-node@v2
+      with:
+        node-version: 12
+        cache: 'npm'
+        cache-dependency-path: function/package-lock.json
+    - name: npm install
+      run: npm install
+    - name: npm install eslint
+      run: npm install eslint -g
+    - name: eslint-plugin-import@latest
+      run: npm install eslint eslint-plugin-import@latest @typescript-eslint/parser --save-dev
+    - name: eslint fix
+      run: npm run fix
+    - name: build
+      run: npm run build
+

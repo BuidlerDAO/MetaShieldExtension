@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDomainData = void 0;
 const utils_1 = require("./utils");
 const whitelist_json_1 = __importDefault(require("../data/whitelist.json"));
+const use_blacklist_json_1 = __importDefault(require("../data/use_blacklist.json"));
 const getDomainData = function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(req.query);
@@ -25,35 +26,40 @@ const getDomainData = function (req, res) {
             res.status(400).send({ code: "Query not find" });
             return;
         }
-        console.log(whitelist_json_1.default);
-        var blackList = ["22.com"];
-        const isContractResult = yield (0, utils_1.isContract)(address, network);
-        console.log(isContractResult);
-        if (isContractResult.error) {
-            // res.status(200).send(responseData)
-            return {
-                error: {
-                    message: isContractResult.error.message,
-                },
-            };
+        const status = use_blacklist_json_1.default.includes(url) ?
+            "blacklist" : whitelist_json_1.default.includes(url) ?
+            "whitelist" : "unknown";
+        var responseData, isContractResultData, isVerifiedResultData, errorData;
+        if (status != "unknown") {
+            responseData = getResponseData("unknown", "unknown", status);
         }
-        const responseData = {
-            code: 200,
-            status: "success",
-            data: {
-                contract: {
-                    IsContract: isContractResult.data,
-                    Verified: isContractResult.data // true || false  || "unknown"
-                },
-                domain: {
-                    status: blackList.includes(url) ?
-                        "blacklist" : whitelist_json_1.default.includes(url) ?
-                        "whitelist" : "unknown"
-                }
-            }
-        };
+        else {
+            const isContractResult = yield (0, utils_1.isContract)(address, network);
+            const isVerifiedResult = yield (0, utils_1.isVerified)(address, network);
+            console.log(isContractResult);
+            isContractResultData = isContractResult.error ? "unknown" : isContractResult.data;
+            isVerifiedResultData = isVerifiedResult.error ? "unknown" : isVerifiedResult.data;
+            errorData = isContractResult.error ? "isContractResult function returned an error" : isVerifiedResult.error ? "isVerifiedResult function returned an error" : undefined;
+            responseData = getResponseData(isContractResultData, isVerifiedResultData, "unknown", errorData);
+        }
         res.status(200).send(responseData);
         return responseData;
     });
 };
 exports.getDomainData = getDomainData;
+function getResponseData(contract, verified, status, error) {
+    return {
+        code: 200,
+        status: "success",
+        data: {
+            contract: {
+                contract: contract,
+                verified: verified // true || false  || "unknown"
+            },
+            domain: {
+                status: status,
+            }
+        },
+        error: error,
+    };
+}
