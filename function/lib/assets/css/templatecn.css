@@ -1179,7 +1179,7 @@ Portfolio
 .our-portfolio {
   padding-top: 120px;
   margin-top: 0px;
-  padding-bottom: 80px;
+  /* padding-bottom: 80px; */
 }
 
 .our-portfolio .section-heading h2 {
