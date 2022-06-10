@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Meta Shield",
+  "name": "MetaShield",
   "description": "Identify phishing websites and protect your crypto assets.",
   "version": "1.0",
 
@@ -17,7 +17,7 @@
 
   "action": {
     "default_icon": "icons/ic_16.png",
-    "default_title": "Meta Shield",
+    "default_title": "MetaShield",
     "default_popup": "html/popup.html"
   },
 
