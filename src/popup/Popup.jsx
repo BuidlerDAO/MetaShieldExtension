@@ -144,7 +144,7 @@ const Popup = () => {
                     <div
                         style={{ color: 'rgba(150, 150, 151, 1)' }}
                     >
-                        {t('popup.footer_builderDAO')}
+                        {t('popup.footer_buidlerDAO')}
                     </div>
                     <div style={{ width: 'auto', display: 'flex', justifyContent: 'end' }}>
                         <a href="https://www.metashield.cc" target="_blank" rel="noreferrer">

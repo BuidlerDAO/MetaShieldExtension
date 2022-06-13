@@ -9,7 +9,7 @@ const translation_en = {
         agree_policy_part2_private_policy: 'Privacy Policy',
         agree_policy_part3_and: ' and ',
         agree_policy_part4_disclaimer: 'disclaimer',
-        footer_builderDAO: '@BuidlerDAO',
+        footer_buidlerDAO: '@BuidlerDAO',
         how_dose_metashield_work: 'How MetaShield works',
         metashield_explanation_part1: "Phishing sites usually disguise themselves as well-known NFT sites. If you click on their inducing button like mint, they'll actually use the ‘approve’ and ‘send’ method to authorize your asset or transfer them away.",
         metashield_explanation_part2: 'MetaShield can timely identify approve transactions, check the security status of authorized addresses through blacklist and whitelist, and inform you of the consequence of clicks. Warning or even blocking high-risk authorization.',
