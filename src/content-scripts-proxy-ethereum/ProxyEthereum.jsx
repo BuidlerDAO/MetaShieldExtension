@@ -116,15 +116,18 @@ export default class ProxyEthereum {
         const proxyInterval = setInterval(proxyETH(), 1000);
         function proxyETH() {
             console.log('window.web3 :>> ', window.web3);
-            if (typeof window.ethereum !== 'undefined' || typeof window.web3 !== 'undefined') {
+            if (typeof window.ethereum !== 'undefined') {
                 console.log('Found ethereum');
                 const proxy1 = new Proxy(window.ethereum.request, handler);
-                const proxy2 = new Proxy(window.web3.currentProvider, handler);
                 window.ethereum.request = proxy1;
+                clearInterval(proxyInterval);
+            } else if (typeof window.web3 !== 'undefined') {
+                console.log('Found web3');
+                const proxy2 = new Proxy(window.web3.currentProvider, handler);
                 window.web3.currentProvider = proxy2;
                 clearInterval(proxyInterval);
             } else {
-                console.log('Did not find ethereum');
+                console.log('Did not find ethereum or web3');
             }
         }
         setTimeout(() => { clearInterval(proxyInterval); }, 10000);
@@ -133,22 +136,6 @@ export default class ProxyEthereum {
     // 封装 fetch 请求： 检验合约和域名安全性
     verifyContractAndDomain({ contractAddress, domain }) {
         return server.postVerification(contractAddress, domain);
-        // const mockData = {
-        //     status: 'success',
-        //     data: {
-        //         contract: {
-        //             contract: true,
-        //             verified: true
-        //         },
-        //         domain: {
-        //             status: 'blacklist' // "blacklist" || "whitelist" || "unknown"
-        //         }
-        //     }
-        // };
-        // const pms = new Promise((resolve, reject) => {
-        //     resolve(mockData);
-        // });
-        // return pms;
     }
 
     test() {
