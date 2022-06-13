@@ -24,7 +24,7 @@ if (type === 'Netscape') {
 lang = lang.substring(0, 2) === 'zh' ? 'zh' : 'en';
 
 // If current webpage dose not support utf-8, then use 'en'
-if (lang === 'zh') {
+if (window.location.protocol !== 'chrome-extension:' && lang === 'zh') {
     const metaArr = document.querySelector('head').getElementsByTagName('meta');
     if (metaArr.length >= 1) {
         let metaString = '';
