@@ -216,7 +216,10 @@ const DrawerDemo = ({
                                     color="#ffffff"
                                 >
                                     <Text>{action}</Text>
-                                    <QuestionCircleOutlined style={{ fontSize: '14px', padding: '0 2px 0px 2px' }} />
+                                    <QuestionCircleOutlined style={{
+                                        display: 'inlineBlock', verticalAlign: 'baseline', fontSize: '14px', padding: '0 2px 0px 2px'
+                                    }}
+                                    />
                                 </Tooltip>
                                 {i18n.language === 'zh' ? '' : ' '}
                                 {i18n.language !== 'zh' ? assetVal : ''}

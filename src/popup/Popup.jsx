@@ -113,7 +113,7 @@ const Popup = () => {
                                         )}
                                         color="#ffffff"
                                     >
-                                        <QuestionCircleOutlined className="question-circle-outlined-icon" style={{ fontSize: '13px' }} />
+                                        <QuestionCircleOutlined className="question-circle-outlined-icon" style={{ display: 'inlineBlock', verticalAlign: 'baseline', fontSize: '13px' }} />
                                         {/* <div className="question-circle-outlined-icon">?</div> */}
                                     </Tooltip>
                                 </div>
