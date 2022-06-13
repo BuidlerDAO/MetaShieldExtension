@@ -97,7 +97,7 @@ const Popup = () => {
                                 <div className="metashield-explanation">
                                     {t('popup.how_dose_metashield_work')}
                                 </div>
-                                <div style={{ paddingTop: i18n.language === 'zh' ? '5px' : '4px' }}>
+                                <div className="question-circle-outlined-icon-container">
                                     <Tooltip
                                         getPopupContainer={() => getPopupContainer()}
                                         title={(
@@ -113,7 +113,8 @@ const Popup = () => {
                                         )}
                                         color="#ffffff"
                                     >
-                                        <QuestionCircleOutlined style={{ fontSize: '13px', marginLeft: '4px' }} />
+                                        <QuestionCircleOutlined className="question-circle-outlined-icon" style={{ fontSize: '13px' }} />
+                                        {/* <div className="question-circle-outlined-icon">?</div> */}
                                     </Tooltip>
                                 </div>
                             </div>
