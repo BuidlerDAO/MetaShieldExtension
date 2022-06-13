@@ -270,10 +270,24 @@ p {
 }
 
 .is-en-button {
-  font-family: Open Sans;
   font-size: 14px;
   font-weight: 700;
   line-height: 19px;
   letter-spacing: 0em;
   text-align: center;
+}
+
+.metashield-explanation-container::-webkit-scrollbar {
+  width: 5px;
+}
+
+.metashield-explanation-container::-webkit-scrollbar-thumb {
+  background: rgba(135, 135, 135, 0.221);
+  border-radius: 20px;
+}
+
+.metashield-explanation-container::-webkit-scrollbar-track {
+  background: rgba(221, 221, 221, 0.559);
+  margin: 18px 8px 18px 0;
+  border-radius: 20px;
 }

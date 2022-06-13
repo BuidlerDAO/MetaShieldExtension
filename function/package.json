@@ -1,17 +1,20 @@
 {
-  "name": "express-demo",
+  "name": "express-cloud-function",
   "version": "1.0.0",
   "description": "",
-  "main": "sls.js",
+  "main": "app.ts",
   "scripts": {
-    "run": "tsc && node ./lib/app.js",
+    "debug": "tsc && node ./lib/app.js",
+    "lint": "eslint --ext .ts .",
+    "fix": "eslint --ext .ts . --fix",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "yugasun",
   "license": "MIT",
   "dependencies": {
     "axios": "^0.27.2",
     "body-parser": "^1.20.0",
+    "eslint": "^8.17.0",
     "eslint-plugin-import": "^2.26.0",
     "express": "^4.18.1",
     "fs": "^0.0.1-security",

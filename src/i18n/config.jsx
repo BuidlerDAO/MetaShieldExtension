@@ -23,6 +23,24 @@ if (type === 'Netscape') {
 }
 lang = lang.substring(0, 2) === 'zh' ? 'zh' : 'en';
 
+// If current webpage dose not support utf-8, then use 'en'
+if (lang === 'zh') {
+    const metaArr = document.querySelector('head').getElementsByTagName('meta');
+    if (metaArr.length >= 1) {
+        let metaString = '';
+        metaArr.forEach((metaTag) => {
+            metaString += metaTag.outerHTML;
+        });
+        if (!metaString.includes('charset="utf-8"')) {
+            console.log('UTF-8 not supported');
+            lang = 'en';
+        }
+    } else {
+        lang = 'en';
+        console.log('UTF-8 not supported');
+    }
+}
+
 i18n.use(initReactI18next).init({
     resources,
     lng: lang,

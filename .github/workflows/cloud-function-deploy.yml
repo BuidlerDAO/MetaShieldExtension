@@ -1,15 +1,18 @@
-name: deploy-cloud-function
+name: cloud-function-deploy
 
 on: 
   push:
     branches: [main]
+    paths: 
+      - 'function/**'
+      - '.github/workflows/cloud-function-deploy.yml'
 jobs:
   build:
     runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
-        working-directory: ./function/
+        working-directory: ./function
     steps:
     - uses: actions/checkout@v2
     - run: mkdir -p /home/runner/.npm
@@ -20,21 +23,21 @@ jobs:
       with:
         node-version: 12
         cache: 'npm'
-        cache-dependency-path: ./package-lock.json
+        cache-dependency-path: function/package-lock.json
   
     
     - name: npm install
       run: npm install
+      # setting https://github.com/serverless/serverless-tencent/issues/142
+    - name: echo >.env
+      run: echo 'SLS_GEO_LOCATION=cn serverless deploy'>./.env && echo 'SERVERLESS_PLATFORM_VENDOR=tencent'>>./.env && cat ./.env
     - name: npm install serverless
       run: npm i -g serverless serverless-tencent
     - name: install typescript
       run: npm install -g typescript
     - name: login with key
-      run: serverless credentials set --secretId ${{ secrets.TENCENTCLOUD_SECRET_ID }} --secretKey ${{ secrets.TENCENTCLOUD_SECRET_KEY }}
-    # setting https://github.com/serverless/serverless-tencent/issues/142
-    - name: export env 
-      run: export SERVERLESS_PLATFORM_VENDOR=tencent sls deploy
-    - name: export env2
-      run: export SLS_GEO_LOCATION=cn sls deploy
+      run: serverless credentials set --secretId ${{ secrets.TENCENT_SECRET_ID }} --secretKey ${{ secrets.TENCENT_SECRET_KEY }}
+    - name: build
+      run: npm run build
     - name: deploy
       run: sls deploy

@@ -1,14 +1,21 @@
-name: eslint-auto-fix
+name: cloud-function-eslint
 
 on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'function/**'
+      - '.github/workflows/cloud-function-eslint.yml'
   pull_request:
+    paths:
+      - 'function/**'
 jobs:
   build:
     runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
-        working-directory: ./function/
+        working-directory: ./function
     steps:
     - uses: actions/checkout@v2
     - run: mkdir -p /home/runner/.npm
@@ -19,13 +26,15 @@ jobs:
       with:
         node-version: 12
         cache: 'npm'
-        cache-dependency-path: ./package-lock.json
+        cache-dependency-path: function/package-lock.json
     - name: npm install
       run: npm install
     - name: npm install eslint
       run: npm install eslint -g
     - name: eslint-plugin-import@latest
-      run: npm install eslint-plugin-import@latest --save-dev
-    - name: run eslint fix
-      run: eslint "./src/**.ts" --fix
+      run: npm install eslint eslint-plugin-import@latest @typescript-eslint/parser --save-dev
+    - name: eslint fix
+      run: npm run fix
+    - name: build
+      run: npm run build
 

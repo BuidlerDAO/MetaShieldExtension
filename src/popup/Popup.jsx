@@ -97,11 +97,16 @@ const Popup = () => {
                                 <div className="metashield-explanation">
                                     {t('popup.how_dose_metashield_work')}
                                 </div>
-                                <div style={{ paddingTop: '5px' }}>
+                                <div style={{ paddingTop: i18n.language === 'zh' ? '5px' : '4px' }}>
                                     <Tooltip
                                         getPopupContainer={() => getPopupContainer()}
                                         title={(
-                                            <div style={{ fontSize: '14px', color: '#767676', padding: '17px' }}>
+                                            <div
+                                                style={{
+                                                    fontSize: '14px', color: '#767676', padding: '17px', overflow: 'auto', maxHeight: '200px'
+                                                }}
+                                                className="metashield-explanation-container"
+                                            >
                                                 <p>{t('popup.metashield_explanation_part1')}</p>
                                                 <p>{t('popup.metashield_explanation_part2')}</p>
                                             </div>
