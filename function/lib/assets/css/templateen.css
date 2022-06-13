@@ -323,11 +323,11 @@ header
 } */
 
 .background-header .main-nav .nav li:hover a {
-  color: #0066FF!important;
+  color: #0066FF !important;
 }
 
 .background-header .nav li a.active {
-  color: #0066FF!important;
+  color: #0066FF !important;
 }
 
 .header-area {
@@ -451,7 +451,7 @@ header
 
 .background-header .main-nav .nav li:hover a,
 .background-header .main-nav .nav li a.active {
-  color: #0066FF!important;
+  color: #0066FF !important;
   opacity: 1;
 }
 
@@ -518,7 +518,7 @@ header
 
 .header-area .main-nav .nav li.submenu ul li a:hover {
   background: #fff;
-  color: #0066FF!important;
+  color: #0066FF !important;
   padding-left: 25px;
 }
 
@@ -886,17 +886,17 @@ preloader
 }
 
 .preloader-inner .dot {
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    top: 12px;
-    left: 15px;
-    background: #0066FF;
-    border-radius: 50%;
-    -webkit-transform: translateX(0);
-    transform: translateX(0);
-    -webkit-animation: dot 2.8s infinite;
-    animation: dot 2.8s infinite;
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 12px;
+  left: 15px;
+  background: #0066FF;
+  border-radius: 50%;
+  -webkit-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-animation: dot 2.8s infinite;
+  animation: dot 2.8s infinite;
 }
 
 .preloader-inner .dots {
@@ -909,13 +909,13 @@ preloader
 }
 
 .preloader-inner .dots span {
-    display: block;
-    float: left;
-    width: 16px;
-    height: 16px;
-    margin-left: 16px;
-    background: #0066FF;
-    border-radius: 50%;
+  display: block;
+  float: left;
+  width: 16px;
+  height: 16px;
+  margin-left: 16px;
+  background: #0066FF;
+  border-radius: 50%;
 }
 
 

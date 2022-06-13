@@ -323,11 +323,11 @@ header
 } */
 
 .background-header .main-nav .nav li:hover a {
-  color: #0066FF!important;
+  color: #0066FF !important;
 }
 
 .background-header .nav li a.active {
-  color: #0066FF!important;
+  color: #0066FF !important;
 }
 
 .header-area {
@@ -451,7 +451,7 @@ header
 
 .background-header .main-nav .nav li:hover a,
 .background-header .main-nav .nav li a.active {
-  color: #0066FF!important;
+  color: #0066FF !important;
   opacity: 1;
 }
 
@@ -518,7 +518,7 @@ header
 
 .header-area .main-nav .nav li.submenu ul li a:hover {
   background: #fff;
-  color: #0066FF!important;
+  color: #0066FF !important;
   padding-left: 25px;
 }
 
