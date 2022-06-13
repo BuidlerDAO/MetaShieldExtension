@@ -88,6 +88,25 @@ p {
   letter-spacing: 0em;
 }
 
+.question-circle-outlined-icon-container{
+  display: flex;
+  justify-content: center;
+  padding-top: 5px;
+  padding-left: 2px;
+  .question-circle-outlined-icon{
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+    // width: 13px;
+    // height: 13px;
+    // line-height: 15px;
+    // font-size: 8px;
+    // font-weight: 500;
+    // border: 2px solid #34302e;
+    // border-radius: 100%;
+  }
+}
+
 // .popup-policy {
 // }
 .popup-policy-en {
