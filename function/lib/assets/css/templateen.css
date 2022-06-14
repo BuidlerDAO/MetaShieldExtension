@@ -674,10 +674,10 @@ header
 
 @media (max-width: 992px) {
 
-  .header-area .main-nav .nav li:last-child,
+  /* .header-area .main-nav .nav li:last-child,
   .background-header .main-nav .nav li:last-child {
     display: none;
-  }
+  } */
 
   .header-area .main-nav .nav li:nth-child(6),
   .background-header .main-nav .nav li:nth-child(6) {
@@ -812,7 +812,7 @@ header
   }
 }
 
-@media (min-width: 767px) {
+@media (min-width: 992px) { 
   .header-area .main-nav .nav {
     display: flex !important;
   }
