@@ -37,6 +37,7 @@ const bodyParser = __importStar(require("body-parser"));
 const path = __importStar(require("path"));
 const fs_1 = require("fs");
 const get_domain_data_1 = require("./src/get-domain-data");
+require("dotenv/config");
 var app = express();
 // https://stackabuse.com/get-http-post-body-in-express-js/
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -84,8 +85,6 @@ app.use(function (err, req, res, next) {
     res.status(500).send("Internal Serverless Error");
 });
 app.get("/inwhitelist", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(process.env.FTMSCAN_API_KEY);
-    console.log(process.env.TENCENT_SECRET_ID);
     yield (0, get_domain_data_1.getDomainData)(req, res);
 }));
 // Web 类型云函数，只能监听 9000 端口

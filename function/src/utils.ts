@@ -1,5 +1,7 @@
 import axios from "axios"
 import { Network, Result } from "./network"
+import "dotenv/config"
+
 
 type Config = {
   // eslint-disable-next-line no-unused-vars
@@ -96,6 +98,7 @@ async function _isContract(
   action: "txlist" | "txlistinternal"
 ): Promise<Result<boolean>> {
   try {
+    // console.log(config[network].apiKey)
     const { data } = await axios.get(
       `https://${config[network].scanDomain}/api`,
       {
@@ -113,8 +116,8 @@ async function _isContract(
         timeout: API_TIMEOUT,
       }
     )
-    console.log("_isContract data:")
-    console.log(data)
+    // console.log("_isContract data:")
+    // console.log(data)
     if (data.status === "1") {
       // contract creation txn
       return { data: data.result[0].to === "" }
@@ -140,8 +143,6 @@ export async function isVerified(
   network: Network
 ): Promise<Result<boolean>> {
   try {
-    console.log("config[network].apiKey===")
-    console.log(config[network].apiKey)
     const { data } = await axios.get(
       `https://${config[network].scanDomain}/api`,
       {
