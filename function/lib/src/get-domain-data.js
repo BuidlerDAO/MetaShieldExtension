@@ -36,7 +36,7 @@ const getDomainData = function (req, res) {
         else {
             const isContractResult = yield (0, utils_1.isContract)(address, network);
             const isVerifiedResult = yield (0, utils_1.isVerified)(address, network);
-            console.log(isContractResult);
+            // console.log(isContractResult)
             isContractResultData = isContractResult.error ? "unknown" : isContractResult.data;
             isVerifiedResultData = isVerifiedResult.error ? "unknown" : isVerifiedResult.data;
             errorData = isContractResult.error ? "isContractResult function returned an error" : isVerifiedResult.error ? "isVerifiedResult function returned an error" : undefined;
