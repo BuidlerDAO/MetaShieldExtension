@@ -139,45 +139,49 @@ export default class ProxyEthereum {
     }
 
     test() {
-        const mockData = {
-            status: 'success',
-            data: {
-                contract: {
-                    contract: true,
-                    verified: true
-                },
-                domain: {
-                    status: 'whitelist' // "blacklist" || "whitelist" || "unknown"
-                }
-            }
-        };
-        const cl = {
-            method: 'eth_sendTransaction',
-            params: [
-                {
-                    from: '0x6cab10630c4f2db291e2372b8cdcb2d07529332b',
-                    data: '0x095ea7b30000000000000000000000006cab10630c4f2db291e2372b8cdcb2d07529332b0000000000000000000000000000000000000000000000000000000000000001',
-                    to: '0x4d224452801aced8b2f0aebe155379bb5d594381',
-                    maxPriorityFeePerGas: '0x3B9ACA00',
-                    maxFeePerGas: '0x53d867b62'
-                }
-            ]
-        };
-        const contractAddress = '0x4d224452801aced8b2f0aebe155379bb5d594381';
-        const domain = window.location.hostname;
-        if (domain.includes('tencent')) {
-            this.renderDrawer('danger', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
-        } else if (domain.includes('google')) {
-            this.renderDrawer('warning', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
-        } else if (domain.includes('github')) {
-            this.renderDrawer('success', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
-        }
+        // const mockData = {
+        //     status: 'success',
+        //     data: {
+        //         contract: {
+        //             contract: true,
+        //             verified: true
+        //         },
+        //         domain: {
+        //             status: 'whitelist' // "blacklist" || "whitelist" || "unknown"
+        //         }
+        //     }
+        // };
+        // const cl = {
+        //     method: 'eth_sendTransaction',
+        //     params: [
+        //         {
+        //             from: '0x6cab10630c4f2db291e2372b8cdcb2d07529332b',
+        //             data: '0x095ea7b30000000000000000000000006cab10630c4f2db291e2372b8cdcb2d07529332b0000000000000000000000000000000000000000000000000000000000000001',
+        //             to: '0x4d224452801aced8b2f0aebe155379bb5d594381',
+        //             maxPriorityFeePerGas: '0x3B9ACA00',
+        //             maxFeePerGas: '0x53d867b62'
+        //         }
+        //     ]
+        // };
+        // const contractAddress = '0x4d224452801aced8b2f0aebe155379bb5d594381';
+        // const domain = window.location.hostname;
+        // if (domain.includes('tencent')) {
+        //     this.renderDrawer('danger', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
+        // } else if (domain.includes('google')) {
+        //     this.renderDrawer('warning', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
+        // } else if (domain.includes('github')) {
+        //     this.renderDrawer('success', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
+        // }
+
+        server.getVerification('', '', '').then((res) => {
+            console.log('res :>> ', res);
+        });
     }
 
     init() {
         this.initContainer();
         this.initEthereumProxy();
-        // this.test();
+        this.test();
         // 注意，必须设置了run_at=document_start 此段代码才会生效
         // document.addEventListener('DOMContentLoaded', () => {
         //     // this.initContainer();
