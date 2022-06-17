@@ -24,10 +24,7 @@ jobs:
         node-version: 12
         cache: 'npm'
         cache-dependency-path: function/package-lock.json
-  
-    
-    - name: npm install
-      run: npm install
+
       # setting https://github.com/serverless/serverless-tencent/issues/142
     - name: echo >.env
       run: >
@@ -35,6 +32,8 @@ jobs:
         && echo 'SERVERLESS_PLATFORM_VENDOR=tencent'>>./.env && cat ./.env
         && echo 'SEVER_GOOGLE_ANALYTICS_KEY=${{ secrets.SEVER_GOOGLE_ANALYTICS_KEY }}'>>./.env
         && echo 'ETHERSCAN_API_KEY=${{ secrets.ETHERSCAN_API_KEY }}'>>./.env
+    - name: npm install
+      run: npm install
     - name: npm install serverless
       run: npm i -g serverless serverless-tencent
     - name: install typescript

@@ -1,4 +1,5 @@
 "use strict";
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.analytics = void 0;
 const analytics_1 = require("analytics");
@@ -10,7 +11,7 @@ exports.analytics = (0, analytics_1.Analytics)({
     version: "0.01",
     plugins: [
         googleAnalytics({
-            trackingId: process.env.SEVER_GOOGLE_ANALYTICS_KEY,
+            trackingId: (_a = process.env.SEVER_GOOGLE_ANALYTICS_KEY) !== null && _a !== void 0 ? _a : "G-1PEVFJ8R43",
         }),
     ]
 });
