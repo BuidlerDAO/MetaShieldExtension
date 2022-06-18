@@ -31,7 +31,7 @@
   letter-spacing: 0.25px;
   width: 222px;
   height: 60px;
-  line-height: 60px;
+  line-height: 58px;
   background: linear-gradient(270deg, #0066FF 0.01%, #149CFF 100%);
   box-shadow: 0px 2px 3px rgba(140, 133, 130, 0.2);
   border-radius: 37px;
@@ -72,7 +72,7 @@
   font-weight: 700;
   color: #2E3034;
   text-transform: capitalize;
-  padding: 12px 25px;
+  padding: 9px 25px;
   letter-spacing: 0.25px;
   background: #FFFFFF;
   box-shadow: 0px 4px 4px rgba(140, 133, 130, 0.2);
@@ -184,7 +184,7 @@
   font-style: normal;
   font-weight: 600;
   font-size: 18px;
-  line-height: 21px;
+  line-height: 24px;
   text-align: center;
   color: #2E3034;
 }
@@ -235,7 +235,7 @@
 .footer .text-primary {
   font-weight: 700;
   font-size: 22px;
-  line-height: 33px;
+  line-height: 13px;
   color: #0B82FF;
 }
 
@@ -248,7 +248,7 @@
 .footer a {
   font-weight: 500;
   font-size: 18px;
-  line-height: 27px;
+  line-height: 35px;
   color: #2E3034;
 }
 
@@ -487,7 +487,7 @@
   }
 
 
-} 
+}
 
 /* 
 @media (min-width: 992px) {
