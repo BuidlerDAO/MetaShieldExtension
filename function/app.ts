@@ -2,10 +2,12 @@ import { Request, Response, Application } from "express"
 import express = require("express");
 
 
-import   * as bodyParser from "body-parser"
-import  * as path from "path"
+import * as bodyParser from "body-parser"
+import * as path from "path"
 import { readFileSync } from "fs"
 import { getDomainData } from "./src/get-domain-data"
+import "dotenv/config"
+
 
 var app: Application = express()
 
@@ -65,8 +67,6 @@ app.use(function (err: any, req: any, res: any, next: any) {
 })
 
 app.get("/inwhitelist", async (req: Request, res: Response) => {
-  console.log(process.env.FTMSCAN_API_KEY)
-  console.log(process.env.TENCENT_SECRET_ID)
   await getDomainData(req, res)
 })
 

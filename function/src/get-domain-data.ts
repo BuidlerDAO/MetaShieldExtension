@@ -3,10 +3,9 @@ import { isContract, isVerified } from "./utils"
 import { Request, Response } from "express"
 import whitelist from "../data/whitelist.json"
 import useBlacklist from "../data/use_blacklist.json"
+import { analytics } from "./analytics"
 
 export const getDomainData = async function (req: Request, res: Response) {
-  console.log(req.query)
-
   var url = req.query["url"] as string
   var address = req.query["address"] as string
   var network = req.query["network"]
@@ -26,12 +25,13 @@ export const getDomainData = async function (req: Request, res: Response) {
   }else{
     const isContractResult = await isContract(address, network as Network)
     const isVerifiedResult = await isVerified(address, network as Network)
-    console.log(isContractResult)
+    // console.log(isContractResult)
     isContractResultData = isContractResult.error ? "unknown" :isContractResult.data
     isVerifiedResultData = isVerifiedResult.error ? "unknown" :isVerifiedResult.data
     errorData = isContractResult.error?"isContractResult function returned an error":isVerifiedResult.error ?"isVerifiedResult function returned an error": undefined
     responseData = getResponseData(isContractResultData, isVerifiedResultData, "unknown", errorData)
   }
+  analytics.track("inWhitelist", {req: req.query, res: responseData})
   res.status(200).send(responseData)
   return responseData
 }

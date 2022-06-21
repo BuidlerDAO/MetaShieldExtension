@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getContract = exports.getCode = exports.isVerified = exports.isContract = exports.config = void 0;
 const axios_1 = __importDefault(require("axios"));
+require("dotenv/config");
 const API_TIMEOUT = 5000;
 exports.config = {
     ethereum: {
@@ -83,6 +84,7 @@ exports.isContract = isContract;
 function _isContract(address, network, action) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
+            // console.log(config[network].apiKey)
             const { data } = yield axios_1.default.get(`https://${exports.config[network].scanDomain}/api`, {
                 params: {
                     module: "account",
@@ -97,8 +99,8 @@ function _isContract(address, network, action) {
                 },
                 timeout: API_TIMEOUT,
             });
-            console.log("_isContract data:");
-            console.log(data);
+            // console.log("_isContract data:")
+            // console.log(data)
             if (data.status === "1") {
                 // contract creation txn
                 return { data: data.result[0].to === "" };
@@ -123,8 +125,6 @@ function _isContract(address, network, action) {
 function isVerified(address, network) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            console.log("config[network].apiKey===");
-            console.log(exports.config[network].apiKey);
             const { data } = yield axios_1.default.get(`https://${exports.config[network].scanDomain}/api`, {
                 params: {
                     module: "contract",

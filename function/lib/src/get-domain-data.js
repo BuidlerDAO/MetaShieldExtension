@@ -16,9 +16,9 @@ exports.getDomainData = void 0;
 const utils_1 = require("./utils");
 const whitelist_json_1 = __importDefault(require("../data/whitelist.json"));
 const use_blacklist_json_1 = __importDefault(require("../data/use_blacklist.json"));
+const analytics_1 = require("./analytics");
 const getDomainData = function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(req.query);
         var url = req.query["url"];
         var address = req.query["address"];
         var network = req.query["network"];
@@ -36,12 +36,13 @@ const getDomainData = function (req, res) {
         else {
             const isContractResult = yield (0, utils_1.isContract)(address, network);
             const isVerifiedResult = yield (0, utils_1.isVerified)(address, network);
-            console.log(isContractResult);
+            // console.log(isContractResult)
             isContractResultData = isContractResult.error ? "unknown" : isContractResult.data;
             isVerifiedResultData = isVerifiedResult.error ? "unknown" : isVerifiedResult.data;
             errorData = isContractResult.error ? "isContractResult function returned an error" : isVerifiedResult.error ? "isVerifiedResult function returned an error" : undefined;
             responseData = getResponseData(isContractResultData, isVerifiedResultData, "unknown", errorData);
         }
+        analytics_1.analytics.track("inWhitelist", { req: req.query, res: responseData });
         res.status(200).send(responseData);
         return responseData;
     });
