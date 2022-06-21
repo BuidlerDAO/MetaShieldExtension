@@ -7,7 +7,7 @@ import {
     ExclamationOutlined, QuestionCircleOutlined, StopOutlined, LinkOutlined
 } from '@ant-design/icons';
 import { useTranslation, Trans } from 'react-i18next';
-import { proxyClient } from '../message';
+import { proxyClient } from '../postMessage.js';
 import 'animate.css';
 import './DrawerDemo.scss';
 import MetaShieldWhite from '../../../public/images/MetaShield-White.png';

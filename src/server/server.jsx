@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
 // import md5 from 'blueimp-md5';
-
 const baseURL = 'https://www.metashield.cc';
 const etherscanURL = 'https://etherscan.io';
 
@@ -54,37 +53,8 @@ const postVerification = (contractAddress, domain) => {
     });
 };
 
-const getVerification = (contractAddress, domain) => {
-    domain = '0x82592bc6dF83f4491c6719840190a8F65bf9aAE7';
-    // fetch(`${etherscanURL}/address/${domain}`);
-    const fetchUrl = `${etherscanURL}/address/${domain}`;
-    return new Promise((resolve, reject) => {
-        // 超时处理
-        const timer = setTimeout(() => {
-            resolve({
-                status: 'success',
-                data: {
-                    contract: {
-                        contract: 'unknown',
-                        verified: 'unknown'
-                    },
-                    domain: {
-                        status: '"unknown"' // "blacklist" || "whitelist" || "unknown"
-                    }
-                }
-            });
-        }, 3000);
-
-        fetch(fetchUrl, {
-            method: 'GET'
-        })
-            .then((res) => {
-                clearTimeout(timer);
-                return res.json();
-            })
-            .then((data) => resolve(data))
-            .catch((err) => reject(err));
-    });
+const getVerification = async (contractAddress, domain) => {
+    
 };
 
 const server = {

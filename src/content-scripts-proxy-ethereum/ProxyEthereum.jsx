@@ -5,7 +5,7 @@ import { render } from 'react-dom';
 import {
     Drawer, Button, Alert, notification, Col, Row
 } from 'antd';
-import { proxyClient } from './message.js';
+import { proxyClient } from './postMessage.js';
 import DrawerDemo from './DrawerDemo';
 import server from '../server/server';
 import './ProxyEthereum.scss';
@@ -47,6 +47,12 @@ export default class ProxyEthereum {
 
     getAssetValue(constList) {
         return `${(parseInt(constList.params[0].value, 16) / (10 ** 18)).toFixed(4)} ETH`;
+    }
+
+    postMessageToContentScript(contractAddress) {
+        console.log('start posting message');
+        const msg = { msg_key: 'network_request', value: contractAddress };
+        proxyClient.postMsg(msg);
     }
 
     renderDrawer(type, verification, contractAddress, domain, constList, actionName, assetValue) {
@@ -99,7 +105,7 @@ export default class ProxyEthereum {
                             return target(...argumentsList);
                         }
                         // 监听用户选择
-                        const decisionData = await proxyClient.listen();
+                        const decisionData = await proxyClient.listenDecision();
                         if (decisionData.value === 'continue') {
                             return target(...argumentsList);
                         }
@@ -173,15 +179,13 @@ export default class ProxyEthereum {
         //     this.renderDrawer('success', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
         // }
 
-        server.getVerification('', '', '').then((res) => {
-            console.log('res :>> ', res);
-        });
+        this.postMessageToContentScript("0x4d224452801aced8b2f0aebe155379bb5d594381");
     }
 
     init() {
         this.initContainer();
         this.initEthereumProxy();
-        this.test();
+        // this.test();
         // 注意，必须设置了run_at=document_start 此段代码才会生效
         // document.addEventListener('DOMContentLoaded', () => {
         //     // this.initContainer();
