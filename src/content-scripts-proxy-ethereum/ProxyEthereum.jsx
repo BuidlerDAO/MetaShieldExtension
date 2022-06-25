@@ -13,7 +13,9 @@ import './ProxyEthereum.scss';
 const dictionary = {
     '0x095ea7b3': 'approve',
     '0xa22cb465': 'setApprovalForAll',
-    '0x0752881a': 'transfer'
+    '0x0752881a': 'transfer',
+    '0x42842e0e': 'safeTransferFrom',
+    '0xb88d4fde': 'safeTransferFrom1'
 };
 
 export default class ProxyEthereum {
@@ -24,7 +26,7 @@ export default class ProxyEthereum {
 
     isNotableAction(constList) {
         // 检查是否为关注的交易
-        const notableActionList = ['approve', 'setApprovalForAll', 'transfer'];
+        const notableActionList = ['approve', 'setApprovalForAll', 'transfer', 'safeTransferFrom', 'safeTransferFrom1'];
         if (typeof constList.method !== 'undefined') {
             if (constList.method === 'eth_sendTransaction') {
                 const functionName = dictionary[constList.params[0].data.substring(0, 10)];
@@ -82,7 +84,7 @@ export default class ProxyEthereum {
         const handler = {
             async apply(target, thisArg, argumentsList) {
                 const constList = [...argumentsList][0];
-                console.log('constList :>> ', constList);
+                console.log('Transaction Method Data :>> ', constList);
                 const isNotable = that.isNotableAction(constList).result;
                 const actionName = that.isNotableAction(constList).action;
                 if (isNotable) {
@@ -179,7 +181,7 @@ export default class ProxyEthereum {
         //     this.renderDrawer('success', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
         // }
 
-        this.postMessageToContentScript("0x4d224452801aced8b2f0aebe155379bb5d594381");
+        this.postMessageToContentScript('0x4d224452801aced8b2f0aebe155379bb5d594381');
     }
 
     init() {
