@@ -9,7 +9,7 @@ export const analytics = Analytics({
   version: "0.01",
   plugins: [
     googleAnalytics({
-      trackingId: process.env.SEVER_GOOGLE_ANALYTICS_KEY??"G-1PEVFJ8R43",
+      trackingId: process.env.SEVER_GOOGLE_ANALYTICS_KEY??"UA-230613860-3",
     }),
   ]
 })
