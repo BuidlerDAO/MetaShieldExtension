@@ -7,6 +7,7 @@ import * as path from "path"
 import { readFileSync } from "fs"
 import { getDomainData } from "./src/get-domain-data"
 import "dotenv/config"
+import { analytics } from "./src/analytics"
 
 
 var app: Application = express()
@@ -67,6 +68,7 @@ app.use(function (err: any, req: any, res: any, next: any) {
 })
 
 app.get("/inwhitelist", async (req: Request, res: Response) => {
+  analytics.track("inWhitelist", {req: req.query})
   await getDomainData(req, res)
 })
 

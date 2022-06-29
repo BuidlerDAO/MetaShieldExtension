@@ -16,9 +16,12 @@ export const getDomainData = async function (req: Request, res: Response) {
     return
   }
 
+  analytics.track("site:"+url)
+
   const status = useBlacklist.includes(url)?
           "blacklist": whitelist.includes(url)?
             "whitelist" : "unknown"
+  analytics.track("domain-status:"+status.toString())
   var responseData, isContractResultData, isVerifiedResultData, errorData: string | boolean | undefined
   if(status!="unknown"){
     responseData = getResponseData("unknown", "unknown", status)
@@ -31,7 +34,7 @@ export const getDomainData = async function (req: Request, res: Response) {
     errorData = isContractResult.error?"isContractResult function returned an error":isVerifiedResult.error ?"isVerifiedResult function returned an error": undefined
     responseData = getResponseData(isContractResultData, isVerifiedResultData, "unknown", errorData)
   }
-  analytics.track("inWhitelist", {req: req.query, res: responseData})
+  // analytics.track("inWhitelist", {req: req.query, res: responseData})
   res.status(200).send(responseData)
   return responseData
 }
