@@ -22,22 +22,27 @@ app.use("/lib/:lib_id",(req, res)=>{
 })
 
 app.get("/", (req: Request, res: Response) => {
+  analytics.track("/zh")
   res.sendFile(path.join(__dirname, "index.html"))
 })
 
 app.get("/en", (req: Request, res: Response) => {
+  analytics.track("/en")
   res.sendFile(path.join(__dirname, "indexen.html"))
 })
 
 app.get("/indexen.html", (req: Request, res: Response) => {
+  analytics.track("/en")
   res.sendFile(path.join(__dirname, "indexen.html"))
 })
 
 app.get("/disclaimer", (req: Request, res: Response) => {
+  analytics.track("/disclaimer")
   res.sendFile(path.join(__dirname, "disclaimer.html"))
 })
 
 app.get("/privacy-policy", (req: Request, res: Response) => {
+  analytics.track("/privacy-policy")
   res.sendFile(path.join(__dirname, "privacy-policy.html"))
 })
 
@@ -52,10 +57,12 @@ app.get("/logo", (req: Request, res: Response) => {
 })
 
 app.get("/404", (req: Request, res: Response) => {
+  analytics.track("/404")
   res.status(404).send("Not found")
 })
 
 app.get("/500", (req: Request, res: Response) => {
+  analytics.track("/500")
   res.status(500).send("Server Error")
 })
 
