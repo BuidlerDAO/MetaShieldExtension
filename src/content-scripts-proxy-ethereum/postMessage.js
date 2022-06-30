@@ -1,9 +1,6 @@
 // proxy scripts 发送和监听消息
 class ProxyClient {
-    // listen(msg, callBack) {
-    //     listeners[msg] = callBack;
-    // }
-    listen() {
+    listenDecision() {
         console.log('listening message');
         return new Promise((resolve) => {
             window.addEventListener('message', (e) => { // 监听 message 事件

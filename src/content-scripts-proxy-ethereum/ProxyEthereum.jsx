@@ -5,7 +5,7 @@ import { render } from 'react-dom';
 import {
     Drawer, Button, Alert, notification, Col, Row
 } from 'antd';
-import { proxyClient } from './message.js';
+import { proxyClient } from './postMessage.js';
 import DrawerDemo from './DrawerDemo';
 import server from '../server/server';
 import './ProxyEthereum.scss';
@@ -13,7 +13,9 @@ import './ProxyEthereum.scss';
 const dictionary = {
     '0x095ea7b3': 'approve',
     '0xa22cb465': 'setApprovalForAll',
-    '0x0752881a': 'transfer'
+    '0x0752881a': 'transfer',
+    '0x42842e0e': 'safeTransferFrom',
+    '0xb88d4fde': 'safeTransferFrom1'
 };
 
 export default class ProxyEthereum {
@@ -24,7 +26,7 @@ export default class ProxyEthereum {
 
     isNotableAction(constList) {
         // 检查是否为关注的交易
-        const notableActionList = ['approve', 'setApprovalForAll', 'transfer'];
+        const notableActionList = ['approve', 'setApprovalForAll', 'transfer', 'safeTransferFrom', 'safeTransferFrom1'];
         if (typeof constList.method !== 'undefined') {
             if (constList.method === 'eth_sendTransaction') {
                 const functionName = dictionary[constList.params[0].data.substring(0, 10)];
@@ -47,6 +49,12 @@ export default class ProxyEthereum {
 
     getAssetValue(constList) {
         return `${(parseInt(constList.params[0].value, 16) / (10 ** 18)).toFixed(4)} ETH`;
+    }
+
+    postMessageToContentScript(contractAddress) {
+        console.log('start posting message');
+        const msg = { msg_key: 'network_request', value: contractAddress };
+        proxyClient.postMsg(msg);
     }
 
     renderDrawer(type, verification, contractAddress, domain, constList, actionName, assetValue) {
@@ -76,7 +84,7 @@ export default class ProxyEthereum {
         const handler = {
             async apply(target, thisArg, argumentsList) {
                 const constList = [...argumentsList][0];
-                console.log('constList :>> ', constList);
+                console.log('Transaction Method Data :>> ', constList);
                 const isNotable = that.isNotableAction(constList).result;
                 const actionName = that.isNotableAction(constList).action;
                 if (isNotable) {
@@ -99,7 +107,7 @@ export default class ProxyEthereum {
                             return target(...argumentsList);
                         }
                         // 监听用户选择
-                        const decisionData = await proxyClient.listen();
+                        const decisionData = await proxyClient.listenDecision();
                         if (decisionData.value === 'continue') {
                             return target(...argumentsList);
                         }
@@ -139,39 +147,41 @@ export default class ProxyEthereum {
     }
 
     test() {
-        const mockData = {
-            status: 'success',
-            data: {
-                contract: {
-                    contract: true,
-                    verified: true
-                },
-                domain: {
-                    status: 'whitelist' // "blacklist" || "whitelist" || "unknown"
-                }
-            }
-        };
-        const cl = {
-            method: 'eth_sendTransaction',
-            params: [
-                {
-                    from: '0x6cab10630c4f2db291e2372b8cdcb2d07529332b',
-                    data: '0x095ea7b30000000000000000000000006cab10630c4f2db291e2372b8cdcb2d07529332b0000000000000000000000000000000000000000000000000000000000000001',
-                    to: '0x4d224452801aced8b2f0aebe155379bb5d594381',
-                    maxPriorityFeePerGas: '0x3B9ACA00',
-                    maxFeePerGas: '0x53d867b62'
-                }
-            ]
-        };
-        const contractAddress = '0x4d224452801aced8b2f0aebe155379bb5d594381';
-        const domain = window.location.hostname;
-        if (domain.includes('tencent')) {
-            this.renderDrawer('danger', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
-        } else if (domain.includes('google')) {
-            this.renderDrawer('warning', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
-        } else if (domain.includes('github')) {
-            this.renderDrawer('success', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
-        }
+        // const mockData = {
+        //     status: 'success',
+        //     data: {
+        //         contract: {
+        //             contract: true,
+        //             verified: true
+        //         },
+        //         domain: {
+        //             status: 'whitelist' // "blacklist" || "whitelist" || "unknown"
+        //         }
+        //     }
+        // };
+        // const cl = {
+        //     method: 'eth_sendTransaction',
+        //     params: [
+        //         {
+        //             from: '0x6cab10630c4f2db291e2372b8cdcb2d07529332b',
+        //             data: '0x095ea7b30000000000000000000000006cab10630c4f2db291e2372b8cdcb2d07529332b0000000000000000000000000000000000000000000000000000000000000001',
+        //             to: '0x4d224452801aced8b2f0aebe155379bb5d594381',
+        //             maxPriorityFeePerGas: '0x3B9ACA00',
+        //             maxFeePerGas: '0x53d867b62'
+        //         }
+        //     ]
+        // };
+        // const contractAddress = '0x4d224452801aced8b2f0aebe155379bb5d594381';
+        // const domain = window.location.hostname;
+        // if (domain.includes('tencent')) {
+        //     this.renderDrawer('danger', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
+        // } else if (domain.includes('google')) {
+        //     this.renderDrawer('warning', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
+        // } else if (domain.includes('github')) {
+        //     this.renderDrawer('success', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
+        // }
+
+        this.postMessageToContentScript('0x4d224452801aced8b2f0aebe155379bb5d594381');
     }
 
     init() {

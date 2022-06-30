@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 // import md5 from 'blueimp-md5';
-
 const baseURL = 'https://www.metashield.cc';
+const etherscanURL = 'https://etherscan.io';
 
 const postVerification = (contractAddress, domain) => {
     const address = contractAddress;

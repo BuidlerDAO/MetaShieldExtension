@@ -2,6 +2,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { contentClient } from '../chrome';
+import { contentMsgClient } from './postMessage';
 import './ContentScripts.scss';
 import DrawerDemo from './DrawerDemo';
 // import { notification } from 'antd';
@@ -25,11 +26,18 @@ export default class ContentScripts {
         document.addEventListener('DOMContentLoaded', () => {
             this.initContainer();
             // this.initMessageClient();
+            this.initPostMsgClient();
             this.injectScript(
                 chrome.runtime.getURL('js/contentScriptsProxyEthereum.js'),
                 'body'
             );
         });
+    }
+
+    async initPostMsgClient() {
+        console.log('initPostMsgClient');
+        // const decisionData = await contentMsgClient.listenRequest();
+        // console.log('decisionData :>> ', decisionData);
     }
 
     // 初始化消息通道

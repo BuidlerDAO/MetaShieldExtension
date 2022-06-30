@@ -13,7 +13,7 @@ export {
     backgroundClient,
     contentClient,
     ChromeMessage,
-    // create,
+    create,
     go,
     reload
 };
