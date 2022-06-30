@@ -53,13 +53,8 @@ const postVerification = (contractAddress, domain) => {
     });
 };
 
-const getVerification = async (contractAddress, domain) => {
-    
-};
-
 const server = {
-    postVerification,
-    getVerification
+    postVerification
 };
 
 export default server;
