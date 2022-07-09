@@ -26,13 +26,12 @@ export default class Background {
     // 初始化消息通道
     initMessageClient() {
         const getContractInfo = (bodyText) => ({
-            openSourced: bodyText.includes('Contract Overview'),
             verified: bodyText.includes('Contract Source Code Verified'),
             audited: bodyText.includes('Audit Report'),
             contract: bodyText.includes('Contract Overview')
         });
 
-        console.log('initMessageClient in background');
+        // console.log('initMessageClient in background');
         backgroundClient.listen('network request', (res, sendResponse) => {
             const domain = res.params.value;
             const etherscanURL = 'https://etherscan.io';
@@ -43,7 +42,6 @@ export default class Background {
                 sendResponse({
                     msg: 'network request success',
                     params: {
-                        openSourced: 'unknown',
                         verified: 'unknown',
                         audited: 'unknown',
                         contract: 'unknown'
