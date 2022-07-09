@@ -2,7 +2,7 @@ import { contentClient, ChromeMessage } from '../chrome';
 
 // 使用 postMessage 发送和监听消息
 class ContentMsgClient {
-    listenRequest() {
+    listenAndFrowardRequest() {
         console.log('content start listening message');
         return new Promise((resolve) => {
             window.addEventListener('message', async (e) => { // 监听 message 事件
@@ -18,8 +18,8 @@ class ContentMsgClient {
                 console.log('content received message');
                 console.log('start sending message to background');
                 const res = await contentClient.seedMessage(new ChromeMessage('network request', e.data));
-                resolve(res);
-                // resolve(e.data);
+                // post msg back to proxyClient
+                this.postMsg(res);
             });
         });
     }

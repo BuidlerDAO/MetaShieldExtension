@@ -38,10 +38,10 @@ export default class ProxyEthereum {
         return { result: false };
     }
 
-    getDrawerType(verificationData) {
-        if (verificationData.domain.status === 'whitelist') {
+    getDrawerType(domainVerificationData) {
+        if (domainVerificationData.domain.status === 'whitelist') {
             return 'success';
-        } if (verificationData.domain.status === 'blacklist') {
+        } if (domainVerificationData.domain.status === 'blacklist') {
             return 'danger';
         }
         return 'warning';
@@ -92,14 +92,34 @@ export default class ProxyEthereum {
                     // 获取一级域名
                     const domain = document.domain.split('.').slice(-2).join('.');
                     // 检查合约和域名安全性
-                    const verificationData = await that.verifyContractAndDomain({
+                    const domainVerificationData = await that.verifyContractAndDomain({
                         contractAddress,
                         domain
                     });
-                    if (verificationData.status && verificationData.status === 'success') {
-                        const verification = verificationData.data;
-                        // const type = (domain === 'looksrare.org') ? 'danger' : that.getDrawerType(verificationData.data);
-                        const type = that.getDrawerType(verificationData.data);
+                    that.postMessageToContentScript(contractAddress);
+                    const contractVerificationData = await proxyClient.listenRequest();
+                    const checkVerificationStatus = (domainVfData, contractVfData) => {
+                        if (domainVfData.status
+                            && domainVfData.status === 'success'
+                            && contractVfData.msg.includes('success')) {
+                            return true;
+                        }
+                        return false;
+                    };
+                    // console.log('domainVerificationData :>> ', domainVerificationData);
+                    // console.log('contractVerificationData :>> ', contractVerificationData);
+
+                    if (checkVerificationStatus(domainVerificationData, contractVerificationData)) {
+                        const verification = {
+                            contract: {
+                                ...(contractVerificationData.params)
+                            },
+                            domain: {
+                                ...domainVerificationData
+                            }
+                        };
+                        console.log('verification :>> ', verification);
+                        const type = that.getDrawerType(domainVerificationData.data);
                         const assetValue = actionName === 'transfer' ? that.getAssetValue(constList) : 0;
                         // 获取验证信息，渲染消息框
                         that.renderDrawer(type, verification, contractAddress, domain, constList, actionName, assetValue);
@@ -146,31 +166,7 @@ export default class ProxyEthereum {
         return server.postVerification(contractAddress, domain);
     }
 
-    test() {
-        // const mockData = {
-        //     status: 'success',
-        //     data: {
-        //         contract: {
-        //             contract: true,
-        //             verified: true
-        //         },
-        //         domain: {
-        //             status: 'whitelist' // "blacklist" || "whitelist" || "unknown"
-        //         }
-        //     }
-        // };
-        // const cl = {
-        //     method: 'eth_sendTransaction',
-        //     params: [
-        //         {
-        //             from: '0x6cab10630c4f2db291e2372b8cdcb2d07529332b',
-        //             data: '0x095ea7b30000000000000000000000006cab10630c4f2db291e2372b8cdcb2d07529332b0000000000000000000000000000000000000000000000000000000000000001',
-        //             to: '0x4d224452801aced8b2f0aebe155379bb5d594381',
-        //             maxPriorityFeePerGas: '0x3B9ACA00',
-        //             maxFeePerGas: '0x53d867b62'
-        //         }
-        //     ]
-        // };
+    async test() {
         // const contractAddress = '0x4d224452801aced8b2f0aebe155379bb5d594381';
         // const domain = window.location.hostname;
         // if (domain.includes('tencent')) {
@@ -181,7 +177,9 @@ export default class ProxyEthereum {
         //     this.renderDrawer('success', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
         // }
 
-        this.postMessageToContentScript('0x4d224452801aced8b2f0aebe155379bb5d594381');
+        // console.log('postMessageToContentScript');
+        // this.postMessageToContentScript('0x4d224452801aced8b2f0aebe155379bb5d594381');
+        // await proxyClient.listenRequest();
     }
 
     init() {
