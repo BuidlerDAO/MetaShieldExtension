@@ -36,8 +36,7 @@ export default class ContentScripts {
 
     async initPostMsgClient() {
         console.log('initPostMsgClient');
-        // const decisionData = await contentMsgClient.listenRequest();
-        // console.log('decisionData :>> ', decisionData);
+        await contentMsgClient.listenAndFrowardRequest();
     }
 
     // 初始化消息通道
