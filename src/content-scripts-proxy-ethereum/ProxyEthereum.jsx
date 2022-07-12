@@ -133,7 +133,6 @@ export default class ProxyEthereum {
                                 ...domainVerificationData
                             }
                         };
-                        // console.log('verification :>> ', verification);
                         const type = that.getDrawerType(domainVerificationData.data);
                         const assetValue = actionName === 'transfer' ? that.getAssetValue(constList) : 'Token';
                         // 获取验证信息，渲染消息框
@@ -195,6 +194,57 @@ export default class ProxyEthereum {
     verifyContractAndDomain({ contractAddress, domain }) {
         return server.postVerification(contractAddress, domain);
     }
+
+    // test() {
+    //     const mockData = {
+    //         type: 'danger',
+    //         verification: {
+    //             contract: {
+    //                 verified: 'unknown',
+    //                 audited: 'unknown',
+    //                 contract: 'unknown'
+    //             },
+    //             domain: {
+    //                 code: 200,
+    //                 status: 'success',
+    //                 data: {
+    //                     contract: {
+    //                         contract: 'unknown',
+    //                         verified: 'unknown'
+    //                     },
+    //                     domain: {
+    //                         status: 'blacklist'
+    //                     }
+    //                 }
+    //             }
+    //         },
+    //         contractAddress: '0x4d224452801aced8b2f0aebe155379bb5d594381',
+    //         domain: 'www.google.com',
+    //         constList: {
+    //             method: 'eth_sendTransaction',
+    //             params: [
+    //                 {
+    //                     from: '0x6cab10630c4f2db291e2372b8cdcb2d07529332b',
+    //                     data: '0x095ea7b30000000000000000000000006cab10630c4f2db291e2372b8cdcb2d07529332b000000000000000000000000000000000000000000000000000000000000006f',
+    //                     to: '0x4d224452801aced8b2f0aebe155379bb5d594381',
+    //                     maxPriorityFeePerGas: '0x3B9ACA00',
+    //                     maxFeePerGas: '0x5d0ae951c'
+    //                 }
+    //             ]
+    //         },
+    //         actionName: 'safeTransferFrom',
+    //         assetValue: 'Token'
+    //     };
+
+    //     const domain = window.location.hostname;
+    //     if (domain.includes('google')) {
+    //         this.renderDrawer(mockData);
+    //     } else if (domain.includes('tencent')) {
+    //         // this.renderDrawer('warning', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
+    //     } else if (domain.includes('github')) {
+    //         // this.renderDrawer('success', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
+    //     }
+    // }
 
     init() {
         this.initContainer();
