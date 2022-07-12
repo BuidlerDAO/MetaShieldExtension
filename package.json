@@ -6,6 +6,7 @@
     "start": "webpack serve --config ./config/webpack.dev.js",
     "build": "webpack --config ./config/webpack.prod.js",
     "buidl": "webpack --config ./config/webpack.prod.js",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -w -r 0",
     "lint": "eslint . --ext .js,.jsx"
   },
   "devDependencies": {
