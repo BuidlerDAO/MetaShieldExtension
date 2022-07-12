@@ -157,9 +157,10 @@ const DrawerDemo = ({
     if (type === 'warning' || type === 'danger') {
         const primaryColor = type === 'warning' ? '#ffd600' : '#fe5200';
         // const tryingFontColor = type === 'warning' ? 'rgba(52, 48, 46, 1)' : '#fe5200';
-        const assetVal = actionName === 'transfer' ? <Text code>{assetValue}</Text> : t('drawer.assets');
-        const action = actionName === 'transfer' ? t('drawer.transfer') : t('drawer.authorize');
-        const explanation = actionName === 'transfer' ? t('drawer.transfer_explanation') : t('drawer.authorize_explanation');
+        const isTransferAction = actionName === 'transfer' || actionName === 'safeTransferFrom' || actionName === 'safeTransferFrom1';
+        const assetVal = isTransferAction ? <Text code>{assetValue}</Text> : t('drawer.assets');
+        const action = isTransferAction ? t('drawer.transfer') : t('drawer.authorize');
+        const explanation = isTransferAction ? t('drawer.transfer_explanation') : t('drawer.authorize_explanation');
         return (
             <Modal
                 closable={false}
