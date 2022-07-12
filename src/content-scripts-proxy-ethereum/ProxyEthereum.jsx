@@ -48,7 +48,10 @@ export default class ProxyEthereum {
     }
 
     getAssetValue(constList) {
-        return `${(parseInt(constList.params[0].value, 16) / (10 ** 18)).toFixed(4)} ETH`;
+        if (constList.params[0].value) {
+            return `${(parseInt(constList.params[0].value, 16) / (10 ** 18)).toFixed(4)} ETH`;
+        }
+        return 'Token';
     }
 
     postMessageToContentScript(contractAddress) {
@@ -57,7 +60,9 @@ export default class ProxyEthereum {
         proxyClient.postMsg(msg);
     }
 
-    renderDrawer(type, verification, contractAddress, domain, constList, actionName, assetValue) {
+    renderDrawer({
+        type, verification, contractAddress, domain, constList, actionName, assetValue
+    }) {
         this.showContainer();
         render(
             <DrawerDemo
@@ -96,8 +101,20 @@ export default class ProxyEthereum {
                         contractAddress,
                         domain
                     });
-                    that.postMessageToContentScript(contractAddress);
-                    const contractVerificationData = await proxyClient.listenRequest();
+                    let contractVerificationData = {
+                        msg: 'network request success',
+                        params: {
+                            verified: 'unknown',
+                            audited: 'unknown',
+                            contract: 'unknown'
+                        }
+                    };
+                    // 仅在灰名单情况下才需要检查合约安全性
+                    console.log('domainVerificationData :>> ', domainVerificationData);
+                    if (domainVerificationData.data.domain.status === 'unknown') {
+                        that.postMessageToContentScript(contractAddress);
+                        contractVerificationData = await proxyClient.listenRequest();
+                    }
                     const checkVerificationStatus = (domainVfData, contractVfData) => {
                         if (domainVfData.status
                             && domainVfData.status === 'success'
@@ -106,8 +123,6 @@ export default class ProxyEthereum {
                         }
                         return false;
                     };
-                    // console.log('domainVerificationData :>> ', domainVerificationData);
-                    // console.log('contractVerificationData :>> ', contractVerificationData);
 
                     if (checkVerificationStatus(domainVerificationData, contractVerificationData)) {
                         const verification = {
@@ -118,11 +133,19 @@ export default class ProxyEthereum {
                                 ...domainVerificationData
                             }
                         };
-                        console.log('verification :>> ', verification);
+                        // console.log('verification :>> ', verification);
                         const type = that.getDrawerType(domainVerificationData.data);
-                        const assetValue = actionName === 'transfer' ? that.getAssetValue(constList) : 0;
+                        const assetValue = actionName === 'transfer' ? that.getAssetValue(constList) : 'Token';
                         // 获取验证信息，渲染消息框
-                        that.renderDrawer(type, verification, contractAddress, domain, constList, actionName, assetValue);
+                        that.renderDrawer({
+                            type,
+                            verification,
+                            contractAddress,
+                            domain,
+                            constList,
+                            actionName,
+                            assetValue
+                        });
                         if (type === 'success') {
                             return target(...argumentsList);
                         }
@@ -135,7 +158,14 @@ export default class ProxyEthereum {
                     }
                     // 检查合约和域名安全性时出错
                     const type = 'error';
-                    that.renderDrawer(type, 'verification', 'contractAddress', domain, constList, actionName);
+                    that.renderDrawer({
+                        type,
+                        verification: 'verification',
+                        contractAddress: 'contractAddress',
+                        domain,
+                        constList,
+                        actionName
+                    });
                 }
                 return target(...argumentsList);
             }
@@ -164,22 +194,6 @@ export default class ProxyEthereum {
     // 封装 fetch 请求： 检验合约和域名安全性
     verifyContractAndDomain({ contractAddress, domain }) {
         return server.postVerification(contractAddress, domain);
-    }
-
-    async test() {
-        // const contractAddress = '0x4d224452801aced8b2f0aebe155379bb5d594381';
-        // const domain = window.location.hostname;
-        // if (domain.includes('tencent')) {
-        //     this.renderDrawer('danger', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
-        // } else if (domain.includes('google')) {
-        //     this.renderDrawer('warning', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
-        // } else if (domain.includes('github')) {
-        //     this.renderDrawer('success', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
-        // }
-
-        // console.log('postMessageToContentScript');
-        // this.postMessageToContentScript('0x4d224452801aced8b2f0aebe155379bb5d594381');
-        // await proxyClient.listenRequest();
     }
 
     init() {

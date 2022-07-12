@@ -47,7 +47,7 @@ const translation_en = {
         cancel_authorization: 'Cancel Authorize',
         continue_authorization: 'Continue',
         website_unknown: 'This website does not exist on the MetaShield whitelist',
-        website_on_blacklist: 'Website is on the Blacklist of MetaShield',
+        website_on_blacklist: 'Website or contract address is on the Blacklist of MetaShield',
         please_authorize_carefully: 'Careful Authorize',
         high_risk_transaction: 'Risk Warning',
         transfer_remind: 'Please notice they may stole your assets.',
