@@ -1,8 +1,8 @@
 import { Network } from "./network"
 import { isContract, isVerified } from "./utils"
 import { Request, Response } from "express"
-import whitelist from "../data/whitelist.json"
-import useBlacklist from "../data/use_blacklist.json"
+import whitelist from "../data/domain_whitelist.json"
+import useBlacklist from "../data/domain_use_blacklist.json"
 import { analytics } from "./analytics"
 
 export const getDomainData = async function (req: Request, res: Response) {

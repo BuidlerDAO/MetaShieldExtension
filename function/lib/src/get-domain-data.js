@@ -14,8 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDomainData = void 0;
 const utils_1 = require("./utils");
-const whitelist_json_1 = __importDefault(require("../data/whitelist.json"));
-const use_blacklist_json_1 = __importDefault(require("../data/use_blacklist.json"));
+const domain_whitelist_json_1 = __importDefault(require("../data/domain_whitelist.json"));
+const domain_use_blacklist_json_1 = __importDefault(require("../data/domain_use_blacklist.json"));
 const analytics_1 = require("./analytics");
 const getDomainData = function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -26,9 +26,11 @@ const getDomainData = function (req, res) {
             res.status(400).send({ code: "Query not find" });
             return;
         }
-        const status = use_blacklist_json_1.default.includes(url) ?
-            "blacklist" : whitelist_json_1.default.includes(url) ?
+        analytics_1.analytics.track("site:" + url);
+        const status = domain_use_blacklist_json_1.default.includes(url) ?
+            "blacklist" : domain_whitelist_json_1.default.includes(url) ?
             "whitelist" : "unknown";
+        analytics_1.analytics.track("domain-status:" + status.toString());
         var responseData, isContractResultData, isVerifiedResultData, errorData;
         if (status != "unknown") {
             responseData = getResponseData("unknown", "unknown", status);
@@ -42,7 +44,7 @@ const getDomainData = function (req, res) {
             errorData = isContractResult.error ? "isContractResult function returned an error" : isVerifiedResult.error ? "isVerifiedResult function returned an error" : undefined;
             responseData = getResponseData(isContractResultData, isVerifiedResultData, "unknown", errorData);
         }
-        analytics_1.analytics.track("inWhitelist", { req: req.query, res: responseData });
+        // analytics.track("inWhitelist", {req: req.query, res: responseData})
         res.status(200).send(responseData);
         return responseData;
     });
