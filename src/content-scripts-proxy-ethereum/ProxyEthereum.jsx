@@ -38,17 +38,20 @@ export default class ProxyEthereum {
         return { result: false };
     }
 
-    getDrawerType(verificationData) {
-        if (verificationData.domain.status === 'whitelist') {
+    getDrawerType(domainVerificationData) {
+        if (domainVerificationData.domain.status === 'whitelist') {
             return 'success';
-        } if (verificationData.domain.status === 'blacklist') {
+        } if (domainVerificationData.domain.status === 'blacklist') {
             return 'danger';
         }
         return 'warning';
     }
 
     getAssetValue(constList) {
-        return `${(parseInt(constList.params[0].value, 16) / (10 ** 18)).toFixed(4)} ETH`;
+        if (constList.params[0].value) {
+            return `${(parseInt(constList.params[0].value, 16) / (10 ** 18)).toFixed(4)} ETH`;
+        }
+        return 'Token';
     }
 
     postMessageToContentScript(contractAddress) {
@@ -57,7 +60,9 @@ export default class ProxyEthereum {
         proxyClient.postMsg(msg);
     }
 
-    renderDrawer(type, verification, contractAddress, domain, constList, actionName, assetValue) {
+    renderDrawer({
+        type, verification, contractAddress, domain, constList, actionName, assetValue
+    }) {
         this.showContainer();
         render(
             <DrawerDemo
@@ -92,17 +97,54 @@ export default class ProxyEthereum {
                     // 获取一级域名
                     const domain = document.domain.split('.').slice(-2).join('.');
                     // 检查合约和域名安全性
-                    const verificationData = await that.verifyContractAndDomain({
+                    const domainVerificationData = await that.verifyContractAndDomain({
                         contractAddress,
                         domain
                     });
-                    if (verificationData.status && verificationData.status === 'success') {
-                        const verification = verificationData.data;
-                        // const type = (domain === 'looksrare.org') ? 'danger' : that.getDrawerType(verificationData.data);
-                        const type = that.getDrawerType(verificationData.data);
-                        const assetValue = actionName === 'transfer' ? that.getAssetValue(constList) : 0;
+                    let contractVerificationData = {
+                        msg: 'network request success',
+                        params: {
+                            verified: 'unknown',
+                            audited: 'unknown',
+                            contract: 'unknown'
+                        }
+                    };
+                    // 仅在灰名单情况下才需要检查合约安全性
+                    console.log('domainVerificationData :>> ', domainVerificationData);
+                    if (domainVerificationData.data.domain.status === 'unknown') {
+                        that.postMessageToContentScript(contractAddress);
+                        contractVerificationData = await proxyClient.listenRequest();
+                    }
+                    const checkVerificationStatus = (domainVfData, contractVfData) => {
+                        if (domainVfData.status
+                            && domainVfData.status === 'success'
+                            && contractVfData.msg.includes('success')) {
+                            return true;
+                        }
+                        return false;
+                    };
+
+                    if (checkVerificationStatus(domainVerificationData, contractVerificationData)) {
+                        const verification = {
+                            contract: {
+                                ...(contractVerificationData.params)
+                            },
+                            domain: {
+                                ...domainVerificationData
+                            }
+                        };
+                        const type = that.getDrawerType(domainVerificationData.data);
+                        const assetValue = actionName === 'transfer' ? that.getAssetValue(constList) : 'Token';
                         // 获取验证信息，渲染消息框
-                        that.renderDrawer(type, verification, contractAddress, domain, constList, actionName, assetValue);
+                        that.renderDrawer({
+                            type,
+                            verification,
+                            contractAddress,
+                            domain,
+                            constList,
+                            actionName,
+                            assetValue
+                        });
                         if (type === 'success') {
                             return target(...argumentsList);
                         }
@@ -115,7 +157,14 @@ export default class ProxyEthereum {
                     }
                     // 检查合约和域名安全性时出错
                     const type = 'error';
-                    that.renderDrawer(type, 'verification', 'contractAddress', domain, constList, actionName);
+                    that.renderDrawer({
+                        type,
+                        verification: 'verification',
+                        contractAddress: 'contractAddress',
+                        domain,
+                        constList,
+                        actionName
+                    });
                 }
                 return target(...argumentsList);
             }
@@ -146,43 +195,56 @@ export default class ProxyEthereum {
         return server.postVerification(contractAddress, domain);
     }
 
-    test() {
-        // const mockData = {
-        //     status: 'success',
-        //     data: {
-        //         contract: {
-        //             contract: true,
-        //             verified: true
-        //         },
-        //         domain: {
-        //             status: 'whitelist' // "blacklist" || "whitelist" || "unknown"
-        //         }
-        //     }
-        // };
-        // const cl = {
-        //     method: 'eth_sendTransaction',
-        //     params: [
-        //         {
-        //             from: '0x6cab10630c4f2db291e2372b8cdcb2d07529332b',
-        //             data: '0x095ea7b30000000000000000000000006cab10630c4f2db291e2372b8cdcb2d07529332b0000000000000000000000000000000000000000000000000000000000000001',
-        //             to: '0x4d224452801aced8b2f0aebe155379bb5d594381',
-        //             maxPriorityFeePerGas: '0x3B9ACA00',
-        //             maxFeePerGas: '0x53d867b62'
-        //         }
-        //     ]
-        // };
-        // const contractAddress = '0x4d224452801aced8b2f0aebe155379bb5d594381';
-        // const domain = window.location.hostname;
-        // if (domain.includes('tencent')) {
-        //     this.renderDrawer('danger', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
-        // } else if (domain.includes('google')) {
-        //     this.renderDrawer('warning', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
-        // } else if (domain.includes('github')) {
-        //     this.renderDrawer('success', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
-        // }
+    // test() {
+    //     const mockData = {
+    //         type: 'danger',
+    //         verification: {
+    //             contract: {
+    //                 verified: 'unknown',
+    //                 audited: 'unknown',
+    //                 contract: 'unknown'
+    //             },
+    //             domain: {
+    //                 code: 200,
+    //                 status: 'success',
+    //                 data: {
+    //                     contract: {
+    //                         contract: 'unknown',
+    //                         verified: 'unknown'
+    //                     },
+    //                     domain: {
+    //                         status: 'blacklist'
+    //                     }
+    //                 }
+    //             }
+    //         },
+    //         contractAddress: '0x4d224452801aced8b2f0aebe155379bb5d594381',
+    //         domain: 'www.google.com',
+    //         constList: {
+    //             method: 'eth_sendTransaction',
+    //             params: [
+    //                 {
+    //                     from: '0x6cab10630c4f2db291e2372b8cdcb2d07529332b',
+    //                     data: '0x095ea7b30000000000000000000000006cab10630c4f2db291e2372b8cdcb2d07529332b000000000000000000000000000000000000000000000000000000000000006f',
+    //                     to: '0x4d224452801aced8b2f0aebe155379bb5d594381',
+    //                     maxPriorityFeePerGas: '0x3B9ACA00',
+    //                     maxFeePerGas: '0x5d0ae951c'
+    //                 }
+    //             ]
+    //         },
+    //         actionName: 'safeTransferFrom',
+    //         assetValue: 'Token'
+    //     };
 
-        this.postMessageToContentScript('0x4d224452801aced8b2f0aebe155379bb5d594381');
-    }
+    //     const domain = window.location.hostname;
+    //     if (domain.includes('google')) {
+    //         this.renderDrawer(mockData);
+    //     } else if (domain.includes('tencent')) {
+    //         // this.renderDrawer('warning', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
+    //     } else if (domain.includes('github')) {
+    //         // this.renderDrawer('success', mockData.data, '0x4d224452801aced8b2f0aebe155379bb5d594381', domain, cl);
+    //     }
+    // }
 
     init() {
         this.initContainer();
