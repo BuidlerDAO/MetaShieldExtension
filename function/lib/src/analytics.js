@@ -11,7 +11,7 @@ exports.analytics = (0, analytics_1.Analytics)({
     version: "0.01",
     plugins: [
         googleAnalytics({
-            trackingId: (_a = process.env.SEVER_GOOGLE_ANALYTICS_KEY) !== null && _a !== void 0 ? _a : "G-1PEVFJ8R43",
+            trackingId: (_a = process.env.SEVER_GOOGLE_ANALYTICS_KEY) !== null && _a !== void 0 ? _a : "UA-230613860-3",
         }),
     ]
 });
