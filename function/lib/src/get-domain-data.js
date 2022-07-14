@@ -16,6 +16,7 @@ exports.getDomainData = void 0;
 const utils_1 = require("./utils");
 const domain_whitelist_json_1 = __importDefault(require("../data/domain_whitelist.json"));
 const domain_use_blacklist_json_1 = __importDefault(require("../data/domain_use_blacklist.json"));
+const contract_blacklist_json_1 = __importDefault(require("../data/contract_blacklist.json"));
 const analytics_1 = require("./analytics");
 const getDomainData = function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -27,7 +28,7 @@ const getDomainData = function (req, res) {
             return;
         }
         analytics_1.analytics.track("site:" + url);
-        const status = domain_use_blacklist_json_1.default.includes(url) ?
+        const status = (domain_use_blacklist_json_1.default.includes(url) || contract_blacklist_json_1.default.includes(address)) ?
             "blacklist" : domain_whitelist_json_1.default.includes(url) ?
             "whitelist" : "unknown";
         analytics_1.analytics.track("domain-status:" + status.toString());

@@ -3,6 +3,7 @@ import { isContract, isVerified } from "./utils"
 import { Request, Response } from "express"
 import whitelist from "../data/domain_whitelist.json"
 import useBlacklist from "../data/domain_use_blacklist.json"
+import contractBlacklist from "../data/contract_blacklist.json"
 import { analytics } from "./analytics"
 
 export const getDomainData = async function (req: Request, res: Response) {
@@ -18,7 +19,7 @@ export const getDomainData = async function (req: Request, res: Response) {
 
   analytics.track("site:"+url)
 
-  const status = useBlacklist.includes(url)?
+  const status = (useBlacklist.includes(url) || contractBlacklist.includes(address))?
           "blacklist": whitelist.includes(url)?
             "whitelist" : "unknown"
   analytics.track("domain-status:"+status.toString())
