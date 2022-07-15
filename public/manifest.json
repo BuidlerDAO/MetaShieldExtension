@@ -11,12 +11,8 @@
   },
 
   "permissions": [
-    "contextMenus",
-    "tabs",
-    "activeTab",
     "storage",
-    "background",
-    "tabCapture"
+    "background"
   ],
   "background": {
     "service_worker": "js/background.js"
