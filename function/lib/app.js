@@ -38,6 +38,7 @@ const path = __importStar(require("path"));
 const fs_1 = require("fs");
 const get_domain_data_1 = require("./src/get-domain-data");
 require("dotenv/config");
+const analytics_1 = require("./src/analytics");
 var app = express();
 // https://stackabuse.com/get-http-post-body-in-express-js/
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -48,18 +49,23 @@ app.use("/lib/:lib_id", (req, res) => {
     res.sendFile(path.join(__dirname, req.originalUrl.substring(1)));
 });
 app.get("/", (req, res) => {
+    analytics_1.analytics.track("/zh");
     res.sendFile(path.join(__dirname, "index.html"));
 });
 app.get("/en", (req, res) => {
+    analytics_1.analytics.track("/en");
     res.sendFile(path.join(__dirname, "indexen.html"));
 });
 app.get("/indexen.html", (req, res) => {
+    analytics_1.analytics.track("/en");
     res.sendFile(path.join(__dirname, "indexen.html"));
 });
 app.get("/disclaimer", (req, res) => {
+    analytics_1.analytics.track("/disclaimer");
     res.sendFile(path.join(__dirname, "disclaimer.html"));
 });
 app.get("/privacy-policy", (req, res) => {
+    analytics_1.analytics.track("/privacy-policy");
     res.sendFile(path.join(__dirname, "privacy-policy.html"));
 });
 app.get("/logo", (req, res) => {
@@ -72,9 +78,11 @@ app.get("/logo", (req, res) => {
     res.status(200).end();
 });
 app.get("/404", (req, res) => {
+    analytics_1.analytics.track("/404");
     res.status(404).send("Not found");
 });
 app.get("/500", (req, res) => {
+    analytics_1.analytics.track("/500");
     res.status(500).send("Server Error");
 });
 // Error handler
@@ -85,6 +93,7 @@ app.use(function (err, req, res, next) {
     res.status(500).send("Internal Serverless Error");
 });
 app.get("/inwhitelist", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    analytics_1.analytics.track("inWhitelist", { req: req.query });
     yield (0, get_domain_data_1.getDomainData)(req, res);
 }));
 // Web 类型云函数，只能监听 9000 端口

@@ -8,7 +8,7 @@ import time
 blacklist = []
 error_list = []
 
-with open("./data/blacklist.json", 'r') as f:
+with open("./data/domain_blacklist.json", 'r') as f:
     data: list = json.load(f)
 
 
@@ -77,5 +77,5 @@ for i in range(thread_num):
     threads[i].join()
 
 
-to_json_file(blacklist, './data/use_blacklist.json')
-to_json_file(error_list, './data/error_list.json')
+to_json_file(blacklist, './data/domain_use_blacklist.json')
+to_json_file(error_list, './data/domain_error_list.json')
