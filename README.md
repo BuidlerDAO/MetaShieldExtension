@@ -15,7 +15,7 @@ MetaShield 可以有效识别 approve 和 send 交易，及时准确的告诉您
 
 
 ## 参与贡献
-* 提交 [白名单](https://github.com/DAOBuidler/MetaShieldExtension/blob/main/function/data/domain_domain_whitelist.json) 或 [黑名单](https://github.com/DAOBuidler/MetaShieldExtension/blob/main/function/data/domain_blacklist.json) PR
+* 提交 [白名单](https://github.com/DAOBuidler/MetaShieldExtension/blob/main/function/data/domain_whitelist.json) 或 [黑名单](https://github.com/DAOBuidler/MetaShieldExtension/blob/main/function/data/domain_blacklist.json) PR
 * [提交 bug 或建议](https://github.com/DAOBuidler/MetaShieldExtension/issues/new)
 
 ## 关于 BuidlerDAO
