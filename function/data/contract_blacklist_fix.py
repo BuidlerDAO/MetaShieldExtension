@@ -13,23 +13,26 @@ args = parser.parse_args()
 
 def get_contract_blacklist_data(url, key):
     now_time = time.strftime("%Y-%m-%d", time.localtime())
-    url = str(url) + "?start=2022-07-10&end={}".format(now_time)
+    url = str(url) + "?start=2022-07-20&end={}".format(now_time)
     headers = {"Authorization-Key": str(key)}
     try:
         response = requests.get(url, headers=headers)
+        print('response.status_code', response.status_code)
         assert(response.status_code == 200)
         black_contract_data_list = eval(response.text.replace(
             "true", "True").replace("flase", "Flase"))['data']
-        assert(len(black_contract_data_list) > 9000)
+        print('black_contract_data_list_count', len(black_contract_data_list))
+        assert(len(black_contract_data_list) > 0)
         with open('./data/contract_blacklist.json', 'r') as init_data_file:
             init_blacklist_data = json.load(init_data_file)
             print(len(init_blacklist_data))
             init_data_file.close()
+        updated_blacklist_data = init_blacklist_data + \
+            [x['address'] for x in black_contract_data_list]
+        updated_blacklist_data = list(set(updated_blacklist_data))
+        print('updated_blacklist_data_count', len(updated_blacklist_data))
+        assert(len(updated_blacklist_data) > 10000)
         with open('./data/contract_blacklist.json', 'w') as f:
-            updated_blacklist_data = init_blacklist_data + \
-                [x['address'] for x in black_contract_data_list]
-            updated_blacklist_data = list(set(updated_blacklist_data))
-            print(len(updated_blacklist_data))
             json.dump(updated_blacklist_data, f)
     except Exception as e:
         print(e)
