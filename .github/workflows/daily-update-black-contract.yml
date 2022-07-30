@@ -8,7 +8,7 @@ on:
       - '.github/workflows/daily-update-black-contract.yml'
   schedule:
     # 定时任务，在每天的 0 点 1 分执行任务
-  	- cron: '0 1 0 * * *'
+  	- cron: '1 0 * * *'
 jobs:
   build:
     runs-on: ubuntu-latest
