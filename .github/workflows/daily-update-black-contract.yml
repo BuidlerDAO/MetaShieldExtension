@@ -23,8 +23,8 @@ jobs:
       run: python3 ./data/contract_blacklist_fix.py --url ${{ secrets.BLACK_CONTRACT_API }} --key ${{ secrets.BLACK_CONTRACT_API_KEY }}
     - name: send msg to feishu if update data fail
       if: failure()
-      run: curl -X POST -H "Content-Type: application/json" \
-        -d '{"msg_type":"text","content":{"text":"update fai"}}' \
+      run: curl -X POST -H "Content-Type:application/json" \
+        -d '{"msg_type":"text","content":{"text":"MetaShield blacklist data update fail"}}' \
         https://open.feishu.cn/open-apis/bot/v2/hook/4b48c622-a55c-4d3d-95e3-c51574a1d5d0
     - name: push to main
       run: |
