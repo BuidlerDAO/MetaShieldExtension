@@ -57,10 +57,10 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: main
-    - name: send msg to feishu if update data fail
+    - name: push to main fail
       if: failure()
       run: |
         curl -X POST -H 'Content-Type:Application/json' \
-        -d '{"msg_type":"text","content":{"text":"MetaShield blacklist data update fail"}}' \
+        -d '{"msg_type":"text","content":{"text":"MetaShield auto push main fail"}}' \
         https://open.feishu.cn/open-apis/bot/v2/hook/59b87f3a-c36f-41de-9900-853a802dce1f
 
