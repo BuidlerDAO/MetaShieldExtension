@@ -18,6 +18,8 @@ jobs:
         working-directory: ./function
     steps:
     - uses: actions/checkout@v2
+      with:
+        persist-credentials: false
     - run: mkdir -p /home/runner/.npm
       continue-on-error: true
     - name: Get current time
@@ -31,6 +33,7 @@ jobs:
     - name: update data
       run: python3 ./data/contract_blacklist_fix.py --url ${{ secrets.BLACK_CONTRACT_API }} --key ${{ secrets.BLACK_CONTRACT_API_KEY }}
     - name: MetaShield blacklist data update failed
+      if: failure()
       uses: foxundermoon/feishu-action@v2
       with:
         url: ${{ secrets.FEISHU_BOT_WEBHOOK_URL }}
@@ -42,7 +45,7 @@ jobs:
               content:
               - - tag: text
                   un_escape: true
-                  text: '出错时间: &nbsp;:${{ steps.current-time.outputs.readableTime }}'
+                  text: '出错时间:\n ${{ steps.current-time.outputs.readableTime }} \n'
                 - tag: a
                   text: github
                   href: https://github.com/DAOBuidler/MetaShieldExtension/actions/workflows/daily-update-black-contract.yml
@@ -56,10 +59,9 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: main
-        force_with_lease: true
     - name: send msg to feishu if update data fail
       if: failure()
       run: curl -X POST -H "Content-Type:application/json" \
         -d '{"msg_type":"text","content":{"text":"MetaShield blacklist data update fail"}}' \
-        https://open.feishu.cn/open-apis/bot/v2/hook/4b48c622-a55c-4d3d-95e3-c51574a1d5d0
+        "https://open.feishu.cn/open-apis/bot/v2/hook/4b48c622-a55c-4d3d-95e3-c51574a1d5d0"
 
