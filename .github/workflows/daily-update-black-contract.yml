@@ -17,6 +17,9 @@ jobs:
         shell: bash
         working-directory: ./function
     steps:
+    - uses: actions/checkout@v2
+    - run: mkdir -p /home/runner/.npm
+      continue-on-error: true
     - name: pip install
       run: pip install requests
     - name: update data
