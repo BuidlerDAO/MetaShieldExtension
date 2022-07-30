@@ -6,8 +6,8 @@ on:
     paths:
       - 'function/**'
       - '.github/workflows/daily-update-black-contract.yml'
+  # 定时任务，在每天的北京时间 0 点 0 分执行任务
   schedule:
-    # 定时任务，在每天的北京时间 0 点 0 分执行任务
   	- cron: '0 16 * * *'
 jobs:
   build:
