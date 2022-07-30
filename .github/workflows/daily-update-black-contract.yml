@@ -19,7 +19,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        persist-credentials: false
+        token: ${{ secrets.KEY }}
     - run: mkdir -p /home/runner/.npm
       continue-on-error: true
     - name: Get current time
@@ -61,7 +61,8 @@ jobs:
         branch: main
     - name: send msg to feishu if update data fail
       if: failure()
-      run: curl -X POST -H "Content-Type:application/json" \
+      run: |
+        curl -X POST -H 'Content-Type:Application/json' \
         -d '{"msg_type":"text","content":{"text":"MetaShield blacklist data update fail"}}' \
-        "https://open.feishu.cn/open-apis/bot/v2/hook/4b48c622-a55c-4d3d-95e3-c51574a1d5d0"
+        https://open.feishu.cn/open-apis/bot/v2/hook/59b87f3a-c36f-41de-9900-853a802dce1f
 
