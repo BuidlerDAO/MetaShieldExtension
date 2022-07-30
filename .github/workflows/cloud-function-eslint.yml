@@ -2,7 +2,6 @@ name: cloud-function-eslint
 
 on:
   push:
-    branches: [ main ]
     paths:
       - 'function/**'
       - '.github/workflows/cloud-function-eslint.yml'
