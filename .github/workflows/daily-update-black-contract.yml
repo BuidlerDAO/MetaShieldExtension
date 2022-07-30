@@ -1,4 +1,4 @@
-name: cloud-function-eslint
+name: daily-update-black-contract
 
 on:
   push:
