@@ -18,8 +18,6 @@ jobs:
         working-directory: ./function
     steps:
     - uses: actions/checkout@v2
-      with:
-        token: ${{ secrets.KEY }}
     - run: mkdir -p /home/runner/.npm
       continue-on-error: true
     - name: Get current time
