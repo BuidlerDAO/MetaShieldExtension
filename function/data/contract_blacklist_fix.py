@@ -21,16 +21,16 @@ def get_contract_blacklist_data(url, key):
         assert(response.status_code == 200)
         black_contract_data_list = eval(response.text.replace(
             "true", "True").replace("flase", "Flase"))['data']
-        print('black_contract_data_list_count', len(black_contract_data_list))
+        print('black_contract_data_list_count:', len(black_contract_data_list))
         assert(len(black_contract_data_list) > 0)
         with open('./data/contract_blacklist.json', 'r') as init_data_file:
             init_blacklist_data = json.load(init_data_file)
-            print(len(init_blacklist_data))
+            print('init_blacklist_data:', len(init_blacklist_data))
             init_data_file.close()
         updated_blacklist_data = init_blacklist_data + \
             [x['address'] for x in black_contract_data_list]
         updated_blacklist_data = list(set(updated_blacklist_data))
-        print('updated_blacklist_data_count', len(updated_blacklist_data))
+        print('updated_blacklist_data_count:', len(updated_blacklist_data))
         assert(len(updated_blacklist_data) > 10000)
         with open('./data/contract_blacklist.json', 'w') as f:
             json.dump(updated_blacklist_data, f)

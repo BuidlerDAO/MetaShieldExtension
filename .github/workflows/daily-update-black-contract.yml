@@ -1,0 +1,39 @@
+name: cloud-function-eslint
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'function/**'
+      - '.github/workflows/daily-update-black-contract.yml'
+  schedule:
+    # 定时任务，在每天的 0 点 1 分执行任务
+  	- cron: '0 1 0 * * ?'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./function
+    steps:
+    - name: pip install
+      run: pip install requests
+    - name: update data
+      run: python3 ./data/contract_blacklist_fix.py --url ${{ secrets.BLACK_CONTRACT_API }} --key ${{ secrets.BLACK_CONTRACT_API_KEY }}
+    - name: send msg to feishu if update data fail
+      if: failure()
+      run: curl -X POST -H "Content-Type: application/json" \
+        -d '{"msg_type":"text","content":{"text":"update fai"}}' \
+        https://open.feishu.cn/open-apis/bot/v2/hook/4b48c622-a55c-4d3d-95e3-c51574a1d5d0
+    - name: push to main
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git commit -m "updata contract blacklist data" -a
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: main
+
