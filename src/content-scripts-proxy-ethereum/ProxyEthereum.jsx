@@ -26,16 +26,31 @@ export default class ProxyEthereum {
 
     isNotableAction(constList) {
         // 检查是否为关注的交易
-        const notableActionList = ['approve', 'setApprovalForAll', 'transfer', 'safeTransferFrom', 'safeTransferFrom1'];
-        if (typeof constList.method !== 'undefined') {
-            if (constList.method === 'eth_sendTransaction') {
-                const functionName = dictionary[constList.params[0].data.substring(0, 10)];
-                if (notableActionList.includes(functionName)) {
-                    return { result: true, action: functionName };
+        try {
+            const notableActionList = ['approve', 'setApprovalForAll', 'transfer', 'safeTransferFrom', 'safeTransferFrom1'];
+            if (typeof constList.method !== 'undefined') {
+                if (constList.method === 'eth_sendTransaction') {
+                    let functionName;
+
+                    // 当 params 长度为 0 或 params[0].data 为 undefined 时
+                    if (constList.params.length === 0) {
+                        functionName = 'transfer';
+                    } else if (constList.params[0].data === undefined) {
+                        functionName = 'transfer';
+                    } else {
+                        functionName = dictionary[constList.params[0].data.substring(0, 10)];
+                    }
+
+                    if (notableActionList.includes(functionName)) {
+                        return { result: true, action: functionName };
+                    }
                 }
             }
+            return { result: false };
+
+        } catch (error) {
+            return { result: false };
         }
-        return { result: false };
     }
 
     getDrawerType(domainVerificationData) {
