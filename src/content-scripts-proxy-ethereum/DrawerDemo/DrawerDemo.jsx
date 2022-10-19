@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import {
-    Modal, Drawer, Button, Alert, notification, Col, Row,
+    Modal, Drawer, Button, Alert, Col, Row,
     Typography, Tooltip
 } from 'antd';
 import {
-    ExclamationOutlined, QuestionCircleOutlined, StopOutlined, LinkOutlined
+    QuestionCircleOutlined, LinkOutlined
 } from '@ant-design/icons';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { proxyClient } from '../postMessage.js';
 import 'animate.css';
 import './DrawerDemo.scss';
@@ -15,7 +15,7 @@ import ExclamationBold from '../../../public/images/ExclamationBold.png';
 import i18n from '../../i18n/config';
 
 // import { contentClient, ChromeMessage } from '../../chrome';
-const { Title, Link, Text } = Typography;
+const { Text } = Typography;
 
 const DrawerDemo = ({
     type, message, verification, contractAddress, domain, method, params, actionName, assetValue
@@ -245,6 +245,114 @@ const DrawerDemo = ({
                                 {type === 'warning'
                                     ? t('drawer.cancel_authorization')
                                     : t('drawer.i_got_it')}
+                            </button>
+                        </Col>
+                        <Col
+                            span={12}
+                            style={{ display: 'flex', justifyContent: 'end', alignItems: 'center' }}
+                        >
+                            <button
+                                className="secondary-button"
+                                type="button"
+                                onClick={() => {
+                                    postMessageToCurrentPage('continue');
+                                    handleCancel();
+                                }}
+                            >
+                                {t('drawer.continue_authorization')}
+                            </button>
+                        </Col>
+                    </Row>
+                </div>
+            </Modal>
+        );
+    }
+
+    if (type === 'signDanger') {
+        const primaryColor = '#fe5200';
+        return (
+            <Modal
+                closable={false}
+                width={460}
+                getContainer={getContainer()}
+                visible={visible}
+                onOk={handleOk}
+                footer={null}
+                className={`notification-${i18n.language}`}
+            >
+                <div id="chrome-extension-content-base-element-ethereum-notification-content">
+                    <Row justify="space-between" style={{ backgroundColor: primaryColor, height: '52px', margin: '-24px -24px 24px -24px' }}>
+                        <Col
+                            span={6}
+                            style={{
+                                display: 'flex', justifyContent: 'left', alignItems: 'center', marginLeft: '36px'
+                            }}
+                        >
+                            <img src={ExclamationBold} style={{ width: '3px' }} alt=""></img>
+                        </Col>
+                        <Col
+                            span={12}
+                            style={{
+                                display: 'flex', justifyContent: 'right', alignItems: 'center', color: '#ffffff', marginRight: '36px'
+                            }}
+                        >
+                            <img src={MetaShieldWhite} style={{ width: '100px' }} alt=""></img>
+                        </Col>
+                    </Row>
+                    <div style={{ margin: '0px 13px 32px 13px' }}>
+                        <div
+                            className={`careful-auth-${i18n.language}`}
+                            style={{
+                                color: primaryColor, display: 'flex', justifyContent: 'center', marginTop: '30px', marginBottom: '36px'
+                            }}
+                        >
+                            {t('drawer.high_risk_transaction')}
+                            {t('exclamation_mark')}
+                        </div>
+                        {/* 您正在试图…… */}
+                        <b>
+                            <p style={{ marginBottom: '4px', color: 'rgba(52, 48, 46, 1)' }}>
+                                {t('drawer.you_are_trying_to')}
+                                {' '}
+                                <Tooltip
+                                    getPopupContainer={() => getModalContainer()}
+                                    title={(
+                                        <div style={{ margin: '12px', fontSize: '8px', color: '#767676' }}>
+                                            <p>{t('drawer.authorize_explanation')}</p>
+                                        </div>
+                                    )}
+                                    color="#ffffff"
+                                >
+                                    <Text>{t('drawer.eth_sign')}</Text>
+                                    <QuestionCircleOutlined style={{
+                                        display: 'inlineBlock', verticalAlign: 'baseline', fontSize: '14px', padding: '0 2px 0px 2px'
+                                    }}
+                                    />
+                                </Tooltip>
+                            </p>
+                        </b>
+                        <p style={{ color: 'rgba(52, 48, 46, 1)' }}>
+                            {t('drawer.website_unknown')}
+                            {t('comma')}
+                            {domain}
+                            {t('dot')}
+                            {t('drawer.transfer_remind')}
+                        </p>
+                    </div>
+                    <Row justify="space-between" style={{ height: '80px', margin: '0px 12px' }}>
+                        <Col
+                            span={12}
+                            style={{ display: 'flex', justifyContent: 'start', alignItems: 'center' }}
+                        >
+                            <button
+                                className="danger-button"
+                                onClick={() => {
+                                    postMessageToCurrentPage('block');
+                                    handleCancel();
+                                }}
+                                type="button"
+                            >
+                                {t('drawer.i_got_it')}
                             </button>
                         </Col>
                         <Col
