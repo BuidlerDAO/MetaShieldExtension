@@ -52,7 +52,8 @@ const translation_en = {
         high_risk_transaction: 'Risk Warning',
         transfer_remind: 'Please notice they may stole your assets.',
         continue_auth_remind: ' Please notice a high risk of stolen assets if you click on continue.',
-        auto_block: 'we automatically blocked this transaction for you'
+        auto_block: 'we automatically blocked this transaction for you',
+        eth_sign: 'transfer your assets with deprecated insecure interface: eth_sign'
     },
     comma: ', ',
     colon: ':',

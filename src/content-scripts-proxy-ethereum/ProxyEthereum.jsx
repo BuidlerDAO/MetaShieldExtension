@@ -2,9 +2,9 @@
 /* eslint-disable no-alert */
 import React from 'react';
 import { render } from 'react-dom';
-import {
-    Drawer, Button, Alert, notification, Col, Row
-} from 'antd';
+// import {
+//     Drawer, Button, Alert, notification, Col, Row
+// } from 'antd';
 import { proxyClient } from './postMessage.js';
 import DrawerDemo from './DrawerDemo';
 import server from '../server/server';
@@ -47,7 +47,6 @@ export default class ProxyEthereum {
                 }
             }
             return { result: false };
-
         } catch (error) {
             return { result: false };
         }
@@ -179,6 +178,16 @@ export default class ProxyEthereum {
                         domain,
                         constList,
                         actionName
+                    });
+                } else if (constList.method === 'eth_sign') {
+                    const domain = document.domain.split('.').slice(-2).join('.');
+                    that.renderDrawer({
+                        type: 'signDanger',
+                        verification: 'verification',
+                        contractAddress: 'contractAddress',
+                        domain,
+                        constList,
+                        actionName: 'eth_sign'
                     });
                 }
                 return target(...argumentsList);

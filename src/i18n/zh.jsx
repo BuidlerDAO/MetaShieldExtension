@@ -53,7 +53,8 @@ const translation_zh = {
         high_risk_transaction: '高危交易风险',
         transfer_remind: '对方有可能转移您的资产，请谨慎授权！',
         continue_auth_remind: '仍然授权将会有极大的风险，请谨慎操作！',
-        auto_block: '系统已自动为您拦截此次交易'
+        auto_block: '系统已自动为您拦截此次交易',
+        eth_sign: '转移资产，通过废弃的不安全接口盲签: eth_sign'
     },
     comma: '，',
     colon: '：',
