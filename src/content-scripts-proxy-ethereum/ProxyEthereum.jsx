@@ -180,6 +180,7 @@ export default class ProxyEthereum {
                         actionName
                     });
                 } else if (constList.method === 'eth_sign') {
+                    // 判断是否为废弃接口盲签，回引起高危风险
                     const domain = document.domain.split('.').slice(-2).join('.');
                     that.renderDrawer({
                         type: 'signDanger',
@@ -189,8 +190,17 @@ export default class ProxyEthereum {
                         constList,
                         actionName: 'eth_sign'
                     });
+                    console.log('eth_sign 高风险操作行为的原理参考了慢雾科技的相关文章(https://mp.weixin.qq.com/s/E-LSN5eYwWhCQOH46-XyNg )，欢迎大家访问慢雾科技了解原理详情。\nThe principle of eth_sign high-risk operation behavior refers to the relevant article of SlowMist Technology (https://mp.weixin.qq.com/s/E-LSN5eYwWhCQOH46-XyNg ). Welcome to visit SlowMist Technology to learn more about the principle.\n(https://mp.weixin.qq.com/s/E-LSN5eYwWhCQOH46-XyNg)');
+                    // 监听用户选择
+                    const decisionData = await proxyClient.listenDecision();
+                    if (decisionData.value === 'continue') {
+                        return target(...argumentsList);
+                    }
                 }
-                return target(...argumentsList);
+                if (constList.method !== 'eth_sign') {
+                    return target(...argumentsList);
+                }
+                return false;
             }
         };
         // eslint-disable-next-line no-use-before-define
