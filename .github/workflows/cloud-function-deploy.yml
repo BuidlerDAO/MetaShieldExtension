@@ -44,3 +44,9 @@ jobs:
       run: npm run build
     - name: deploy
       run: sls deploy
+    - name: depoly fail
+      if: failure()
+      run: |
+        curl -X POST -H 'Content-Type:Application/json' \
+        -d '{"msg_type":"text","content":{"text":"MetaShield depoly fail"}}' \
+        https://open.feishu.cn/open-apis/bot/v2/hook/59b87f3a-c36f-41de-9900-853a802dce1f
