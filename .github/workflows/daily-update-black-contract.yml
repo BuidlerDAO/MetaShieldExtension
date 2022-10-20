@@ -54,23 +54,24 @@ jobs:
     defaults:
       run:
         shell: bash
+        working-directory: ./function
     steps:
-    - name: assets bot
-      run: |
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        git commit -m "updata contract blacklist data" -a
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: main
-    - name: push to main fail
-      if: failure()
-      run: |
-        curl -X POST -H 'Content-Type:Application/json' \
-        -d '{"msg_type":"text","content":{"text":"MetaShield auto push main fail"}}' \
-        https://open.feishu.cn/open-apis/bot/v2/hook/59b87f3a-c36f-41de-9900-853a802dce1f
+      - name: assets bot
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "updata contract blacklist data" -a
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
+      - name: push to main fail
+        if: failure()
+        run: |
+          curl -X POST -H 'Content-Type:Application/json' \
+          -d '{"msg_type":"text","content":{"text":"MetaShield auto push main fail"}}' \
+          https://open.feishu.cn/open-apis/bot/v2/hook/59b87f3a-c36f-41de-9900-853a802dce1f
   
   depoly:
     needs: [pushMain]
