@@ -54,7 +54,6 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./function
     steps:
     - name: assets bot
       run: |
