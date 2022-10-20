@@ -47,7 +47,13 @@ jobs:
                 - tag: a
                   text: github
                   href: https://github.com/DAOBuidler/MetaShieldExtension/actions/workflows/daily-update-black-contract.yml
-    - name: push to main
+  pushMain:
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./function
+    steps:
+    - name: assets bot
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
@@ -63,8 +69,9 @@ jobs:
         curl -X POST -H 'Content-Type:Application/json' \
         -d '{"msg_type":"text","content":{"text":"MetaShield auto push main fail"}}' \
         https://open.feishu.cn/open-apis/bot/v2/hook/59b87f3a-c36f-41de-9900-853a802dce1f
+  
   depoly:
-    uses: BuidlerDAO/MetashiedExtension/.github/workflows/cloud-function-deploy.yml
+    uses: ./.github/workflows/cloud-function-deploy.yml
   
   depolyFail:  
     steps:
