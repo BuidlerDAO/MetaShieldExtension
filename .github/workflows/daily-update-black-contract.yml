@@ -10,48 +10,51 @@ on:
   schedule:
     - cron: '0 16 * * *'
 jobs:
-  updateBlackList:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: ./function
-    steps:
-      - uses: actions/checkout@v2
-      - run: mkdir -p /home/runner/.npm
-        continue-on-error: true
-      - name: Get current time
-        uses: josStorer/get-current-time@v2
-        id: current-time
-        with:
-          format: YYYYMMDD-HH
-          utcOffset: "+08:00"
-      - name: pip install
-        run: pip install requests
-      - name: update data
-        run: python3 ./data/contract_blacklist_fix.py --url ${{ secrets.BLACK_CONTRACT_API }} --key ${{ secrets.BLACK_CONTRACT_API_KEY }}
-      - name: MetaShield blacklist data update failed
-        if: failure()
-        uses: foxundermoon/feishu-action@v2
-        with:
-          url: ${{ secrets.FEISHU_BOT_WEBHOOK_URL }}
-          msg_type: post
-          content: |
-            post:
-              zh_cn:
-                title: MetaShield 黑名单更新错误
-                content:
-                - - tag: text
-                    un_escape: true
-                    text: '出错时间:\n ${{ steps.current-time.outputs.readableTime }} \n'
-                  - tag: a
-                    text: github
-                    href: https://github.com/DAOBuidler/MetaShieldExtension/actions/workflows/daily-update-black-contract.yml
+  # updateBlackList:
+  #   runs-on: ubuntu-latest
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #       working-directory: ./function
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - run: mkdir -p /home/runner/.npm
+  #       continue-on-error: true
+  #     - name: Get current time
+  #       uses: josStorer/get-current-time@v2
+  #       id: current-time
+  #       with:
+  #         format: YYYYMMDD-HH
+  #         utcOffset: "+08:00"
+  #     - name: pip install
+  #       run: pip install requests
+  #     - name: update data
+  #       run: python3 ./data/contract_blacklist_fix.py --url ${{ secrets.BLACK_CONTRACT_API }} --key ${{ secrets.BLACK_CONTRACT_API_KEY }}
+  #     - name: MetaShield blacklist data update failed
+  #       if: failure()
+  #       uses: foxundermoon/feishu-action@v2
+  #       with:
+  #         url: ${{ secrets.FEISHU_BOT_WEBHOOK_URL }}
+  #         msg_type: post
+  #         content: |
+  #           post:
+  #             zh_cn:
+  #               title: MetaShield 黑名单更新错误
+  #               content:
+  #               - - tag: text
+  #                   un_escape: true
+  #                   text: '出错时间:\n ${{ steps.current-time.outputs.readableTime }} \n'
+  #                 - tag: a
+  #                   text: github
+  #                   href: https://github.com/DAOBuidler/MetaShieldExtension/actions/workflows/daily-update-black-contract.yml
   
   pushMain:
     runs-on: ubuntu-latest
-    needs: [updateBlackList]
+    # needs: [updateBlackList]
     steps:
+      - name: echo dic
+        run: pwd
+
       - name: assets bot
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
