@@ -64,7 +64,7 @@ jobs:
         -d '{"msg_type":"text","content":{"text":"MetaShield auto push main fail"}}' \
         https://open.feishu.cn/open-apis/bot/v2/hook/59b87f3a-c36f-41de-9900-853a802dce1f
   depoly:
-    uses: BuidlerDAO/MetashiedExtension/.github/workflows/cloud-function-deploy.yml@v1
+    uses: BuidlerDAO/MetashiedExtension/.github/workflows/cloud-function-deploy.yml
   
   depolyFail:  
     steps:
