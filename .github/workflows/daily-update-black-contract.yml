@@ -63,30 +63,52 @@ jobs:
           curl -X POST -H 'Content-Type:Application/json' \
           -d '{"msg_type":"text","content":{"text":"MetaShield auto push main fail"}}' \
           https://open.feishu.cn/open-apis/bot/v2/hook/59b87f3a-c36f-41de-9900-853a802dce1f
-  # pushMain:
-  #   runs-on: ubuntu-latest
-  #   needs: [updateBlackList]
-  #   steps:
-  #     - name: assets bot
-  #       run: |
-  #         git config --local user.email "github-actions[bot]@users.noreply.github.com"
-  #         git config --local user.name "github-actions[bot]"
-  #         git commit -m "updata contract blacklist data" -a
-  #     - name: Push changes
-  #       uses: ad-m/github-push-action@master
-  #       with:
-  #         github_token: ${{ secrets.GITHUB_TOKEN }}
-  #         branch: main
-  #     - name: push to main fail
-  #       if: failure()
-  #       run: |
-  #         curl -X POST -H 'Content-Type:Application/json' \
-  #         -d '{"msg_type":"text","content":{"text":"MetaShield auto push main fail"}}' \
-  #         https://open.feishu.cn/open-apis/bot/v2/hook/59b87f3a-c36f-41de-9900-853a802dce1f
+
   
   depoly:
-    needs: [updateBlackList]
-    uses: ./.github/workflows/cloud-function-deploy.yml
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./function
+    steps:
+      - uses: actions/checkout@v2
+      - run: mkdir -p /home/runner/.npm
+        continue-on-error: true
+
+      - name: Use Node.js 12
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12
+          cache: 'npm'
+          cache-dependency-path: function/package-lock.json
+
+        # setting https://github.com/serverless/serverless-tencent/issues/142
+      - name: echo >.env
+        run: >
+          echo 'SLS_GEO_LOCATION=cn serverless deploy'>./.env
+          && echo 'SERVERLESS_PLATFORM_VENDOR=tencent'>>./.env && cat ./.env
+          && echo 'SEVER_GOOGLE_ANALYTICS_KEY=${{ secrets.SEVER_GOOGLE_ANALYTICS_KEY }}'>>./.env
+          && echo 'ETHERSCAN_API_KEY=${{ secrets.ETHERSCAN_API_KEY }}'>>./.env
+      - name: npm install
+        run: npm install
+      - name: npm install serverless
+        run: npm i -g serverless serverless-tencent
+      - name: install typescript
+        run: npm install -g typescript
+      - name: login with key
+        run: serverless credentials set --secretId ${{ secrets.TENCENT_SECRET_ID }} --secretKey ${{ secrets.TENCENT_SECRET_KEY }}
+      - name: build
+        run: npm run build
+      - name: deploy
+        run: sls deploy
+      - name: depoly fail
+        if: failure()
+        run: |
+          curl -X POST -H 'Content-Type:Application/json' \
+          -d '{"msg_type":"text","content":{"text":"MetaShield depoly fail"}}' \
+          https://open.feishu.cn/open-apis/bot/v2/hook/59b87f3a-c36f-41de-9900-853a802dce1f
+
   
   depolyFail:  
     needs: [depoly]
