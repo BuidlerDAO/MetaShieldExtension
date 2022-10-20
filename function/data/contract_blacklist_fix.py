@@ -13,7 +13,7 @@ args = parser.parse_args()
 
 def get_contract_blacklist_data(url, key):
     now_time = time.strftime("%Y-%m-%d", time.localtime())
-    url = str(url) + "?start=2022-07-20&end={}".format(now_time)
+    url = str(url) + "?start=2022-10-18&end={}".format(now_time)
     headers = {"Authorization-Key": str(key)}
     try:
         response = requests.get(url, headers=headers)
