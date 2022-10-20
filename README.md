@@ -1,5 +1,9 @@
 ![image](https://user-images.githubusercontent.com/34613360/173281927-208ab47c-d249-42b9-a2f8-8553d8ff9d64.png)
 # MetaShield
+[![daily-update-black-contract](https://github.com/BuidlerDAO/MetaShieldExtension/actions/workflows/daily-update-black-contract.yml/badge.svg)](https://github.com/BuidlerDAO/MetaShieldExtension/actions/workflows/daily-update-black-contract.yml)
+[![cloud-function-deploy](https://github.com/BuidlerDAO/MetaShieldExtension/actions/workflows/cloud-function-deploy.yml/badge.svg)](https://github.com/BuidlerDAO/MetaShieldExtension/actions/workflows/cloud-function-deploy.yml)
+
+
 Metashield 是由 BuidlerDAO 孵化的第一个项目，我们发现大量用户的加密资产遭受到了钓鱼网站的威胁，在全球范围内，每年有价值数亿美金的加密资产被钓鱼网站偷走，包括大量的 BAYC, Moonbird 等。经过成员提案，我们开发了插件 MetaShield ，可以有效预警并拦截钓鱼网站的盗窃行为，在 Web3.0 黑暗森林中保护用户资产安全。
 
 ## 技术原理
