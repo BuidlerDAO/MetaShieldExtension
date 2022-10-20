@@ -51,10 +51,6 @@ jobs:
   pushMain:
     runs-on: ubuntu-latest
     needs: [updateBlackList]
-    defaults:
-      run:
-        shell: bash
-        working-directory: .
     steps:
       - name: assets bot
         run: |
