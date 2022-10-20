@@ -10,7 +10,7 @@ on:
   schedule:
     - cron: '0 16 * * *'
 jobs:
-  build:
+  updateBlackList:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -48,6 +48,7 @@ jobs:
                   text: github
                   href: https://github.com/DAOBuidler/MetaShieldExtension/actions/workflows/daily-update-black-contract.yml
   pushMain:
+    needs: [updateBlackList]
     defaults:
       run:
         shell: bash
@@ -71,10 +72,17 @@ jobs:
         https://open.feishu.cn/open-apis/bot/v2/hook/59b87f3a-c36f-41de-9900-853a802dce1f
   
   depoly:
-    uses: ./.github/workflows/cloud-function-deploy.yml
     needs: [pushMain]
+    runs-on: ubuntu-latest
+      defaults:
+        run:
+          shell: bash
+          working-directory: ./function
+    uses: ./.github/workflows/cloud-function-deploy.yml
+    
   
   depolyFail:  
+    needs: [depoly]
     steps:
     - name: depoly fail
       if: failure()
