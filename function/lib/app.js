@@ -68,6 +68,10 @@ app.get("/privacy-policy", (req, res) => {
     analytics_1.analytics.track("/privacy-policy");
     res.sendFile(path.join(__dirname, "privacy-policy.html"));
 });
+app.get("/test-example", (req, res) => {
+    analytics_1.analytics.track("/test-example");
+    res.sendFile(path.join(__dirname, "test-example.html"));
+});
 app.get("/logo", (req, res) => {
     const logo = path.join(__dirname, "logo.png");
     const content = (0, fs_1.readFileSync)(logo, {

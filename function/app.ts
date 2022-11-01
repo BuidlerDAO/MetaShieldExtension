@@ -17,6 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use("/assets/:asset_id",(req, res)=>{
   res.sendFile(path.join(__dirname, req.originalUrl.substring(1)))
 })
+
 app.use("/lib/:lib_id",(req, res)=>{
   res.sendFile(path.join(__dirname, req.originalUrl.substring(1)))
 })
