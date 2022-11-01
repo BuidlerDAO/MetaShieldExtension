@@ -46,6 +46,11 @@ app.get("/privacy-policy", (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, "privacy-policy.html"))
 })
 
+app.get("/test-example", (req: Request, res: Response) => {
+  analytics.track("/test-example")
+  res.sendFile(path.join(__dirname, "test-example.html"))
+})
+
 app.get("/logo", (req: Request, res: Response) => {
   const logo = path.join(__dirname, "logo.png")
   const content = readFileSync(logo, {
