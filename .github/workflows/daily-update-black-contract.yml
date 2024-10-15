@@ -1,123 +1,123 @@
-name: daily-update-black-contract
+# name: daily-update-black-contract
 
-on:
-  push:
-    branches: [ main ]
-    paths:
-      - 'function/**'
-      - '.github/workflows/daily-update-black-contract.yml'
-  # 定时任务，在每天的北京时间 0 点 0 分执行任务
-  schedule:
-    - cron: '0 16 * * *'
-jobs:
-  updateBlackList:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: ./function
-    steps:
-      - uses: actions/checkout@v2
-      - run: mkdir -p /home/runner/.npm
-        continue-on-error: true
-      - name: Get current time
-        uses: josStorer/get-current-time@v2
-        id: current-time
-        with:
-          format: YYYYMMDD-HH
-          utcOffset: "+08:00"
-      - name: pip install
-        run: pip install requests
-      - name: update data
-        run: python3 ./data/contract_blacklist_fix.py --url ${{ secrets.BLACK_CONTRACT_API }} --key ${{ secrets.BLACK_CONTRACT_API_KEY }}
-      - name: MetaShield blacklist data update failed
-        if: failure()
-        uses: foxundermoon/feishu-action@v2
-        with:
-          url: ${{ secrets.FEISHU_BOT_WEBHOOK_URL }}
-          msg_type: post
-          content: |
-            post:
-              zh_cn:
-                title: MetaShield 黑名单更新错误
-                content:
-                - - tag: text
-                    un_escape: true
-                    text: '出错时间:\n ${{ steps.current-time.outputs.readableTime }} \n'
-                  - tag: a
-                    text: github
-                    href: https://github.com/DAOBuidler/MetaShieldExtension/actions/workflows/daily-update-black-contract.yml
-      - name: assets bot
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git commit -m "updata contract blacklist data" -a
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
-      - name: push to main fail
-        if: failure()
-        run: |
-          curl -X POST -H 'Content-Type:Application/json' \
-          -d '{"msg_type":"text","content":{"text":"MetaShield auto push main fail"}}' \
-          https://open.feishu.cn/open-apis/bot/v2/hook/59b87f3a-c36f-41de-9900-853a802dce1f
-
-  
-  depoly:
-    needs: [updateBlackList]
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: ./function
-    steps:
-      - uses: actions/checkout@v2
-      - run: mkdir -p /home/runner/.npm
-        continue-on-error: true
-
-      - name: Use Node.js 12
-        uses: actions/setup-node@v2
-        with:
-          node-version: 12
-          cache: 'npm'
-          cache-dependency-path: function/package-lock.json
-
-        # setting https://github.com/serverless/serverless-tencent/issues/142
-      - name: echo >.env
-        run: >
-          echo 'SLS_GEO_LOCATION=cn serverless deploy'>./.env
-          && echo 'SERVERLESS_PLATFORM_VENDOR=tencent'>>./.env && cat ./.env
-          && echo 'SEVER_GOOGLE_ANALYTICS_KEY=${{ secrets.SEVER_GOOGLE_ANALYTICS_KEY }}'>>./.env
-          && echo 'ETHERSCAN_API_KEY=${{ secrets.ETHERSCAN_API_KEY }}'>>./.env
-      - name: npm install
-        run: npm install
-      - name: npm install serverless
-        run: npm i -g serverless serverless-tencent
-      - name: install typescript
-        run: npm install -g typescript
-      - name: login with key
-        run: serverless credentials set --secretId ${{ secrets.TENCENT_SECRET_ID }} --secretKey ${{ secrets.TENCENT_SECRET_KEY }}
-      - name: build
-        run: npm run build
-      - name: deploy
-        run: sls deploy
-      - name: depoly fail
-        if: failure()
-        run: |
-          curl -X POST -H 'Content-Type:Application/json' \
-          -d '{"msg_type":"text","content":{"text":"MetaShield depoly fail"}}' \
-          https://open.feishu.cn/open-apis/bot/v2/hook/59b87f3a-c36f-41de-9900-853a802dce1f
+# on:
+#   push:
+#     branches: [ main ]
+#     paths:
+#       - 'function/**'
+#       - '.github/workflows/daily-update-black-contract.yml'
+#   # 定时任务，在每天的北京时间 0 点 0 分执行任务
+#   schedule:
+#     - cron: '0 16 * * *'
+# jobs:
+#   updateBlackList:
+#     runs-on: ubuntu-latest
+#     defaults:
+#       run:
+#         shell: bash
+#         working-directory: ./function
+#     steps:
+#       - uses: actions/checkout@v2
+#       - run: mkdir -p /home/runner/.npm
+#         continue-on-error: true
+#       - name: Get current time
+#         uses: josStorer/get-current-time@v2
+#         id: current-time
+#         with:
+#           format: YYYYMMDD-HH
+#           utcOffset: "+08:00"
+#       - name: pip install
+#         run: pip install requests
+#       - name: update data
+#         run: python3 ./data/contract_blacklist_fix.py --url ${{ secrets.BLACK_CONTRACT_API }} --key ${{ secrets.BLACK_CONTRACT_API_KEY }}
+#       - name: MetaShield blacklist data update failed
+#         if: failure()
+#         uses: foxundermoon/feishu-action@v2
+#         with:
+#           url: ${{ secrets.FEISHU_BOT_WEBHOOK_URL }}
+#           msg_type: post
+#           content: |
+#             post:
+#               zh_cn:
+#                 title: MetaShield 黑名单更新错误
+#                 content:
+#                 - - tag: text
+#                     un_escape: true
+#                     text: '出错时间:\n ${{ steps.current-time.outputs.readableTime }} \n'
+#                   - tag: a
+#                     text: github
+#                     href: https://github.com/DAOBuidler/MetaShieldExtension/actions/workflows/daily-update-black-contract.yml
+#       - name: assets bot
+#         run: |
+#           git config --local user.email "github-actions[bot]@users.noreply.github.com"
+#           git config --local user.name "github-actions[bot]"
+#           git commit -m "updata contract blacklist data" -a
+#       - name: Push changes
+#         uses: ad-m/github-push-action@master
+#         with:
+#           github_token: ${{ secrets.GITHUB_TOKEN }}
+#           branch: main
+#       - name: push to main fail
+#         if: failure()
+#         run: |
+#           curl -X POST -H 'Content-Type:Application/json' \
+#           -d '{"msg_type":"text","content":{"text":"MetaShield auto push main fail"}}' \
+#           https://open.feishu.cn/open-apis/bot/v2/hook/59b87f3a-c36f-41de-9900-853a802dce1f
 
   
-  depolyFail:  
-    needs: [depoly]
-    runs-on: ubuntu-latest
-    steps:
-    - name: depoly fail
-      if: failure()
-      run: |
-        curl -X POST -H 'Content-Type:Application/json' \
-        -d '{"msg_type":"text","content":{"text":"MetaShield depoly fail"}}' \
-        https://open.feishu.cn/open-apis/bot/v2/hook/59b87f3a-c36f-41de-9900-853a802dce1f
+#   depoly:
+#     needs: [updateBlackList]
+#     runs-on: ubuntu-latest
+#     defaults:
+#       run:
+#         shell: bash
+#         working-directory: ./function
+#     steps:
+#       - uses: actions/checkout@v2
+#       - run: mkdir -p /home/runner/.npm
+#         continue-on-error: true
+
+#       - name: Use Node.js 12
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: 12
+#           cache: 'npm'
+#           cache-dependency-path: function/package-lock.json
+
+#         # setting https://github.com/serverless/serverless-tencent/issues/142
+#       - name: echo >.env
+#         run: >
+#           echo 'SLS_GEO_LOCATION=cn serverless deploy'>./.env
+#           && echo 'SERVERLESS_PLATFORM_VENDOR=tencent'>>./.env && cat ./.env
+#           && echo 'SEVER_GOOGLE_ANALYTICS_KEY=${{ secrets.SEVER_GOOGLE_ANALYTICS_KEY }}'>>./.env
+#           && echo 'ETHERSCAN_API_KEY=${{ secrets.ETHERSCAN_API_KEY }}'>>./.env
+#       - name: npm install
+#         run: npm install
+#       - name: npm install serverless
+#         run: npm i -g serverless serverless-tencent
+#       - name: install typescript
+#         run: npm install -g typescript
+#       - name: login with key
+#         run: serverless credentials set --secretId ${{ secrets.TENCENT_SECRET_ID }} --secretKey ${{ secrets.TENCENT_SECRET_KEY }}
+#       - name: build
+#         run: npm run build
+#       - name: deploy
+#         run: sls deploy
+#       - name: depoly fail
+#         if: failure()
+#         run: |
+#           curl -X POST -H 'Content-Type:Application/json' \
+#           -d '{"msg_type":"text","content":{"text":"MetaShield depoly fail"}}' \
+#           https://open.feishu.cn/open-apis/bot/v2/hook/59b87f3a-c36f-41de-9900-853a802dce1f
+
+  
+#   depolyFail:  
+#     needs: [depoly]
+#     runs-on: ubuntu-latest
+#     steps:
+#     - name: depoly fail
+#       if: failure()
+#       run: |
+#         curl -X POST -H 'Content-Type:Application/json' \
+#         -d '{"msg_type":"text","content":{"text":"MetaShield depoly fail"}}' \
+#         https://open.feishu.cn/open-apis/bot/v2/hook/59b87f3a-c36f-41de-9900-853a802dce1f
